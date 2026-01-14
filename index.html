@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="프로젝트 포트폴리오" />
+    <meta name="keywords" content="포트폴리오, WebGL, 프로젝트, 개발자" />
+    <meta name="author" content="Your Name" />
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="My Project Portfolio" />
+    <meta property="og:description" content="Cheonghakim's Project Portfolio" />
+    <meta property="og:type" content="website" />
+
+    <title>CK's Project Portfolio</title>
+
+    <link rel="stylesheet" href="public/css/styles.css" />
+
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  </head>
+
+  <body>
+    <!-- WebGL Background Canvas -->
+    <canvas id="webgl-canvas"></canvas>
+
+    <!-- Main Content -->
+    <div class="container">
+      <!-- Header -->
+      <header>
+        <h1>CK's Project Portfolio</h1>
+        <p class="subtitle">Innovative Projects with Cutting-Edge Technology</p>
+      </header>
+
+      <!-- Navigation -->
+      <nav>
+        <a href="#projects">Projects</a>
+        <a href="https://github.com" target="_blank">GitHub</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <!-- Projects Section -->
+      <section id="projects">
+        <div class="projects-grid">
+          <!-- Project 1: BujaMarket -->
+          <article class="project-card">
+            <h2>의류부자재 플랫폼(B2C/B2B)</h2>
+            <p class="project-description">
+              - AI 검색 기반 의류부자재 거래 플랫폼 입니다.
+            </p>
+            <img
+              src="public/imgs/buja.jpg"
+              alt="bujamarket"
+              class="project-preview"
+            />
+          </article>
+
+          <!-- Project 2: ServiceDesk -->
+          <article class="project-card">
+            <h2>ServiceDesk<span class="badge private">PRIVATE</span></h2>
+            <p class="project-description">
+              이벤트 관리/ 알림 관리 등 보안관제를 위한 통합 서비스 입니다.
+            </p>
+            <div class="project-preview private"></div>
+          </article>
+
+          <!-- Project 3: 국방부 -->
+          <article class="project-card">
+            <h2>
+              국방부 기밀 프로젝트<span class="badge private">PRIVATE</span>
+            </h2>
+            <p class="project-description">
+              기밀 프로젝트의 리드 개발자로 투입 되었고 좋은 성과로 표창을
+              받았습니다.
+            </p>
+            <div class="project-preview private"></div>
+          </article>
+
+          <!-- Project 4: PROM LIGHT2 -->
+          <article class="project-card">
+            <h2>PROM LIGHT2 <span class="badge private">PRIVATE</span></h2>
+            <p class="project-description">
+              보안장비 로그를 수집하고 룰 관리를 하는 서비스 입니다.
+            </p>
+            <img
+              src="public/imgs/dashboard.png"
+              alt="PROM LIGHT2"
+              class="project-preview"
+            />
+          </article>
+
+          <!-- Project 5: PROM-ATS -->
+          <article class="project-card">
+            <h2>PROM-ATS <span class="badge private">PRIVATE</span></h2>
+            <p class="project-description">
+              보안 점검을 위한 침투 테스트 서비스 입니다.
+            </p>
+            <div class="project-preview private"></div>
+          </article>
+
+          <!-- Project 6: SoarPlaybook -->
+          <article class="project-card">
+            <h2>SoarPlaybook <span class="badge private">PRIVATE</span></h2>
+            <p class="project-description">
+              보안관제 자동화를 위한 서비스 입니다. 레이어 개념을 도입하여 적은
+              플레이북으로도 관리를 쉽게 할 수 있도록 했습니다.
+            </p>
+            <div class="project-preview private"></div>
+          </article>
+
+          <!-- Project 7: HTML Overlay Node -->
+          <article class="project-card">
+            <h2>HTML Overlay Node</h2>
+            <p class="project-description">
+              HTML Overlay Node는 HTML을 오버레이 할 수 있는 노드 모듈입니다.
+            </p>
+            <img
+              src="public/imgs/node.png"
+              alt="HTML Overlay Node Preview"
+              class="project-preview"
+            />
+            <div class="button-group">
+              <a
+                href="https://cheonghakim.github.io/HTML-overlay-node/"
+                class="btn btn-primary"
+                >LIVE DEMO</a
+              >
+              <a
+                href="https://github.com/cheonghakim/HTML-overlay-node"
+                class="btn"
+                >GITHUB</a
+              >
+            </div>
+          </article>
+
+          <!-- Project 8: High Tree -->
+          <article class="project-card">
+            <h2>High Tree</h2>
+            <p class="project-description">가볍고 빠른 트리 컴포넌트 입니다.</p>
+            <img
+              src="public/imgs/tree.png"
+              alt="High Tree Preview"
+              class="project-preview"
+            />
+            <div class="button-group">
+              <a
+                href="https://cheonghakim.github.io/high-tree/"
+                class="btn btn-primary"
+                >LIVE DEMO</a
+              >
+              <a href="https://github.com/cheonghakim/high-tree" class="btn"
+                >GITHUB</a
+              >
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer id="contact">
+        <p>
+          &copy; 2026 My Portfolio. Built with WebGL & Modern Web Technologies.
+        </p>
+        <p>
+          <a href="mailto:funky856@naver.com">Contact Me</a> |
+          <a href="https://github.com/cheonghakim" target="_blank">GitHub</a>
+        </p>
+      </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="public/js/webgl-canvas.js"></script>
+  </body>
+</html>
