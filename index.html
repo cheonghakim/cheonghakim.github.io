@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="프로젝트 포트폴리오" />
     <meta name="keywords" content="포트폴리오, WebGL, 프로젝트, 개발자" />
-    <meta name="author" content="Your Name" />
+    <meta name="author" content="Cheonghakim" />
 
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="My Project Portfolio" />
@@ -24,6 +24,9 @@
     <!-- WebGL Background Canvas -->
     <canvas id="webgl-canvas"></canvas>
 
+    <!-- Full-screen noise overlay -->
+    <div id="noise-overlay"></div>
+
     <!-- Main Content -->
     <div class="container">
       <!-- Header -->
@@ -35,7 +38,8 @@
       <!-- Navigation -->
       <nav>
         <a href="#projects">Projects</a>
-        <a href="https://github.com" target="_blank">GitHub</a>
+        <a href="#experience">Experience</a>
+        <a href="https://github.com/cheonghakim" target="_blank">GitHub</a>
         <a href="#contact">Contact</a>
       </nav>
 
@@ -43,29 +47,117 @@
       <section id="projects">
         <div class="projects-grid">
           <!-- Project 1: BujaMarket -->
-          <article class="project-card">
+          <article class="project-card" data-card-index="0">
             <h2>의류부자재 플랫폼(B2C/B2B)</h2>
             <p class="project-description">
               - AI 검색 기반 의류부자재 거래 플랫폼 입니다.
             </p>
+            <div class="problem-solution">
+              <div class="ps-item">
+                <span class="ps-label">Problem</span>
+                <span class="ps-text"
+                  >부자재의 카테고리가 복잡하고 제조사 마다 다르게 분류</span
+                >
+              </div>
+              <div class="ps-item">
+                <span class="ps-label">Solution</span>
+                <span class="ps-text"
+                  >이미지의 특징을 기반으로 부자재를 분류</span
+                >
+              </div>
+            </div>
             <img
               src="public/imgs/buja.jpg"
               alt="bujamarket"
               class="project-preview"
             />
+            <div class="tech-tags">
+              <span class="tech-tag-sm">Vue.js</span>
+              <span class="tech-tag-sm">AI Image Search</span>
+            </div>
+          </article>
+
+          <article class="project-card" data-card-index="1">
+            <h2>
+              AI 데이터 수집 스크래퍼<span class="badge private">PRIVATE</span>
+            </h2>
+            <p class="project-description">
+              - AI 학습을 위한 데이터 수집 스크래퍼<br />
+              - 이미지를 각 사이트에 맞게 수집하고 정제<br />
+              - 이미지 라벨링
+            </p>
+            <div class="problem-solution">
+              <div class="ps-item">
+                <span class="ps-label">Problem</span>
+                <span class="ps-text"
+                  >SPA를 사용하는 페이지는 데이터를 수집하기 어려움</span
+                >
+              </div>
+              <div class="ps-item">
+                <span class="ps-label">Solution</span>
+                <span class="ps-text"
+                  >실제로 페이지가 렌더링 된 이후에 데이터를 수집할 수 있도록
+                  구현</span
+                >
+              </div>
+            </div>
+            <div class="project-preview private">
+              <div class="access-restricted-label">ACCESS RESTRICTED</div>
+              <div class="fingerprint-scanner">
+                <div class="fp-reticle"></div>
+                <div class="fp-ridges"></div>
+                <div class="fp-scan-line"></div>
+                <div class="fp-status">SCANNING</div>
+              </div>
+            </div>
+            <div class="tech-tags">
+              <span class="tech-tag-sm">Vue.js</span>
+              <span class="tech-tag-sm">Node.js</span>
+              <span class="tech-tag-sm">Puppeteer</span>
+            </div>
           </article>
 
           <!-- Project 2: ServiceDesk -->
-          <article class="project-card">
+          <article class="project-card" data-card-index="2">
             <h2>ServiceDesk<span class="badge private">PRIVATE</span></h2>
             <p class="project-description">
               이벤트 관리/ 알림 관리 등 보안관제를 위한 통합 서비스 입니다.
             </p>
-            <div class="project-preview private"></div>
+            <div class="problem-solution">
+              <div class="ps-item">
+                <span class="ps-label">Problem</span>
+                <span class="ps-text"
+                  >보안 이벤트의 분산된 관리와 느린 대응 시간</span
+                >
+              </div>
+              <div class="ps-item">
+                <span class="ps-label">Solution</span>
+                <span class="ps-text"
+                  >통합 대시보드와 자동화된 알림 시스템으로 실시간 관제
+                  구현</span
+                >
+              </div>
+            </div>
+            <div class="project-preview private">
+              <div class="access-restricted-label">ACCESS RESTRICTED</div>
+              <div class="fingerprint-scanner">
+                <div class="fp-reticle"></div>
+                <div class="fp-ridges"></div>
+                <div class="fp-scan-line"></div>
+                <div class="fp-status">SCANNING</div>
+              </div>
+            </div>
+            <div class="tech-tags">
+              <span class="tech-tag-sm">Vue.js</span>
+              <span class="tech-tag-sm">Rust WebAssembly</span>
+              <span class="tech-tag-sm">Web Worker</span>
+              <span class="tech-tag-sm">WebSocket</span>
+              <span class="tech-tag-sm">REST API</span>
+            </div>
           </article>
 
           <!-- Project 3: 국방부 -->
-          <article class="project-card">
+          <article class="project-card" data-card-index="3">
             <h2>
               국방부 기밀 프로젝트<span class="badge private">PRIVATE</span>
             </h2>
@@ -73,11 +165,32 @@
               기밀 프로젝트의 리드 개발자로 투입 되었고 좋은 성과로 표창을
               받았습니다.
             </p>
-            <div class="project-preview private"></div>
+            <div class="problem-solution">
+              <div class="ps-item">
+                <span class="ps-label">Problem</span>
+                <span class="ps-text">기밀 사항</span>
+              </div>
+              <div class="ps-item">
+                <span class="ps-label">Solution</span>
+                <span class="ps-text">기밀 사항</span>
+              </div>
+            </div>
+            <div class="project-preview private">
+              <div class="access-restricted-label">ACCESS RESTRICTED</div>
+              <div class="fingerprint-scanner">
+                <div class="fp-reticle"></div>
+                <div class="fp-ridges"></div>
+                <div class="fp-scan-line"></div>
+                <div class="fp-status">SCANNING</div>
+              </div>
+            </div>
+            <div class="tech-tags">
+              <span class="tech-tag-sm">Classified</span>
+            </div>
           </article>
 
           <!-- Project 4: PROM LIGHT2 -->
-          <article class="project-card">
+          <article class="project-card" data-card-index="4">
             <h2>PROM LIGHT2 <span class="badge private">PRIVATE</span></h2>
             <p class="project-description">
               보안장비 로그를 수집하고 룰 관리를 하는 서비스 입니다.
@@ -87,41 +200,154 @@
               alt="PROM LIGHT2"
               class="project-preview"
             />
+            <div class="tech-tags">
+              <span class="tech-tag-sm">Vue.js</span>
+              <span class="tech-tag-sm">Pixi.js</span>
+              <span class="tech-tag-sm">Log Engine</span>
+            </div>
           </article>
 
           <!-- Project 5: Argus -->
-          <article class="project-card">
+          <article class="project-card" data-card-index="5">
             <h2>Argus <span class="badge private">PRIVATE</span></h2>
             <p class="project-description">
               서버/서비스 실시간 모니터링을 위한 NMS 서비스 입니다.
             </p>
-            <div class="project-preview private"></div>
+            <div class="problem-solution">
+              <div class="ps-item">
+                <span class="ps-label">Problem</span>
+                <span class="ps-text"
+                  >서버 장애 감지 지연과 분산된 모니터링 체계</span
+                >
+              </div>
+              <div class="ps-item">
+                <span class="ps-label">Solution</span>
+                <span class="ps-text"
+                  >실시간 NMS 모니터링으로 즉각적인 장애 감지 및 대응</span
+                >
+              </div>
+            </div>
+            <div class="project-preview private">
+              <div class="access-restricted-label">ACCESS RESTRICTED</div>
+              <div class="fingerprint-scanner">
+                <div class="fp-reticle"></div>
+                <div class="fp-ridges"></div>
+                <div class="fp-scan-line"></div>
+                <div class="fp-status">SCANNING</div>
+              </div>
+            </div>
+            <div class="tech-tags">
+              <span class="tech-tag-sm">Vanilla JS</span>
+              <span class="tech-tag-sm">Three.js</span>
+              <span class="tech-tag-sm">SNMP</span>
+              <span class="tech-tag-sm">NMS</span>
+              <span class="tech-tag-sm">WebSockets</span>
+            </div>
           </article>
 
           <!-- Project 6: PROM-ATS -->
-          <article class="project-card">
+          <article class="project-card" data-card-index="6">
             <h2>PROM-ATS <span class="badge private">PRIVATE</span></h2>
             <p class="project-description">
-              보안 점검을 위한 침투 테스트 서비스 입니다.
+              사회공학적 공격 경로를 점검하고 보안 취약점을 검증하는 침투 테스트
+              서비스입니다.
             </p>
-            <div class="project-preview private"></div>
+            <div class="problem-solution">
+              <div class="ps-item">
+                <span class="ps-label">Problem</span>
+                <span class="ps-text"
+                  >회사나 시기별로 다양한 시나리오 필요</span
+                >
+              </div>
+              <div class="ps-item">
+                <span class="ps-label">Solution</span>
+                <span class="ps-text"
+                  >파일/링크/응답 등 다양한 시나리오를 자유롭게 생성</span
+                >
+              </div>
+            </div>
+            <div class="project-preview private">
+              <div class="access-restricted-label">ACCESS RESTRICTED</div>
+              <div class="fingerprint-scanner">
+                <div class="fp-reticle"></div>
+                <div class="fp-ridges"></div>
+                <div class="fp-scan-line"></div>
+                <div class="fp-status">SCANNING</div>
+              </div>
+            </div>
+            <div class="tech-tags">
+              <span class="tech-tag-sm">Vanilla JS</span>
+              <span class="tech-tag-sm">Penetration Testing</span>
+              <span class="tech-tag-sm">Automation</span>
+            </div>
           </article>
 
           <!-- Project 7: SoarPlaybook -->
-          <article class="project-card">
+          <article class="project-card soar-card" data-card-index="7">
             <h2>SoarPlaybook <span class="badge private">PRIVATE</span></h2>
             <p class="project-description">
-              보안관제 자동화를 위한 서비스 입니다. 레이어 개념을 도입하여 적은
-              플레이북으로도 관리를 쉽게 할 수 있도록 했습니다.
+              보안관제 자동화를 위한 서비스 입니다. 레이어 개념으로 플레이북
+              수를 최소화하여 효율적으로 관리할 수 있도록 설계했습니다
             </p>
-            <div class="project-preview private"></div>
+
+            <!-- Mini Playbook Editor Visual -->
+            <div class="soar-visual">
+              <div class="playbook-stack">
+                <div class="playbook-layer" data-soar-layer="3">
+                  <span class="layer-icon">&#9881;</span>
+                  <span>Response Actions</span>
+                </div>
+                <div class="playbook-layer" data-soar-layer="2">
+                  <span class="layer-icon">&#9670;</span>
+                  <span>Decision Logic</span>
+                </div>
+                <div class="playbook-layer" data-soar-layer="1">
+                  <span class="layer-icon">&#9654;</span>
+                  <span>Trigger / Detection</span>
+                </div>
+              </div>
+
+              <!-- Automation flow -->
+              <div class="soar-flow">
+                <div class="flow-step">Event</div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-step">Analyze</div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-step">Respond</div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-step">Report</div>
+              </div>
+            </div>
+
+            <div class="problem-solution">
+              <div class="ps-item">
+                <span class="ps-label">Problem</span>
+                <span class="ps-text"
+                  >수백 개의 중복 플레이북 관리의 비효율성</span
+                >
+              </div>
+              <div class="ps-item">
+                <span class="ps-label">Solution</span>
+                <span class="ps-text"
+                  >레이어 아키텍처로 최소한의 플레이북으로 최대 커버리지
+                  달성</span
+                >
+              </div>
+            </div>
+
+            <div class="tech-tags">
+              <span class="tech-tag-sm">Vue.js</span>
+              <span class="tech-tag-sm">Rust WebAssembly</span>
+              <span class="tech-tag-sm">SOAR</span>
+              <span class="tech-tag-sm">SSE/REST API</span>
+            </div>
           </article>
 
           <!-- Project 8: HTML Overlay Node -->
-          <article class="project-card">
+          <article class="project-card" data-card-index="8">
             <h2>HTML Overlay Node</h2>
             <p class="project-description">
-              HTML Overlay Node는 HTML을 오버레이 할 수 있는 노드 모듈입니다.
+              HTML 요소를 오버레이 할 수 있는 사용자 정의 노드 모듈입니다.
             </p>
             <img
               src="public/imgs/node.png"
@@ -143,7 +369,7 @@
           </article>
 
           <!-- Project 9: High Tree -->
-          <article class="project-card">
+          <article class="project-card" data-card-index="9">
             <h2>High Tree</h2>
             <p class="project-description">가볍고 빠른 트리 컴포넌트 입니다.</p>
             <img
@@ -165,6 +391,57 @@
         </div>
       </section>
 
+      <!-- Experience / Tech Stack Section -->
+      <section id="experience">
+        <h2 class="section-title">Tech Stack Architecture</h2>
+        <div class="tech-layers">
+          <!-- Top Layer: Frontend -->
+          <div class="tech-layer" data-layer="frontend">
+            <div class="layer-header">
+              <span class="layer-label">Frontend / Visualization</span>
+            </div>
+            <div class="layer-content">
+              <div class="tech-tag">JavaScript/TypeScript</div>
+              <div class="tech-tag">Vue.js</div>
+              <div class="tech-tag">Three.js</div>
+              <div class="tech-tag">GLSL</div>
+              <div class="tech-tag">Pixi.js</div>
+              <div class="tech-tag">HTML Overlay</div>
+              <div class="tech-tag">Rust WASM</div>
+            </div>
+          </div>
+
+          <!-- Middle Layer: Backend/Security -->
+          <div class="tech-layer" data-layer="backend">
+            <div class="layer-header">
+              <span class="layer-label">Backend / Security Logic</span>
+            </div>
+            <div class="layer-content">
+              <div class="tech-tag">Node.js</div>
+              <div class="tech-tag">Security Rules</div>
+              <div class="tech-tag">SOAR Automation</div>
+              <div class="tech-tag">Log Analysis</div>
+              <div class="tech-tag">Playbook Engine</div>
+            </div>
+          </div>
+
+          <!-- Bottom Layer: Infrastructure -->
+          <div class="tech-layer" data-layer="infra">
+            <div class="layer-header">
+              <span class="layer-label">Infrastructure / Server</span>
+            </div>
+            <div class="layer-content">
+              <div class="tech-tag">NMS</div>
+              <div class="tech-tag">SNMP</div>
+              <div class="tech-tag">Server Monitoring</div>
+              <div class="tech-tag">Network Security</div>
+              <div class="tech-tag">Host Based Penetration Testing</div>
+              <div class="tech-tag">Linux</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- Footer -->
       <footer id="contact">
         <p>&copy; 2026 Cheongha Kim</p>
@@ -177,5 +454,24 @@
 
     <!-- Scripts -->
     <script src="public/js/webgl-canvas.js"></script>
+    <script src="public/js/private-card-glitch.js"></script>
+
+    <!-- Matrix surge interaction -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Private card hover triggers matrix surge
+        var cards = document.querySelectorAll(".project-card");
+        cards.forEach(function (card) {
+          card.addEventListener("mouseenter", function () {
+            if (card.querySelector(".badge.private")) {
+              // Trigger matrix surge
+              if (window.__matrixBg) {
+                window.__matrixBg.triggerSurge();
+              }
+            }
+          });
+        });
+      });
+    </script>
   </body>
 </html>

@@ -1,544 +1,559 @@
 /**
- * Solar System Background with Scroll-Based Camera Movement
- * Using Three.js for 3D rendering
+ * 3D Matrix Rain Background with Scroll-Based Camera Movement
+ * SOC (Security Operations Center) themed decorative background
+ * Falling character columns scattered in 3D space
  */
 
-// Import Three.js from CDN (will be added to HTML)
-// This script assumes Three.js is loaded globally
+class MatrixRainBackground {
+  constructor(canvas) {
+    this.canvas = canvas;
+    this.scrollY = 0;
+    this.targetScrollY = 0;
+    this.mouseX = 0;
+    this.mouseY = 0;
+    this.columns = [];
+    this.frameCount = 0;
+    this.clock = new THREE.Clock();
 
-class SolarSystemBackground {
-    constructor(canvas) {
-        this.canvas = canvas;
-        this.scrollY = 0;
-        this.targetScrollY = 0;
+    this.chars =
+      "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ<>{}[]|/\\:;.=-+*";
 
-        // Initialize Three.js
-        this.initThreeJS();
-        this.createSolarSystem();
-        this.initEventListeners();
-        this.resize();
-        this.animate();
+    this.initThreeJS();
+    this.createHexGrid();
+    this.createBinaryRain();
+    this.createMatrixColumns();
+    this.createStarfield();
+    this.createAmbientParticles();
+    this.initEventListeners();
+    this.resize();
+    this.animate();
+  }
+
+  initThreeJS() {
+    this.scene = new THREE.Scene();
+    this.scene.fog = new THREE.FogExp2(0x0a0e1a, 0.006);
+
+    this.camera = new THREE.PerspectiveCamera(
+      60,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000,
+    );
+    this.camera.position.set(0, 15, 60);
+    this.camera.lookAt(0, 0, 0);
+
+    this.renderer = new THREE.WebGLRenderer({
+      canvas: this.canvas,
+      antialias: true,
+      alpha: false,
+    });
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    this.renderer.setClearColor(0x0a0e1a);
+
+    const ambientLight = new THREE.AmbientLight(0x112233, 0.2);
+    this.scene.add(ambientLight);
+  }
+
+  createHexGrid() {
+    const gridGroup = new THREE.Group();
+    const hexRadius = 3;
+    const rows = 20;
+    const cols = 30;
+
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
+        const x = col * hexRadius * 1.75 - (cols * hexRadius * 1.75) / 2;
+        const z =
+          row * hexRadius * 1.52 -
+          (rows * hexRadius * 1.52) / 2 +
+          (col % 2 ? hexRadius * 0.76 : 0);
+
+        if (Math.random() > 0.4) continue;
+
+        const points = [];
+        for (let i = 0; i <= 6; i++) {
+          const angle = (Math.PI / 3) * i + Math.PI / 6;
+          points.push(
+            new THREE.Vector3(
+              x + Math.cos(angle) * hexRadius,
+              -35,
+              z + Math.sin(angle) * hexRadius,
+            ),
+          );
+        }
+
+        const geometry = new THREE.BufferGeometry().setFromPoints(points);
+        const distFromCenter = Math.sqrt(x * x + z * z);
+        const opacity = Math.max(0.02, 0.1 - distFromCenter * 0.001);
+
+        const material = new THREE.LineBasicMaterial({
+          color: 0x00d4ff,
+          transparent: true,
+          opacity: opacity,
+        });
+        gridGroup.add(new THREE.Line(geometry, material));
+      }
     }
 
-    initThreeJS() {
-        // Scene
-        this.scene = new THREE.Scene();
-        this.scene.fog = new THREE.Fog(0x000000, 50, 200);
+    this.scene.add(gridGroup);
+  }
 
-        // Camera
-        this.camera = new THREE.PerspectiveCamera(
-            60,
-            window.innerWidth / window.innerHeight,
-            0.1,
-            1000
+  createBinaryRain() {
+    const columnCount = 40;
+    this.binaryColumns = [];
+
+    for (let i = 0; i < columnCount; i++) {
+      const charSize = 14 + Math.floor(Math.random() * 4);
+      const canvasW = charSize + 6;
+      const canvasH = 300;
+      const numChars = Math.floor(canvasH / charSize);
+
+      const colCanvas = document.createElement("canvas");
+      colCanvas.width = canvasW;
+      colCanvas.height = canvasH;
+      const ctx = colCanvas.getContext("2d");
+      ctx.fillStyle = "#000";
+      ctx.fillRect(0, 0, canvasW, canvasH);
+
+      const colHeight = 14 + Math.random() * 10;
+      const planeW = colHeight * (canvasW / canvasH);
+      const geometry = new THREE.PlaneGeometry(planeW, colHeight);
+      const texture = new THREE.CanvasTexture(colCanvas);
+      texture.minFilter = THREE.LinearFilter;
+      texture.magFilter = THREE.LinearFilter;
+
+      const material = new THREE.MeshBasicMaterial({
+        map: texture,
+        transparent: true,
+        opacity: 0.4 + Math.random() * 0.2,
+        blending: THREE.AdditiveBlending,
+        side: THREE.DoubleSide,
+        depthWrite: false,
+      });
+
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.position.set(
+        (Math.random() - 0.5) * 160,
+        (Math.random() - 0.5) * 40,
+        (Math.random() - 0.5) * 140 - 20,
+      );
+
+      this.scene.add(mesh);
+
+      const charArray = [];
+      for (let j = 0; j < numChars; j++) {
+        charArray.push(Math.random() > 0.5 ? "0" : "1");
+      }
+
+      this.binaryColumns.push({
+        canvas: colCanvas,
+        ctx,
+        texture,
+        mesh,
+        charSize,
+        numChars,
+        headPos: Math.random() * numChars * (0.5 + Math.random()),
+        headSpeed: 0.3 + Math.random() * 0.9,
+        trailLength: 4 + Math.floor(Math.random() * 10),
+        chars: charArray,
+        charFlickerTimer: Math.random() * 0.2,
+        charFlickerInterval: 0.1 + Math.random() * 0.3,
+      });
+    }
+  }
+
+  createMatrixColumns() {
+    const columnCount = 70;
+
+    for (let i = 0; i < columnCount; i++) {
+      const charSize = 11 + Math.floor(Math.random() * 5);
+      const canvasW = charSize + 6;
+      const canvasH = 400;
+      const numChars = Math.floor(canvasH / charSize);
+
+      // Create canvas for this column
+      const colCanvas = document.createElement("canvas");
+      colCanvas.width = canvasW;
+      colCanvas.height = canvasH;
+      const ctx = colCanvas.getContext("2d");
+      ctx.fillStyle = "#000";
+      ctx.fillRect(0, 0, canvasW, canvasH);
+
+      // Create tall thin plane
+      const colHeight = 18 + Math.random() * 14;
+      const planeW = colHeight * (canvasW / canvasH);
+      const geometry = new THREE.PlaneGeometry(planeW, colHeight);
+      const texture = new THREE.CanvasTexture(colCanvas);
+      texture.minFilter = THREE.LinearFilter;
+      texture.magFilter = THREE.LinearFilter;
+
+      const material = new THREE.MeshBasicMaterial({
+        map: texture,
+        transparent: true,
+        opacity: 0.5 + Math.random() * 0.45,
+        blending: THREE.AdditiveBlending,
+        side: THREE.DoubleSide,
+        depthWrite: false,
+      });
+
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.position.set(
+        (Math.random() - 0.5) * 150,
+        (Math.random() - 0.5) * 30,
+        (Math.random() - 0.5) * 130,
+      );
+
+      this.scene.add(mesh);
+
+      // Character array
+      const charArray = [];
+      for (let j = 0; j < numChars; j++) {
+        charArray.push(
+          this.chars[Math.floor(Math.random() * this.chars.length)],
         );
-        this.camera.position.set(0, 30, 80);
-        this.camera.lookAt(0, 0, 0);
+      }
 
-        // Renderer
-        this.renderer = new THREE.WebGLRenderer({
-            canvas: this.canvas,
-            antialias: true,
-            alpha: false
-        });
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
-        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        this.renderer.setClearColor(0x000000);
+      this.columns.push({
+        canvas: colCanvas,
+        ctx,
+        texture,
+        mesh,
+        charSize,
+        numChars,
+        // Much more varied starting positions
+        headPos: Math.random() * numChars * (0.5 + Math.random()),
+        // Significantly faster falling speed with more variation
+        headSpeed: 4 + Math.random() * 11,
+        // More varied trail lengths
+        trailLength: 4 + Math.floor(Math.random() * 18),
+        chars: charArray,
+        charFlickerTimer: Math.random() * 0.1,
+        charFlickerInterval: 0.02 + Math.random() * 0.12,
+        // For surge effect
+        surgeTimer: 0,
+        surgeActive: false,
+      });
+    }
+  }
 
-        // Lighting
-        const ambientLight = new THREE.AmbientLight(0x333333, 0.5);
-        this.scene.add(ambientLight);
+  createStarfield() {
+    const geometry = new THREE.BufferGeometry();
+    const vertices = [];
+    const colors = [];
 
-        const sunLight = new THREE.PointLight(0xffffff, 2, 300);
-        sunLight.position.set(0, 0, 0);
-        this.scene.add(sunLight);
+    for (let i = 0; i < 4000; i++) {
+      vertices.push(
+        (Math.random() - 0.5) * 600,
+        (Math.random() - 0.5) * 600,
+        (Math.random() - 0.5) * 600,
+      );
+      const color = new THREE.Color();
+      const r = Math.random();
+      if (r < 0.4) color.setHex(0xffffff);
+      else if (r < 0.6) color.setHex(0xc8e6ff);
+      else if (r < 0.8) color.setHex(0x88ccff);
+      else color.setHex(0x55aaee);
+      colors.push(color.r, color.g, color.b);
     }
 
-    createSolarSystem() {
-        this.planets = [];
-        this.stars = [];
+    geometry.setAttribute(
+      "position",
+      new THREE.Float32BufferAttribute(vertices, 3),
+    );
+    geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
 
-        // Create starfield background
-        this.createStarfield();
+    const material = new THREE.PointsMaterial({
+      size: 0.2,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.7,
+      sizeAttenuation: true,
+    });
 
-        // Create milky way galaxy
-        this.createMilkyWay();
+    this.starField = new THREE.Points(geometry, material);
+    this.scene.add(this.starField);
+  }
 
-        // Enhanced Sun with realistic glow
-        const sunGeometry = new THREE.SphereGeometry(5, 64, 64);
-        const sunMaterial = new THREE.MeshBasicMaterial({
-            color: 0xfdb813,
-            emissive: 0xff8800,
-            emissiveIntensity: 1.5
-        });
-        this.sun = new THREE.Mesh(sunGeometry, sunMaterial);
-        this.scene.add(this.sun);
+  createAmbientParticles() {
+    const count = 600;
+    const geometry = new THREE.BufferGeometry();
+    const vertices = [];
+    const colors = [];
 
-        // Multi-layer glow effect for realism
-        // Inner glow (orange)
-        const innerGlowGeometry = new THREE.SphereGeometry(5.8, 32, 32);
-        const innerGlowMaterial = new THREE.MeshBasicMaterial({
-            color: 0xff6600,
-            transparent: true,
-            opacity: 0.5,
-            side: THREE.BackSide
-        });
-        const innerGlow = new THREE.Mesh(innerGlowGeometry, innerGlowMaterial);
-        this.sun.add(innerGlow);
-
-        // Middle glow (yellow-orange)
-        const middleGlowGeometry = new THREE.SphereGeometry(7, 32, 32);
-        const middleGlowMaterial = new THREE.MeshBasicMaterial({
-            color: 0xffaa00,
-            transparent: true,
-            opacity: 0.25,
-            side: THREE.BackSide
-        });
-        const middleGlow = new THREE.Mesh(middleGlowGeometry, middleGlowMaterial);
-        this.sun.add(middleGlow);
-
-        // Outer corona (yellow-white)
-        const coronaGeometry = new THREE.SphereGeometry(9, 32, 32);
-        const coronaMaterial = new THREE.MeshBasicMaterial({
-            color: 0xffdd88,
-            transparent: true,
-            opacity: 0.15,
-            side: THREE.BackSide
-        });
-        const corona = new THREE.Mesh(coronaGeometry, coronaMaterial);
-        this.sun.add(corona);
-
-        // Planet data: [radius, orbitRadius, color, speed, tilt, name]
-        const planetData = [
-            [0.8, 12, 0x8c7853, 0.015, 0.1, 'mercury'],    // Mercury
-            [1.2, 18, 0xffc649, 0.012, 0.05, 'venus'],     // Venus
-            [1.3, 25, 0x4a90e2, 0.010, 0.15, 'earth'],     // Earth
-            [0.9, 32, 0xcd5c5c, 0.008, 0.12, 'mars'],      // Mars
-            [3.5, 45, 0xc88b3a, 0.005, 0.08, 'jupiter'],   // Jupiter
-            [3.0, 60, 0xe1c16e, 0.004, 0.1, 'saturn'],     // Saturn
-            [2.0, 75, 0x4fd0e7, 0.003, 0.2, 'uranus'],     // Uranus
-            [1.9, 88, 0x4166f5, 0.002, 0.18, 'neptune']    // Neptune
-        ];
-
-        planetData.forEach(([radius, orbitRadius, color, speed, tilt, name]) => {
-            this.createPlanet(radius, orbitRadius, color, speed, tilt, name);
-        });
-
-        // Create asteroid belt
-        this.createAsteroidBelt();
+    for (let i = 0; i < count; i++) {
+      vertices.push(
+        (Math.random() - 0.5) * 200,
+        (Math.random() - 0.5) * 120,
+        (Math.random() - 0.5) * 200,
+      );
+      const c = new THREE.Color();
+      c.setHex(Math.random() > 0.6 ? 0x00ffcc : 0x00d4ff);
+      colors.push(c.r, c.g, c.b);
     }
 
-    createPlanet(radius, orbitRadius, color, speed, tilt, name) {
-        // Create procedural texture for the planet
-        const texture = this.createPlanetTexture(color, name);
+    geometry.setAttribute(
+      "position",
+      new THREE.Float32BufferAttribute(vertices, 3),
+    );
+    geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
 
-        // Planet mesh with texture
-        const geometry = new THREE.SphereGeometry(radius, 64, 64);
-        const material = new THREE.MeshStandardMaterial({
-            map: texture,
-            roughness: 0.7,
-            metalness: 0.3
-        });
-        const planet = new THREE.Mesh(geometry, material);
+    const material = new THREE.PointsMaterial({
+      size: 0.06,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.3,
+      sizeAttenuation: true,
+      blending: THREE.AdditiveBlending,
+    });
 
-        // Orbit line
-        const orbitGeometry = new THREE.BufferGeometry();
-        const orbitPoints = [];
-        for (let i = 0; i <= 64; i++) {
-            const angle = (i / 64) * Math.PI * 2;
-            orbitPoints.push(
-                Math.cos(angle) * orbitRadius,
-                0,
-                Math.sin(angle) * orbitRadius
-            );
-        }
-        orbitGeometry.setAttribute('position', new THREE.Float32BufferAttribute(orbitPoints, 3));
-        const orbitMaterial = new THREE.LineBasicMaterial({
-            color: 0x444444,
-            transparent: true,
-            opacity: 0.3
-        });
-        const orbitLine = new THREE.Line(orbitGeometry, orbitMaterial);
-        orbitLine.rotation.x = Math.PI / 2;
-        this.scene.add(orbitLine);
+    this.ambientParticles = new THREE.Points(geometry, material);
+    this.scene.add(this.ambientParticles);
+  }
 
-        // Store planet data
-        this.planets.push({
-            mesh: planet,
-            orbitRadius: orbitRadius,
-            speed: speed,
-            angle: Math.random() * Math.PI * 2,
-            tilt: tilt,
-            rotationSpeed: 0.01 + Math.random() * 0.02
-        });
+  initEventListeners() {
+    window.addEventListener("resize", () => this.resize());
 
-        this.scene.add(planet);
+    window.addEventListener("scroll", () => {
+      this.targetScrollY = window.scrollY;
+    });
+
+    window.addEventListener("mousemove", (e) => {
+      this.mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+      this.mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+    });
+  }
+
+  resize() {
+    this.camera.aspect = window.innerWidth / window.innerHeight;
+    this.camera.updateProjectionMatrix();
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
+  }
+
+  // Trigger a brief brightness surge on some columns
+  triggerSurge() {
+    const count = 8 + Math.floor(Math.random() * 10);
+    for (let i = 0; i < count; i++) {
+      const idx = Math.floor(Math.random() * this.columns.length);
+      this.columns[idx].surgeActive = true;
+      this.columns[idx].surgeTimer = 0.3 + Math.random() * 0.3;
     }
+  }
 
-    createPlanetTexture(baseColor, planetName) {
-        // Create canvas for texture
-        const size = 512;
-        const canvas = document.createElement('canvas');
-        canvas.width = size;
-        canvas.height = size;
-        const ctx = canvas.getContext('2d');
+  updateCameraFromScroll() {
+    this.scrollY += (this.targetScrollY - this.scrollY) * 0.05;
 
-        // Convert hex color to RGB
-        const r = (baseColor >> 16) & 255;
-        const g = (baseColor >> 8) & 255;
-        const b = baseColor & 255;
+    const maxScroll =
+      document.documentElement.scrollHeight - window.innerHeight;
+    const scrollProgress = this.scrollY / Math.max(maxScroll, 1);
 
-        // Fill base color
-        ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
-        ctx.fillRect(0, 0, size, size);
+    const startPos = { x: 0, y: 15, z: 60 };
+    const endPos = { x: -40, y: -10, z: -30 };
 
-        // Add surface features based on planet type
-        if (planetName === 'earth') {
-            // Earth: continents and oceans
-            this.addEarthFeatures(ctx, size, r, g, b);
-        } else if (planetName === 'jupiter' || planetName === 'saturn') {
-            // Gas giants: bands
-            this.addGasGiantBands(ctx, size, r, g, b);
-        } else if (planetName === 'mars') {
-            // Mars: craters and terrain
-            this.addRockyFeatures(ctx, size, r, g, b, 30);
-        } else {
-            // Other planets: general surface features
-            this.addRockyFeatures(ctx, size, r, g, b, 20);
-        }
+    this.camera.position.x =
+      startPos.x + (endPos.x - startPos.x) * scrollProgress;
+    this.camera.position.y =
+      startPos.y + (endPos.y - startPos.y) * scrollProgress;
+    this.camera.position.z =
+      startPos.z + (endPos.z - startPos.z) * scrollProgress;
 
-        // Create Three.js texture from canvas
-        const texture = new THREE.CanvasTexture(canvas);
-        texture.needsUpdate = true;
-        return texture;
+    const lookTarget = new THREE.Vector3(
+      -20 * scrollProgress,
+      -5 * scrollProgress,
+      -10 * scrollProgress,
+    );
+    this.camera.lookAt(lookTarget);
+
+    if (this.mouseX !== undefined) {
+      this.camera.position.x += this.mouseX * 2;
+      this.camera.position.y += this.mouseY * 1.5;
     }
+  }
 
-    addEarthFeatures(ctx, size, r, g, b) {
-        // Add green landmasses
-        for (let i = 0; i < 15; i++) {
-            const x = Math.random() * size;
-            const y = Math.random() * size;
-            const radius = 20 + Math.random() * 60;
+  updateMatrixColumns(delta) {
+    this.frameCount++;
 
-            ctx.fillStyle = `rgba(34, 139, 34, ${0.6 + Math.random() * 0.4})`;
-            ctx.beginPath();
-            ctx.arc(x, y, radius, 0, Math.PI * 2);
-            ctx.fill();
-        }
+    // Update binary rain (background layer)
+    if (this.binaryColumns) {
+      this.binaryColumns.forEach((col) => {
+        const { ctx, canvas, charSize, numChars } = col;
 
-        // Add white clouds
-        for (let i = 0; i < 30; i++) {
-            const x = Math.random() * size;
-            const y = Math.random() * size;
-            const radius = 10 + Math.random() * 25;
-
-            ctx.fillStyle = `rgba(255, 255, 255, ${0.3 + Math.random() * 0.3})`;
-            ctx.beginPath();
-            ctx.arc(x, y, radius, 0, Math.PI * 2);
-            ctx.fill();
-        }
-    }
-
-    addGasGiantBands(ctx, size, r, g, b) {
-        // Add horizontal bands
-        const bandCount = 15 + Math.floor(Math.random() * 10);
-        for (let i = 0; i < bandCount; i++) {
-            const y = (i / bandCount) * size;
-            const bandHeight = size / bandCount;
-            const darkness = Math.random() * 0.3;
-
-            ctx.fillStyle = `rgba(${Math.floor(r * (1 - darkness))}, ${Math.floor(g * (1 - darkness))}, ${Math.floor(b * (1 - darkness))}, ${0.3 + Math.random() * 0.5})`;
-            ctx.fillRect(0, y, size, bandHeight);
-        }
-
-        // Add some swirl patterns
-        for (let i = 0; i < 5; i++) {
-            const x = Math.random() * size;
-            const y = Math.random() * size;
-            const radius = 20 + Math.random() * 40;
-
-            ctx.fillStyle = `rgba(${Math.floor(r * 0.8)}, ${Math.floor(g * 0.8)}, ${Math.floor(b * 0.8)}, 0.5)`;
-            ctx.beginPath();
-            ctx.ellipse(x, y, radius, radius * 0.6, Math.random() * Math.PI, 0, Math.PI * 2);
-            ctx.fill();
-        }
-    }
-
-    addRockyFeatures(ctx, size, r, g, b, craterCount) {
-        // Add craters and surface variations
-        for (let i = 0; i < craterCount; i++) {
-            const x = Math.random() * size;
-            const y = Math.random() * size;
-            const radius = 5 + Math.random() * 30;
-            const darkness = 0.2 + Math.random() * 0.4;
-
-            // Crater shadow
-            ctx.fillStyle = `rgba(${Math.floor(r * (1 - darkness))}, ${Math.floor(g * (1 - darkness))}, ${Math.floor(b * (1 - darkness))}, 0.7)`;
-            ctx.beginPath();
-            ctx.arc(x, y, radius, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Crater rim highlight
-            ctx.strokeStyle = `rgba(${Math.min(255, r + 30)}, ${Math.min(255, g + 30)}, ${Math.min(255, b + 30)}, 0.4)`;
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.arc(x, y, radius, 0, Math.PI * 2);
-            ctx.stroke();
-        }
-
-        // Add some color variation patches
-        for (let i = 0; i < 15; i++) {
-            const x = Math.random() * size;
-            const y = Math.random() * size;
-            const radius = 20 + Math.random() * 50;
-            const variation = (Math.random() - 0.5) * 0.2;
-
-            ctx.fillStyle = `rgba(${Math.floor(r * (1 + variation))}, ${Math.floor(g * (1 + variation))}, ${Math.floor(b * (1 + variation))}, 0.3)`;
-            ctx.beginPath();
-            ctx.arc(x, y, radius, 0, Math.PI * 2);
-            ctx.fill();
-        }
-    }
-
-    createAsteroidBelt() {
-        const asteroidCount = 300;
-        const asteroidGeometry = new THREE.SphereGeometry(0.1, 8, 8);
-        const asteroidMaterial = new THREE.MeshStandardMaterial({
-            color: 0x888888,
-            roughness: 0.9
-        });
-
-        for (let i = 0; i < asteroidCount; i++) {
-            const asteroid = new THREE.Mesh(asteroidGeometry, asteroidMaterial);
-            const angle = Math.random() * Math.PI * 2;
-            const radius = 35 + Math.random() * 8;
-            const height = (Math.random() - 0.5) * 3;
-
-            asteroid.position.set(
-                Math.cos(angle) * radius,
-                height,
-                Math.sin(angle) * radius
-            );
-            asteroid.scale.setScalar(0.5 + Math.random() * 1.5);
-
-            this.scene.add(asteroid);
-        }
-    }
-
-    createStarfield() {
-        const starGeometry = new THREE.BufferGeometry();
-        const starVertices = [];
-        const starColors = [];
-        const starSizes = [];
-
-        for (let i = 0; i < 5000; i++) {
-            const x = (Math.random() - 0.5) * 500;
-            const y = (Math.random() - 0.5) * 500;
-            const z = (Math.random() - 0.5) * 500;
-            starVertices.push(x, y, z);
-
-            // Random star colors (white, blue-white, yellow-white)
-            const color = new THREE.Color();
-            const colorChoice = Math.random();
-            if (colorChoice < 0.7) {
-                color.setHex(0xffffff); // White
-            } else if (colorChoice < 0.85) {
-                color.setHex(0xaaccff); // Blue-white
-            } else {
-                color.setHex(0xffffaa); // Yellow-white
+        col.headPos += col.headSpeed * delta;
+        if (col.headPos >= numChars) {
+          col.headPos -= numChars;
+          for (let j = 0; j < numChars; j++) {
+            if (Math.random() < 0.15) {
+              col.chars[j] = Math.random() > 0.5 ? "0" : "1";
             }
-            starColors.push(color.r, color.g, color.b);
-
-            // Vary star sizes - most small, few large
-            const size = Math.random() < 0.9 ? 0.2 + Math.random() * 0.3 : 0.5 + Math.random() * 0.5;
-            starSizes.push(size);
+          }
         }
 
-        starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
-        starGeometry.setAttribute('color', new THREE.Float32BufferAttribute(starColors, 3));
-        starGeometry.setAttribute('size', new THREE.Float32BufferAttribute(starSizes, 1));
-
-        const starMaterial = new THREE.PointsMaterial({
-            size: 0.4,
-            vertexColors: true,
-            transparent: true,
-            opacity: 0.9,
-            sizeAttenuation: true
-        });
-
-        this.starField = new THREE.Points(starGeometry, starMaterial);
-        this.scene.add(this.starField);
-    }
-
-    createMilkyWay() {
-        // Create milky way galaxy band
-        const milkyWayGeometry = new THREE.BufferGeometry();
-        const milkyWayVertices = [];
-        const milkyWayColors = [];
-
-        // Create a band of stars representing the milky way
-        for (let i = 0; i < 8000; i++) {
-            const angle = Math.random() * Math.PI * 2;
-            const radius = 100 + Math.random() * 200;
-
-            // Gaussian distribution for thickness
-            const thickness = (Math.random() + Math.random() + Math.random() - 1.5) * 20;
-
-            const x = Math.cos(angle) * radius;
-            const y = thickness;
-            const z = Math.sin(angle) * radius;
-
-            milkyWayVertices.push(x, y, z);
-
-            // Milky way colors - subtle blues and whites
-            const color = new THREE.Color();
-            const colorChoice = Math.random();
-            if (colorChoice < 0.6) {
-                color.setHex(0xccddff); // Pale blue
-            } else if (colorChoice < 0.85) {
-                color.setHex(0xffffff); // White
-            } else {
-                color.setHex(0xffddcc); // Pale orange
-            }
-
-            milkyWayColors.push(color.r, color.g, color.b);
+        col.charFlickerTimer += delta;
+        if (col.charFlickerTimer > col.charFlickerInterval) {
+          col.charFlickerTimer = 0;
+          const idx = Math.floor(Math.random() * numChars);
+          col.chars[idx] = Math.random() > 0.5 ? "0" : "1";
         }
 
-        milkyWayGeometry.setAttribute('position', new THREE.Float32BufferAttribute(milkyWayVertices, 3));
-        milkyWayGeometry.setAttribute('color', new THREE.Float32BufferAttribute(milkyWayColors, 3));
+        ctx.fillStyle = "rgba(0, 0, 0, 0.95)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        const milkyWayMaterial = new THREE.PointsMaterial({
-            size: 0.3,
-            vertexColors: true,
-            transparent: true,
-            opacity: 0.4,
-            sizeAttenuation: true,
-            blending: THREE.AdditiveBlending
-        });
+        ctx.font = charSize + "px monospace";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "top";
 
-        this.milkyWay = new THREE.Points(milkyWayGeometry, milkyWayMaterial);
-        this.milkyWay.rotation.x = Math.PI / 6; // Tilt the galaxy band
-        this.scene.add(this.milkyWay);
-    }
+        const headIdx = Math.floor(col.headPos);
 
-    initEventListeners() {
-        window.addEventListener('resize', () => this.resize());
+        for (let j = 0; j < numChars; j++) {
+          const distBehindHead = (headIdx - j + numChars) % numChars;
+          if (distBehindHead > col.trailLength) continue;
 
-        // Scroll event for camera movement
-        window.addEventListener('scroll', () => {
-            this.targetScrollY = window.scrollY;
-        });
+          const brightness = (1 - distBehindHead / col.trailLength) * 0.8;
+          const y = j * charSize;
 
-        // Mouse move for subtle camera tilt
-        window.addEventListener('mousemove', (e) => {
-            this.mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-            this.mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
-        });
-    }
+          ctx.shadowBlur = 0;
+          const g = Math.floor(Math.min(255, 160 * brightness));
+          const b = Math.floor(Math.min(255, 220 * brightness));
+          const alpha = Math.max(0.1, brightness * 0.7);
+          ctx.fillStyle = "rgba(0, " + g + ", " + b + ", " + alpha + ")";
 
-    resize() {
-        this.camera.aspect = window.innerWidth / window.innerHeight;
-        this.camera.updateProjectionMatrix();
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
-    }
-
-    updateCameraFromScroll() {
-        // Smooth scroll interpolation
-        this.scrollY += (this.targetScrollY - this.scrollY) * 0.05;
-
-        // Calculate scroll progress (0 to 1)
-        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-        const scrollProgress = this.scrollY / Math.max(maxScroll, 1);
-
-        // Camera movement based on scroll
-        // Start position: Above and far
-        // End position: Close and side view
-        const startPos = { x: 0, y: 30, z: 80 };
-        const endPos = { x: 120, y: 20, z: 50 };
-
-        this.camera.position.x = startPos.x + (endPos.x - startPos.x) * scrollProgress;
-        this.camera.position.y = startPos.y + (endPos.y - startPos.y) * scrollProgress;
-        this.camera.position.z = startPos.z + (endPos.z - startPos.z) * scrollProgress;
-
-        // Rotate camera view as we scroll
-        const lookAtTarget = new THREE.Vector3(
-            -20 * scrollProgress,
-            0,
-            0
-        );
-        this.camera.lookAt(lookAtTarget);
-
-        // Add subtle mouse-based camera tilt
-        if (this.mouseX !== undefined && this.mouseY !== undefined) {
-            this.camera.position.x += this.mouseX * 2;
-            this.camera.position.y += this.mouseY * 2;
-        }
-    }
-
-    animate() {
-        // Update camera based on scroll
-        this.updateCameraFromScroll();
-
-        // Rotate planets
-        this.planets.forEach(planet => {
-            // Orbit around sun
-            planet.angle += planet.speed;
-            planet.mesh.position.x = Math.cos(planet.angle) * planet.orbitRadius;
-            planet.mesh.position.z = Math.sin(planet.angle) * planet.orbitRadius;
-            planet.mesh.position.y = Math.sin(planet.angle) * planet.tilt * 2;
-
-            // Rotate planet on its axis
-            planet.mesh.rotation.y += planet.rotationSpeed;
-        });
-
-        // Slowly rotate sun with pulsing effect
-        this.sun.rotation.y += 0.002;
-
-        // Add subtle pulsing to sun's children (glow layers)
-        const pulseScale = 1 + Math.sin(Date.now() * 0.001) * 0.05;
-        this.sun.children.forEach(child => {
-            child.scale.setScalar(pulseScale);
-        });
-
-        // Slowly rotate starfield for depth effect
-        if (this.starField) {
-            this.starField.rotation.y += 0.0001;
+          ctx.fillText(col.chars[j], canvas.width / 2, y);
         }
 
-        // Rotate milky way galaxy slowly
-        if (this.milkyWay) {
-            this.milkyWay.rotation.y += 0.00005;
-        }
-
-        // Render
-        this.renderer.render(this.scene, this.camera);
-
-        requestAnimationFrame(() => this.animate());
+        col.texture.needsUpdate = true;
+        col.mesh.quaternion.copy(this.camera.quaternion);
+      });
     }
-}
 
-// Initialize when DOM and Three.js are ready
-function initBackground() {
-    if (typeof THREE === 'undefined') {
-        console.error('Three.js not loaded. Please include Three.js library.');
+    this.columns.forEach((col, colIdx) => {
+      // Round-robin: update ~23 columns per frame (each column updates every 3 frames)
+      if ((this.frameCount + colIdx) % 3 !== 0) {
+        // Still billboard even on skip frames
+        col.mesh.quaternion.copy(this.camera.quaternion);
         return;
+      }
+
+      const { ctx, canvas, charSize, numChars } = col;
+      const effectiveDelta = delta * 3; // compensate for skip
+
+      // Move head
+      col.headPos += col.headSpeed * effectiveDelta;
+      if (col.headPos >= numChars) {
+        col.headPos -= numChars;
+        // Refresh some chars
+        for (let j = 0; j < numChars; j++) {
+          if (Math.random() < 0.25) {
+            col.chars[j] =
+              this.chars[Math.floor(Math.random() * this.chars.length)];
+          }
+        }
+      }
+
+      // Random character flicker
+      col.charFlickerTimer += effectiveDelta;
+      if (col.charFlickerTimer > col.charFlickerInterval) {
+        col.charFlickerTimer = 0;
+        const idx = Math.floor(Math.random() * numChars);
+        col.chars[idx] =
+          this.chars[Math.floor(Math.random() * this.chars.length)];
+      }
+
+      // Surge countdown
+      if (col.surgeActive) {
+        col.surgeTimer -= effectiveDelta;
+        if (col.surgeTimer <= 0) {
+          col.surgeActive = false;
+        }
+      }
+
+      // Clear canvas
+      ctx.fillStyle = "rgba(0, 0, 0, 0.92)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Draw characters
+      ctx.font = charSize + "px monospace";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+
+      const headIdx = Math.floor(col.headPos);
+      const surgeBoost = col.surgeActive ? 1.5 : 1;
+
+      for (let j = 0; j < numChars; j++) {
+        const distBehindHead = (headIdx - j + numChars) % numChars;
+        if (distBehindHead > col.trailLength) continue;
+
+        const brightness = (1 - distBehindHead / col.trailLength) * surgeBoost;
+        const y = j * charSize;
+
+        if (distBehindHead === 0) {
+          // Head: bright white with glow
+          ctx.shadowColor = "#00ffdd";
+          ctx.shadowBlur = 10;
+          ctx.fillStyle =
+            "rgba(255, 255, 255, " + Math.min(1, brightness) + ")";
+        } else if (distBehindHead < 3) {
+          // Near head: bright cyan
+          ctx.shadowColor = "#00d4ff";
+          ctx.shadowBlur = 6;
+          var a = Math.min(1, brightness * 0.9);
+          ctx.fillStyle = "rgba(0, 255, 220, " + a + ")";
+        } else {
+          // Trail: fading
+          ctx.shadowBlur = 0;
+          var g = Math.floor(Math.min(255, 180 * brightness));
+          var b = Math.floor(Math.min(255, 255 * brightness));
+          var alpha = Math.max(0.05, brightness * 0.7);
+          ctx.fillStyle = "rgba(0, " + g + ", " + b + ", " + alpha + ")";
+        }
+
+        ctx.fillText(col.chars[j], canvas.width / 2, y);
+      }
+
+      ctx.shadowBlur = 0;
+      col.texture.needsUpdate = true;
+
+      // Billboard
+      col.mesh.quaternion.copy(this.camera.quaternion);
+    });
+  }
+
+  animate() {
+    var delta = this.clock.getDelta();
+
+    this.updateCameraFromScroll();
+    this.updateMatrixColumns(delta);
+
+    if (this.starField) {
+      this.starField.rotation.y += 0.00006;
+    }
+    if (this.ambientParticles) {
+      this.ambientParticles.rotation.y += 0.00015;
     }
 
-    const canvas = document.getElementById('webgl-canvas');
-    if (canvas) {
-        new SolarSystemBackground(canvas);
-    }
+    this.renderer.render(this.scene, this.camera);
+    requestAnimationFrame(() => this.animate());
+  }
 }
 
-// Wait for both DOM and Three.js to be ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initBackground);
+// Initialize
+function initBackground() {
+  if (typeof THREE === "undefined") {
+    console.error("Three.js not loaded.");
+    return;
+  }
+
+  var canvas = document.getElementById("webgl-canvas");
+  if (canvas) {
+    window.__matrixBg = new MatrixRainBackground(canvas);
+  }
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initBackground);
 } else {
-    // If DOM already loaded, check if Three.js is ready
-    if (typeof THREE !== 'undefined') {
-        initBackground();
-    } else {
-        // Wait a bit for Three.js to load
-        setTimeout(initBackground, 100);
-    }
+  if (typeof THREE !== "undefined") {
+    initBackground();
+  } else {
+    setTimeout(initBackground, 100);
+  }
 }
