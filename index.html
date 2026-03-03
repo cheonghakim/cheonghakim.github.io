@@ -8,11 +8,11 @@
     <meta name="author" content="Cheonghakim" />
 
     <!-- 오픈 그래프 메타 태그 -->
-    <meta property="og:title" content="My Project Portfolio" />
-    <meta property="og:description" content="Cheonghakim's Project Portfolio" />
+    <meta property="og:title" content="Cheongha Kim | Security Engineer & Frontend Developer" />
+    <meta property="og:description" content="보안 엔지니어 & 프론트엔드 개발자 김청하의 포트폴리오" />
     <meta property="og:type" content="website" />
 
-    <title>CK's Project Portfolio</title>
+    <title>Cheongha Kim | Security Engineer & Frontend Developer</title>
 
     <link rel="stylesheet" href="public/css/styles.css" />
     <link
@@ -33,22 +33,62 @@
 
     <!-- 메인 콘텐츠 -->
     <div class="container">
-      <!-- 헤더 -->
-      <header>
-        <h1>CK's Project Portfolio</h1>
-        <p class="subtitle">최신 기술을 활용한 보안 및 시각화 프로젝트</p>
+      <!-- 히어로 섹션 -->
+      <header class="hero">
+        <p class="hero-greeting">Security Engineer & Frontend Developer</p>
+        <h1>Cheongha Kim</h1>
+        <p class="subtitle">보안 시스템 설계부터 프론트엔드 시각화까지,<br/>안전하고 직관적인 서비스를 만듭니다.</p>
+        <div class="hero-cta">
+          <a href="#projects" class="btn btn-primary">프로젝트 보기</a>
+          <a href="#contact" class="btn">연락하기</a>
+        </div>
       </header>
 
       <!-- 네비게이션 -->
       <nav>
+        <a href="#about">About</a>
         <a href="#projects">Projects</a>
         <a href="#experience">Experience</a>
         <a href="https://github.com/cheonghakim" target="_blank">GitHub</a>
         <a href="#contact">Contact</a>
       </nav>
 
+      <!-- 자기소개 섹션 -->
+      <section id="about" class="reveal">
+        <h2 class="section-title">About</h2>
+        <div class="about-content">
+          <div class="about-text">
+            <p>
+              보안관제 솔루션과 프론트엔드 개발을 전문으로 하는 엔지니어입니다.
+              Vue.js, Three.js, Rust WebAssembly 등 다양한 기술 스택으로
+              실시간 모니터링 대시보드, SOAR 자동화 플레이북, 침투 테스트 플랫폼 등
+              보안 분야의 핵심 서비스를 설계하고 구현해 왔습니다.
+            </p>
+            <p>
+              국방부 기밀 프로젝트에서 리드 개발자로 활동하며 표창을 받았으며,
+              복잡한 보안 데이터를 직관적으로 시각화하는 데 강점을 가지고 있습니다.
+            </p>
+          </div>
+          <div class="about-stats">
+            <div class="stat-item">
+              <span class="stat-number">9+</span>
+              <span class="stat-label">Projects</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">5+</span>
+              <span class="stat-label">Security Solutions</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">1</span>
+              <span class="stat-label">Commendation</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- 프로젝트 섹션 -->
-      <section id="projects">
+      <section id="projects" class="reveal">
+        <h2 class="section-title">Projects</h2>
         <div class="projects-grid">
           <!-- Project 1: BujaMarket -->
           <article class="project-card" data-card-index="0">
@@ -446,7 +486,7 @@
       </section>
 
       <!-- 기술 스택 / 아키텍처 섹션 -->
-      <section id="experience">
+      <section id="experience" class="reveal">
         <h2 class="section-title">Tech Stack Architecture</h2>
         <div class="tech-layers">
           <!-- Top Layer: Frontend -->
@@ -496,13 +536,23 @@
         </div>
       </section>
 
-      <!-- 푸터 -->
-      <footer id="contact">
-        <p>&copy; 2026 Cheongha Kim</p>
-        <p>
-          <a href="mailto:funky856@naver.com">Contact Me</a> |
-          <a href="https://github.com/cheonghakim" target="_blank">GitHub</a>
-        </p>
+      <!-- 푸터 / 연락처 섹션 -->
+      <footer id="contact" class="reveal">
+        <h2 class="section-title">Contact</h2>
+        <p class="contact-description">프로젝트 협업이나 채용 관련 문의를 환영합니다.</p>
+        <div class="contact-links">
+          <a href="mailto:funky856@naver.com" class="contact-item">
+            <span class="contact-icon">&#9993;</span>
+            <span>funky856@naver.com</span>
+          </a>
+          <a href="https://github.com/cheonghakim" target="_blank" class="contact-item">
+            <span class="contact-icon">&#9733;</span>
+            <span>github.com/cheonghakim</span>
+          </a>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2026 Cheongha Kim. All rights reserved.</p>
+        </div>
       </footer>
     </div>
 
@@ -510,7 +560,7 @@
     <script src="public/js/webgl-canvas.js"></script>
     <script src="public/js/private-card-glitch.js"></script>
 
-    <!-- 매트릭스 서지 상호작용 관련 스크립트 -->
+    <!-- 상호작용 및 스크롤 애니메이션 스크립트 -->
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         // 비공개 카드 호버 시 매트릭스 서지 효과 발생
@@ -518,12 +568,28 @@
         cards.forEach(function (card) {
           card.addEventListener("mouseenter", function () {
             if (card.querySelector(".badge.private")) {
-              // Trigger matrix surge
               if (window.__matrixBg) {
                 window.__matrixBg.triggerSurge();
               }
             }
           });
+        });
+
+        // 스크롤 리빌 애니메이션 (Intersection Observer)
+        var revealSections = document.querySelectorAll(".reveal");
+        var observer = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("revealed");
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.1 }
+        );
+        revealSections.forEach(function (section) {
+          observer.observe(section);
         });
       });
     </script>

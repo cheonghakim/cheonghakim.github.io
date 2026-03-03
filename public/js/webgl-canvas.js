@@ -11,6 +11,8 @@ class MatrixRainBackground {
     this.targetScrollY = 0;
     this.mouseX = 0;
     this.mouseY = 0;
+    this.smoothMouseX = 0;
+    this.smoothMouseY = 0;
     this.columns = [];
     this.frameCount = 0;
     this.clock = new THREE.Clock();
@@ -360,11 +362,13 @@ class MatrixRainBackground {
       -10 * scrollProgress,
     );
 
+    // 마우스 위치를 부드럽게 보간 (lerp)
+    this.smoothMouseX += (this.mouseX - this.smoothMouseX) * 0.03;
+    this.smoothMouseY += (this.mouseY - this.smoothMouseY) * 0.03;
+
     // 자연스러운 기울기 효과를 위해 lookTarget에 마우스 오프셋 추가
-    if (this.mouseX !== undefined) {
-      lookTarget.x += this.mouseX * 15;
-      lookTarget.y -= this.mouseY * 15;
-    }
+    lookTarget.x += this.smoothMouseX * 5;
+    lookTarget.y -= this.smoothMouseY * 5;
 
     this.camera.lookAt(lookTarget);
   }

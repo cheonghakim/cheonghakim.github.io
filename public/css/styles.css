@@ -39,6 +39,10 @@
   --transition-speed: 0.3s;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: var(--font-primary);
   background-color: var(--color-bg-primary);
@@ -80,35 +84,54 @@ body {
 }
 
 /* =====================
-   헤더
+   히어로 섹션
 ===================== */
-header {
+.hero {
   text-align: center;
   margin-bottom: var(--spacing-2xl);
-  padding: var(--spacing-xl) 0;
+  padding: var(--spacing-2xl) 0 var(--spacing-xl);
+}
+
+.hero-greeting {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--color-accent-cyan);
+  margin-bottom: var(--spacing-sm);
+  animation: fadeInUp 0.8s ease-out both;
 }
 
 h1 {
-  font-size: 4rem;
+  font-size: 4.5rem;
   font-weight: 800;
   margin-bottom: var(--spacing-md);
   background: linear-gradient(
     135deg,
-    var(--color-accent-cyan),
-    var(--color-accent-black)
+    var(--color-text-primary),
+    var(--color-accent-cyan)
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  letter-spacing: -0.02em;
-  animation: fadeInUp 0.8s ease-out;
+  letter-spacing: -0.03em;
+  animation: fadeInUp 0.8s ease-out 0.15s both;
 }
 
 .subtitle {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   color: var(--color-text-secondary);
   font-weight: 400;
-  animation: fadeInUp 0.8s ease-out 0.2s both;
+  line-height: 1.8;
+  animation: fadeInUp 0.8s ease-out 0.3s both;
+}
+
+.hero-cta {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-lg);
+  animation: fadeInUp 0.8s ease-out 0.45s both;
 }
 
 /* =====================
@@ -119,7 +142,14 @@ nav {
   justify-content: center;
   gap: var(--spacing-lg);
   margin-bottom: var(--spacing-2xl);
-  animation: fadeInUp 0.8s ease-out 0.4s both;
+  padding: var(--spacing-sm) var(--spacing-md);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0, 212, 255, 0.08);
+  animation: fadeInUp 0.8s ease-out 0.6s both;
 }
 
 nav a {
@@ -742,14 +772,23 @@ nav a:hover {
 }
 
 .section-title {
-  font-size: 2.5rem;
+  font-size: 2.2rem;
   font-weight: 700;
   text-align: center;
   margin-bottom: var(--spacing-xl);
-  background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-black));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+  position: relative;
+}
+
+.section-title::after {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 3px;
+  background: var(--color-accent-cyan);
+  margin: var(--spacing-sm) auto 0;
+  border-radius: 2px;
 }
 
 .tech-layers {
@@ -880,24 +919,119 @@ nav a:hover {
 }
 
 /* =====================
-   푸터
+   자기소개 섹션
+===================== */
+#about {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.about-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--spacing-xl);
+  align-items: start;
+}
+
+.about-text p {
+  font-size: 1.05rem;
+  color: var(--color-text-secondary);
+  line-height: 1.8;
+  margin-bottom: var(--spacing-sm);
+}
+
+.about-stats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-glass-bg);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 12px;
+  transition: all var(--transition-speed) ease;
+}
+
+.stat-item:hover {
+  border-color: var(--color-accent-cyan);
+  box-shadow: 0 8px 30px rgba(0, 212, 255, 0.15);
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--color-accent-cyan);
+  letter-spacing: -0.02em;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-secondary);
+}
+
+/* =====================
+   푸터 / 연락처 섹션
 ===================== */
 footer {
   text-align: center;
-  padding: var(--spacing-xl) 0;
-  color: var(--color-text-secondary);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: var(--spacing-2xl) 0 var(--spacing-xl);
   margin-top: var(--spacing-2xl);
 }
 
-footer a {
-  color: var(--color-accent-cyan);
-  text-decoration: none;
-  transition: color var(--transition-speed) ease;
+.contact-description {
+  font-size: 1.05rem;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-lg);
 }
 
-footer a:hover {
-  color: var(--color-text-primary);
+.contact-links {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-2xl);
+  flex-wrap: wrap;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-glass-bg);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 12px;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: all var(--transition-speed) ease;
+  font-size: 0.95rem;
+}
+
+.contact-item:hover {
+  border-color: var(--color-accent-cyan);
+  color: var(--color-accent-cyan);
+  box-shadow: 0 8px 30px rgba(0, 212, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.contact-icon {
+  font-size: 1.2rem;
+}
+
+.footer-bottom {
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer-bottom p {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  opacity: 0.6;
 }
 
 /* =====================
@@ -978,15 +1112,50 @@ footer a:hover {
 }
 
 /* =====================
+   스크롤 리빌 애니메이션
+===================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =====================
    반응형 디자인
 ===================== */
 @media (max-width: 768px) {
   h1 {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
+  }
+
+  .hero-greeting {
+    font-size: 0.8rem;
   }
 
   .subtitle {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
+  }
+
+  .about-content {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+
+  .about-stats {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .stat-item {
+    flex: 1;
+    align-items: center;
+    text-align: center;
   }
 
   .projects-grid {
@@ -1025,11 +1194,30 @@ footer a:hover {
   .soar-card:hover .playbook-layer {
     transform: none !important;
   }
+
+  .contact-links {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-cta {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-cta .btn {
+    width: 200px;
+    justify-content: center;
+  }
 }
 
 @media (max-width: 480px) {
   h1 {
-    font-size: 2rem;
+    font-size: 2.2rem;
+  }
+
+  .about-stats {
+    flex-direction: column;
   }
 
   .project-card {
