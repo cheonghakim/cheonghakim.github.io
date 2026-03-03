@@ -1,7 +1,7 @@
 /**
- * 3D Matrix Rain Background with Scroll-Based Camera Movement
- * SOC (Security Operations Center) themed decorative background
- * Falling character columns scattered in 3D space
+ * 스크롤 기반 카메라 이동이 포함된 3D 매트릭스 레인 배경
+ * SOC (보안 운영 센터) 테마의 장식용 배경
+ * 3D 공간에 흩어져 떨어지는 문자 열
  */
 
 class MatrixRainBackground {
@@ -15,8 +15,7 @@ class MatrixRainBackground {
     this.frameCount = 0;
     this.clock = new THREE.Clock();
 
-    this.chars =
-      "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ<>{}[]|/\\:;.=-+*";
+    this.chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ<>{}[]|/\\:;.=-+*";
 
     this.initThreeJS();
     this.createHexGrid();
@@ -31,7 +30,7 @@ class MatrixRainBackground {
 
   initThreeJS() {
     this.scene = new THREE.Scene();
-    this.scene.fog = new THREE.FogExp2(0x0a0e1a, 0.006);
+    this.scene.fog = new THREE.FogExp2(0x0a0e1a, 0.004); // 더 깊은 원경을 위해 안개 밀도 감소
 
     this.camera = new THREE.PerspectiveCamera(
       60,
@@ -104,19 +103,18 @@ class MatrixRainBackground {
     this.binaryColumns = [];
 
     for (let i = 0; i < columnCount; i++) {
-      const charSize = 14 + Math.floor(Math.random() * 4);
-      const canvasW = charSize + 6;
-      const canvasH = 300;
+      const charSize = 20 + Math.floor(Math.random() * 8); // 기존 14-18
+      const canvasW = charSize + 8;
+      const canvasH = 450; // 기존 300
       const numChars = Math.floor(canvasH / charSize);
 
       const colCanvas = document.createElement("canvas");
       colCanvas.width = canvasW;
       colCanvas.height = canvasH;
       const ctx = colCanvas.getContext("2d");
-      ctx.fillStyle = "#000";
-      ctx.fillRect(0, 0, canvasW, canvasH);
+      // ctx.clearRect(0, 0, canvasW, canvasH); // 기본적으로 이미 투명함
 
-      const colHeight = 14 + Math.random() * 10;
+      const colHeight = 30 + Math.random() * 25; // 기존 14-24
       const planeW = colHeight * (canvasW / canvasH);
       const geometry = new THREE.PlaneGeometry(planeW, colHeight);
       const texture = new THREE.CanvasTexture(colCanvas);
@@ -134,9 +132,9 @@ class MatrixRainBackground {
 
       const mesh = new THREE.Mesh(geometry, material);
       mesh.position.set(
-        (Math.random() - 0.5) * 160,
-        (Math.random() - 0.5) * 40,
-        (Math.random() - 0.5) * 140 - 20,
+        (Math.random() - 0.5) * 250,
+        (Math.random() - 0.5) * 100,
+        (Math.random() - 0.5) * 400 - 100,
       );
 
       this.scene.add(mesh);
@@ -154,7 +152,7 @@ class MatrixRainBackground {
         charSize,
         numChars,
         headPos: Math.random() * numChars * (0.5 + Math.random()),
-        headSpeed: 0.3 + Math.random() * 0.9,
+        headSpeed: 3 + Math.random() * 8, // 속도를 0.3-1.2에서 3.0-11.0으로 상향
         trailLength: 4 + Math.floor(Math.random() * 10),
         chars: charArray,
         charFlickerTimer: Math.random() * 0.2,
@@ -167,21 +165,20 @@ class MatrixRainBackground {
     const columnCount = 70;
 
     for (let i = 0; i < columnCount; i++) {
-      const charSize = 11 + Math.floor(Math.random() * 5);
-      const canvasW = charSize + 6;
-      const canvasH = 400;
+      const charSize = 18 + Math.floor(Math.random() * 10); // 기존 11-15
+      const canvasW = charSize + 8;
+      const canvasH = 600; // 기존 400
       const numChars = Math.floor(canvasH / charSize);
 
-      // Create canvas for this column
+      // 이 열을 위한 캔버스 생성
       const colCanvas = document.createElement("canvas");
       colCanvas.width = canvasW;
       colCanvas.height = canvasH;
       const ctx = colCanvas.getContext("2d");
-      ctx.fillStyle = "#000";
-      ctx.fillRect(0, 0, canvasW, canvasH);
+      // ctx.clearRect(0, 0, canvasW, canvasH);
 
-      // Create tall thin plane
-      const colHeight = 18 + Math.random() * 14;
+      // 길고 얇은 평면 생성
+      const colHeight = 40 + Math.random() * 30; // 기존 18-32
       const planeW = colHeight * (canvasW / canvasH);
       const geometry = new THREE.PlaneGeometry(planeW, colHeight);
       const texture = new THREE.CanvasTexture(colCanvas);
@@ -199,9 +196,9 @@ class MatrixRainBackground {
 
       const mesh = new THREE.Mesh(geometry, material);
       mesh.position.set(
-        (Math.random() - 0.5) * 150,
-        (Math.random() - 0.5) * 30,
-        (Math.random() - 0.5) * 130,
+        (Math.random() - 0.5) * 200,
+        (Math.random() - 0.5) * 80,
+        (Math.random() - 0.5) * 300 - 50,
       );
 
       this.scene.add(mesh);
@@ -230,7 +227,7 @@ class MatrixRainBackground {
         chars: charArray,
         charFlickerTimer: Math.random() * 0.1,
         charFlickerInterval: 0.02 + Math.random() * 0.12,
-        // For surge effect
+        // 서지(Surge) 효과용
         surgeTimer: 0,
         surgeActive: false,
       });
@@ -242,11 +239,11 @@ class MatrixRainBackground {
     const vertices = [];
     const colors = [];
 
-    for (let i = 0; i < 4000; i++) {
+    for (let i = 0; i < 6000; i++) {
       vertices.push(
-        (Math.random() - 0.5) * 600,
-        (Math.random() - 0.5) * 600,
-        (Math.random() - 0.5) * 600,
+        (Math.random() - 0.5) * 1000,
+        (Math.random() - 0.5) * 1000,
+        (Math.random() - 0.5) * 1000,
       );
       const color = new THREE.Color();
       const r = Math.random();
@@ -330,7 +327,7 @@ class MatrixRainBackground {
     this.renderer.setSize(window.innerWidth, window.innerHeight);
   }
 
-  // Trigger a brief brightness surge on some columns
+  // 일부 열에 짧은 밝기 서지 유도
   triggerSurge() {
     const count = 8 + Math.floor(Math.random() * 10);
     for (let i = 0; i < count; i++) {
@@ -362,18 +359,20 @@ class MatrixRainBackground {
       -5 * scrollProgress,
       -10 * scrollProgress,
     );
-    this.camera.lookAt(lookTarget);
 
+    // 자연스러운 기울기 효과를 위해 lookTarget에 마우스 오프셋 추가
     if (this.mouseX !== undefined) {
-      this.camera.position.x += this.mouseX * 2;
-      this.camera.position.y += this.mouseY * 1.5;
+      lookTarget.x += this.mouseX * 15;
+      lookTarget.y -= this.mouseY * 15;
     }
+
+    this.camera.lookAt(lookTarget);
   }
 
   updateMatrixColumns(delta) {
     this.frameCount++;
 
-    // Update binary rain (background layer)
+    // 바이너리 레인 업데이트 (배경 레이어)
     if (this.binaryColumns) {
       this.binaryColumns.forEach((col) => {
         const { ctx, canvas, charSize, numChars } = col;
@@ -395,8 +394,7 @@ class MatrixRainBackground {
           col.chars[idx] = Math.random() > 0.5 ? "0" : "1";
         }
 
-        ctx.fillStyle = "rgba(0, 0, 0, 0.95)";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         ctx.font = charSize + "px monospace";
         ctx.textAlign = "center";
@@ -426,21 +424,26 @@ class MatrixRainBackground {
     }
 
     this.columns.forEach((col, colIdx) => {
-      // Round-robin: update ~23 columns per frame (each column updates every 3 frames)
-      if ((this.frameCount + colIdx) % 3 !== 0) {
-        // Still billboard even on skip frames
+      // 최적화: 먼 열은 덜 자주 업데이트
+      const dist = col.mesh.position.z;
+      const updateInterval = dist < -100 ? 5 : 3; // 기존 -50
+
+      if ((this.frameCount + colIdx) % updateInterval !== 0) {
+        // 프레임을 건너뛰어도 빌보드 유지
         col.mesh.quaternion.copy(this.camera.quaternion);
         return;
       }
 
       const { ctx, canvas, charSize, numChars } = col;
-      const effectiveDelta = delta * 3; // compensate for skip
+      const effectiveDelta = delta * updateInterval; // 건너뛴 프레임 보정
 
-      // Move head
+      const isDistant = dist < -100 || charSize < 20; // 임계값 상향
+
+      // 헤드 이동
       col.headPos += col.headSpeed * effectiveDelta;
       if (col.headPos >= numChars) {
         col.headPos -= numChars;
-        // Refresh some chars
+        // 일부 문자 갱신
         for (let j = 0; j < numChars; j++) {
           if (Math.random() < 0.25) {
             col.chars[j] =
@@ -449,7 +452,7 @@ class MatrixRainBackground {
         }
       }
 
-      // Random character flicker
+      // 무작위 문자 깜빡임
       col.charFlickerTimer += effectiveDelta;
       if (col.charFlickerTimer > col.charFlickerInterval) {
         col.charFlickerTimer = 0;
@@ -458,7 +461,7 @@ class MatrixRainBackground {
           this.chars[Math.floor(Math.random() * this.chars.length)];
       }
 
-      // Surge countdown
+      // 서지 카운트다운
       if (col.surgeActive) {
         col.surgeTimer -= effectiveDelta;
         if (col.surgeTimer <= 0) {
@@ -466,11 +469,10 @@ class MatrixRainBackground {
         }
       }
 
-      // Clear canvas
-      ctx.fillStyle = "rgba(0, 0, 0, 0.92)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // 캔버스 클리어
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Draw characters
+      // 문자 그리기
       ctx.font = charSize + "px monospace";
       ctx.textAlign = "center";
       ctx.textBaseline = "top";
@@ -486,19 +488,23 @@ class MatrixRainBackground {
         const y = j * charSize;
 
         if (distBehindHead === 0) {
-          // Head: bright white with glow
-          ctx.shadowColor = "#00ffdd";
-          ctx.shadowBlur = 10;
+          // 헤드: 글로우 효과가 있는 밝은 흰색 (멀지 않은 경우에만 글로우 필터 적용)
+          if (!isDistant) {
+            ctx.shadowColor = "#00ffdd";
+            ctx.shadowBlur = 10;
+          }
           ctx.fillStyle =
             "rgba(255, 255, 255, " + Math.min(1, brightness) + ")";
         } else if (distBehindHead < 3) {
-          // Near head: bright cyan
-          ctx.shadowColor = "#00d4ff";
-          ctx.shadowBlur = 6;
+          // 헤드 근처: 밝은 시안색
+          if (!isDistant) {
+            ctx.shadowColor = "#00d4ff";
+            ctx.shadowBlur = 6;
+          }
           var a = Math.min(1, brightness * 0.9);
           ctx.fillStyle = "rgba(0, 255, 220, " + a + ")";
         } else {
-          // Trail: fading
+          // 트레일: 페이드 아웃
           ctx.shadowBlur = 0;
           var g = Math.floor(Math.min(255, 180 * brightness));
           var b = Math.floor(Math.min(255, 255 * brightness));
@@ -512,7 +518,7 @@ class MatrixRainBackground {
       ctx.shadowBlur = 0;
       col.texture.needsUpdate = true;
 
-      // Billboard
+      // 빌보드
       col.mesh.quaternion.copy(this.camera.quaternion);
     });
   }
@@ -535,7 +541,7 @@ class MatrixRainBackground {
   }
 }
 
-// Initialize
+// 초기화
 function initBackground() {
   if (typeof THREE === "undefined") {
     console.error("Three.js not loaded.");

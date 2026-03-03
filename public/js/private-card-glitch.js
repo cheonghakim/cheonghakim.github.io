@@ -1,6 +1,6 @@
 /**
- * WebGL Glitch Effect for Private Project Cards
- * Simplified version with stable GLSL shaders and safe uniform names
+ * 비공개 프로젝트 카드를 위한 WebGL 글리치 효과
+ * 안정적인 GLSL 셰이더와 안전한 유니폼 이름을 사용한 단순화된 버전
  */
 
 class CardGlitchEffect {
@@ -22,7 +22,7 @@ class CardGlitchEffect {
   }
 
   init() {
-    // Create canvas
+    // 캔버스 생성
     this.canvas = document.createElement("canvas");
     this.canvas.style.position = "absolute";
     this.canvas.style.inset = "0";
@@ -39,7 +39,7 @@ class CardGlitchEffect {
     const width = rect.width;
     const height = rect.height;
 
-    // Setup Three.js
+    // Three.js 설정
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
       alpha: true,
@@ -56,10 +56,10 @@ class CardGlitchEffect {
     this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
     this.cameraBack = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
-    // Create texture from preview element
+    // 미리보기 요소로부터 텍스처 생성
     this.createTexture();
 
-    // Setup event listeners
+    // 이벤트 리스너 설정
     this.card.addEventListener("mouseenter", () => this.start());
     this.card.addEventListener("mouseleave", () => this.stop());
   }
@@ -69,13 +69,13 @@ class CardGlitchEffect {
     const width = rect.width;
     const height = rect.height;
 
-    // Create a simple colored texture as source
+    // 소스용 간단한 색상 텍스처 생성
     const canvas = document.createElement("canvas");
     canvas.width = width;
     canvas.height = height;
     const ctx = canvas.getContext("2d");
 
-    // Fill with dark gradient
+    // 어두운 그라데이션으로 채우기
     const gradient = ctx.createLinearGradient(0, 0, width, height);
     gradient.addColorStop(0, "#0a0a0a");
     gradient.addColorStop(0.5, "#1a1a1a");
@@ -83,7 +83,7 @@ class CardGlitchEffect {
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, width, height);
 
-    // Add some patterns
+    // 일부 패턴 추가
     ctx.fillStyle = "rgba(0, 255, 200, 0.1)";
     for (let i = 0; i < 20; i++) {
       ctx.fillRect(Math.random() * width, Math.random() * height, 2, height);
@@ -93,7 +93,7 @@ class CardGlitchEffect {
     texture.magFilter = THREE.NearestFilter;
     texture.minFilter = THREE.NearestFilter;
 
-    // Background plane
+    // 배경 평면
     const bgGeometry = new THREE.PlaneGeometry(2, 2);
     const bgMaterial = new THREE.MeshBasicMaterial({
       map: texture,
@@ -101,7 +101,7 @@ class CardGlitchEffect {
     const bgMesh = new THREE.Mesh(bgGeometry, bgMaterial);
     this.sceneBack.add(bgMesh);
 
-    // Post effect
+    // 포스트 이펙트
     this.postEffect = new PostEffect(
       this.renderTarget.texture,
       rect.width,
@@ -207,36 +207,36 @@ class PostEffect {
             vec2 uv = vUv;
             float t = uTime * 2.0;
             
-            // RGB split
+            // RGB 분할
             float splitAmount = 0.01 + noise(vec2(t * 5.0, uv.y * 10.0)) * 0.02;
             float r = texture2D(uTexture, uv + vec2(splitAmount, 0.0)).r;
             float g = texture2D(uTexture, uv).g;
             float b = texture2D(uTexture, uv - vec2(splitAmount, 0.0)).b;
             
-            // Scan lines
+            // 스캔 라인
             float scanline = sin(uv.y * uResolution.y * 2.0 + t * 10.0) * 0.04;
             
-            // Block noise
+            // 블록 노이즈
             vec2 blockUv = floor(uv * vec2(20.0, 40.0) + vec2(0.0, t * 10.0)) / vec2(20.0, 40.0);
             float blockNoise = step(0.9, random(blockUv + vec2(t)));
             
-            // Horizontal glitch
+            // 수평 글리치
             float glitchLine = step(0.98, random(vec2(floor(uv.y * 50.0 + t * 20.0), 0.0)));
             vec2 glitchOffset = vec2(glitchLine * (random(vec2(t, uv.y)) - 0.5) * 0.1, 0.0);
             
-            // Final color with glitch
+            // 글리치가 적용된 최종 색상
             vec3 color = vec3(r, g, b);
             if (glitchLine > 0.5) {
               color = texture2D(uTexture, uv + glitchOffset).rgb;
             }
             
-            // Add block noise
+            // 블록 노이즈 추가
             color += vec3(blockNoise * 0.3);
             
-            // Add scanlines
+            // 스캔라인 추가
             color += vec3(scanline);
             
-            // White noise
+            // 화이트 노이즈
             float whiteNoise = (random(uv + vec2(t * 0.1)) - 0.5) * 0.1;
             color += vec3(whiteNoise);
             
@@ -256,7 +256,7 @@ class PostEffect {
   }
 }
 
-// Initialize glitch effects for all PRIVATE cards
+// 모든 PRIVATE 카드에 글리치 효과 초기화
 function initPrivateCardGlitches() {
   if (typeof THREE === "undefined") {
     console.error("Three.js is required for glitch effects");
@@ -269,7 +269,7 @@ function initPrivateCardGlitches() {
   const glitchInstances = [];
 
   allCards.forEach((card) => {
-    // Check if card has a PRIVATE badge
+    // 카드에 PRIVATE 배지가 있는지 확인
     const privateBadge = card.querySelector(".badge.private");
     if (!privateBadge) return;
 
@@ -285,7 +285,7 @@ function initPrivateCardGlitches() {
 
   console.log(`Initialized ${glitchInstances.length} glitch effects`);
 
-  // Handle window resize
+  // 창 크기 조정 처리
   let resizeTimeout;
   window.addEventListener("resize", () => {
     clearTimeout(resizeTimeout);
@@ -295,7 +295,7 @@ function initPrivateCardGlitches() {
   });
 }
 
-// Initialize when DOM is ready and Three.js is loaded
+// DOM이 준비되고 Three.js가 로드되면 초기화
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", initPrivateCardGlitches);
 } else {

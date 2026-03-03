@@ -7,7 +7,7 @@
     <meta name="keywords" content="포트폴리오, WebGL, 프로젝트, 개발자" />
     <meta name="author" content="Cheonghakim" />
 
-    <!-- Open Graph Meta Tags -->
+    <!-- 오픈 그래프 메타 태그 -->
     <meta property="og:title" content="My Project Portfolio" />
     <meta property="og:description" content="Cheonghakim's Project Portfolio" />
     <meta property="og:type" content="website" />
@@ -16,26 +16,26 @@
 
     <link rel="stylesheet" href="public/css/styles.css" />
 
-    <!-- Three.js Library -->
+    <!-- Three.js 라이브러리 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   </head>
 
   <body>
-    <!-- WebGL Background Canvas -->
+    <!-- WebGL 배경 캔버스 -->
     <canvas id="webgl-canvas"></canvas>
 
-    <!-- Full-screen noise overlay -->
+    <!-- 전체 화면 노이즈 오버레이 -->
     <div id="noise-overlay"></div>
 
-    <!-- Main Content -->
+    <!-- 메인 콘텐츠 -->
     <div class="container">
-      <!-- Header -->
+      <!-- 헤더 -->
       <header>
         <h1>CK's Project Portfolio</h1>
-        <p class="subtitle">Innovative Projects with Cutting-Edge Technology</p>
+        <p class="subtitle">최신 기술을 활용한 보안 및 시각화 프로젝트</p>
       </header>
 
-      <!-- Navigation -->
+      <!-- 네비게이션 -->
       <nav>
         <a href="#projects">Projects</a>
         <a href="#experience">Experience</a>
@@ -43,7 +43,7 @@
         <a href="#contact">Contact</a>
       </nav>
 
-      <!-- Projects Section -->
+      <!-- 프로젝트 섹션 -->
       <section id="projects">
         <div class="projects-grid">
           <!-- Project 1: BujaMarket -->
@@ -102,7 +102,17 @@
               </div>
             </div>
             <div class="project-preview private">
-              <div class="access-restricted-label">ACCESS RESTRICTED</div>
+              <div class="hud-frame">
+                <div class="hud-corner top-left"></div>
+                <div class="hud-corner top-right"></div>
+                <div class="hud-corner bottom-left"></div>
+                <div class="hud-corner bottom-right"></div>
+              </div>
+              <div class="access-restricted-label">
+                <span class="hud-prefix">SYSTEM ALERT //</span>
+                <span class="hud-main">ACCESS RESTRICTED</span>
+                <span class="hud-id">SEC-ID: #PRV-842</span>
+              </div>
               <div class="fingerprint-scanner">
                 <div class="fp-reticle"></div>
                 <div class="fp-ridges"></div>
@@ -117,7 +127,7 @@
             </div>
           </article>
 
-          <!-- Project 2: ServiceDesk -->
+          <!-- 프로젝트 2: ServiceDesk -->
           <article class="project-card" data-card-index="2">
             <h2>ServiceDesk<span class="badge private">PRIVATE</span></h2>
             <p class="project-description">
@@ -139,7 +149,17 @@
               </div>
             </div>
             <div class="project-preview private">
-              <div class="access-restricted-label">ACCESS RESTRICTED</div>
+              <div class="hud-frame">
+                <div class="hud-corner top-left"></div>
+                <div class="hud-corner top-right"></div>
+                <div class="hud-corner bottom-left"></div>
+                <div class="hud-corner bottom-right"></div>
+              </div>
+              <div class="access-restricted-label">
+                <span class="hud-prefix">SYSTEM ALERT //</span>
+                <span class="hud-main">SECURE SYSTEM</span>
+                <span class="hud-id">SEC-ID: #SD-402</span>
+              </div>
               <div class="fingerprint-scanner">
                 <div class="fp-reticle"></div>
                 <div class="fp-ridges"></div>
@@ -156,7 +176,7 @@
             </div>
           </article>
 
-          <!-- Project 3: 국방부 -->
+          <!-- 프로젝트 3: 국방부 기밀 프로젝트 -->
           <article class="project-card" data-card-index="3">
             <h2>
               국방부 기밀 프로젝트<span class="badge private">PRIVATE</span>
@@ -176,7 +196,17 @@
               </div>
             </div>
             <div class="project-preview private">
-              <div class="access-restricted-label">ACCESS RESTRICTED</div>
+              <div class="hud-frame">
+                <div class="hud-corner top-left"></div>
+                <div class="hud-corner top-right"></div>
+                <div class="hud-corner bottom-left"></div>
+                <div class="hud-corner bottom-right"></div>
+              </div>
+              <div class="access-restricted-label">
+                <span class="hud-prefix">SYSTEM ALERT //</span>
+                <span class="hud-main">TOP SECRET</span>
+                <span class="hud-id">SEC-ID: #MIL-007</span>
+              </div>
               <div class="fingerprint-scanner">
                 <div class="fp-reticle"></div>
                 <div class="fp-ridges"></div>
@@ -189,7 +219,7 @@
             </div>
           </article>
 
-          <!-- Project 4: PROM LIGHT2 -->
+          <!-- 프로젝트 4: PROM LIGHT2 -->
           <article class="project-card" data-card-index="4">
             <h2>PROM LIGHT2 <span class="badge private">PRIVATE</span></h2>
             <p class="project-description">
@@ -207,7 +237,7 @@
             </div>
           </article>
 
-          <!-- Project 5: Argus -->
+          <!-- 프로젝트 5: Argus -->
           <article class="project-card" data-card-index="5">
             <h2>Argus <span class="badge private">PRIVATE</span></h2>
             <p class="project-description">
@@ -228,7 +258,17 @@
               </div>
             </div>
             <div class="project-preview private">
-              <div class="access-restricted-label">ACCESS RESTRICTED</div>
+              <div class="hud-frame">
+                <div class="hud-corner top-left"></div>
+                <div class="hud-corner top-right"></div>
+                <div class="hud-corner bottom-left"></div>
+                <div class="hud-corner bottom-right"></div>
+              </div>
+              <div class="access-restricted-label">
+                <span class="hud-prefix">SYSTEM ALERT //</span>
+                <span class="hud-main">SENSITIVE ASSET</span>
+                <span class="hud-id">SEC-ID: #ARG-332</span>
+              </div>
               <div class="fingerprint-scanner">
                 <div class="fp-reticle"></div>
                 <div class="fp-ridges"></div>
@@ -245,7 +285,7 @@
             </div>
           </article>
 
-          <!-- Project 6: PROM-ATS -->
+          <!-- 프로젝트 6: PROM-ATS -->
           <article class="project-card" data-card-index="6">
             <h2>PROM-ATS <span class="badge private">PRIVATE</span></h2>
             <p class="project-description">
@@ -267,7 +307,17 @@
               </div>
             </div>
             <div class="project-preview private">
-              <div class="access-restricted-label">ACCESS RESTRICTED</div>
+              <div class="hud-frame">
+                <div class="hud-corner top-left"></div>
+                <div class="hud-corner top-right"></div>
+                <div class="hud-corner bottom-left"></div>
+                <div class="hud-corner bottom-right"></div>
+              </div>
+              <div class="access-restricted-label">
+                <span class="hud-prefix">SYSTEM ALERT //</span>
+                <span class="hud-main">UNAUTHORIZED ACCESS</span>
+                <span class="hud-id">SEC-ID: #ATS-119</span>
+              </div>
               <div class="fingerprint-scanner">
                 <div class="fp-reticle"></div>
                 <div class="fp-ridges"></div>
@@ -282,7 +332,7 @@
             </div>
           </article>
 
-          <!-- Project 7: SoarPlaybook -->
+          <!-- 프로젝트 7: SoarPlaybook -->
           <article class="project-card soar-card" data-card-index="7">
             <h2>SoarPlaybook <span class="badge private">PRIVATE</span></h2>
             <p class="project-description">
@@ -290,7 +340,7 @@
               수를 최소화하여 효율적으로 관리할 수 있도록 설계했습니다
             </p>
 
-            <!-- Mini Playbook Editor Visual -->
+            <!-- 미니 플레이북 에디터 시각화 -->
             <div class="soar-visual">
               <div class="playbook-stack">
                 <div class="playbook-layer" data-soar-layer="3">
@@ -307,7 +357,7 @@
                 </div>
               </div>
 
-              <!-- Automation flow -->
+              <!-- 자동화 플로우 -->
               <div class="soar-flow">
                 <div class="flow-step">Event</div>
                 <div class="flow-arrow">&rarr;</div>
@@ -343,7 +393,7 @@
             </div>
           </article>
 
-          <!-- Project 8: HTML Overlay Node -->
+          <!-- 프로젝트 8: HTML Overlay Node -->
           <article class="project-card" data-card-index="8">
             <h2>HTML Overlay Node</h2>
             <p class="project-description">
@@ -368,7 +418,7 @@
             </div>
           </article>
 
-          <!-- Project 9: High Tree -->
+          <!-- 프로젝트 9: High Tree -->
           <article class="project-card" data-card-index="9">
             <h2>High Tree</h2>
             <p class="project-description">가볍고 빠른 트리 컴포넌트 입니다.</p>
@@ -391,7 +441,7 @@
         </div>
       </section>
 
-      <!-- Experience / Tech Stack Section -->
+      <!-- 기술 스택 / 아키텍처 섹션 -->
       <section id="experience">
         <h2 class="section-title">Tech Stack Architecture</h2>
         <div class="tech-layers">
@@ -442,7 +492,7 @@
         </div>
       </section>
 
-      <!-- Footer -->
+      <!-- 푸터 -->
       <footer id="contact">
         <p>&copy; 2026 Cheongha Kim</p>
         <p>
@@ -452,14 +502,14 @@
       </footer>
     </div>
 
-    <!-- Scripts -->
+    <!-- 스크립트 -->
     <script src="public/js/webgl-canvas.js"></script>
     <script src="public/js/private-card-glitch.js"></script>
 
-    <!-- Matrix surge interaction -->
+    <!-- 매트릭스 서지 상호작용 관련 스크립트 -->
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        // Private card hover triggers matrix surge
+        // 비공개 카드 호버 시 매트릭스 서지 효과 발생
         var cards = document.querySelectorAll(".project-card");
         cards.forEach(function (card) {
           card.addEventListener("mouseenter", function () {

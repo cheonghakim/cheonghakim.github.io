@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
 
 /* =====================
-   CSS Reset & Base
+   CSS 리셋 및 기본 설정
 ===================== */
 * {
   margin: 0;
@@ -10,18 +10,18 @@
 }
 
 :root {
-  /* Colors */
+  /* 색상 변수 */
   --color-bg-primary: #0a0e1a;
   --color-bg-secondary: #0f1419;
-  --color-accent-cyan: #00d4ff;
+  --color-accent-cyan: #1bafcd;
   --color-accent-blue: #0099cc;
   --color-accent-black: #000000;
   --color-text-primary: #ffffff;
   --color-text-secondary: #a0aec0;
-  --color-glass-bg: rgba(15, 20, 25, 0.6);
+  --color-glass-bg: transparent;
   --color-glass-border: rgba(0, 212, 255, 0.2);
 
-  /* Spacing */
+  /* 간격 변수 */
   --spacing-xs: 0.5rem;
   --spacing-sm: 1rem;
   --spacing-md: 1.5rem;
@@ -29,11 +29,11 @@
   --spacing-xl: 3rem;
   --spacing-2xl: 4rem;
 
-  /* Typography */
+  /* 타이포그래피 */
   --font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
 
-  /* Effects */
+  /* 효과 */
   --blur-glass: 20px;
   --border-radius: 1rem;
   --transition-speed: 0.3s;
@@ -49,7 +49,7 @@ body {
 }
 
 /* =====================
-   WebGL Canvas
+   WebGL 캔버스
 ===================== */
 #webgl-canvas {
   position: fixed;
@@ -62,14 +62,14 @@ body {
 }
 
 /* =====================
-   Noise Overlay (Hidden - using GLSL shader instead)
+   노이즈 오버레이 (비활성 - GLSL 셰이더 사용)
 ===================== */
 #noise-overlay {
   display: none;
 }
 
 /* =====================
-   Container & Layout
+   컨테이너 및 레이아웃
 ===================== */
 .container {
   position: relative;
@@ -80,7 +80,7 @@ body {
 }
 
 /* =====================
-   Header
+   헤더
 ===================== */
 header {
   text-align: center;
@@ -112,7 +112,7 @@ h1 {
 }
 
 /* =====================
-   Navigation
+   네비게이션
 ===================== */
 nav {
   display: flex;
@@ -159,7 +159,7 @@ nav a:hover {
 }
 
 /* =====================
-   Projects Grid
+   프로젝트 그리드
 ===================== */
 .projects-grid {
   display: grid;
@@ -169,7 +169,7 @@ nav a:hover {
 }
 
 /* =====================
-   Project Card
+   프로젝트 카드
 ===================== */
 .project-card {
   background: var(--color-glass-bg);
@@ -225,7 +225,7 @@ nav a:hover {
 }
 
 /* =====================
-   Project Card Content
+   프로젝트 카드 콘텐츠
 ===================== */
 .project-icon {
   width: 80px;
@@ -261,7 +261,7 @@ nav a:hover {
 }
 
 /* =====================
-   Private Project Preview
+   비공개 프로젝트 미리보기
 ===================== */
 .project-preview.private {
   display: flex;
@@ -279,7 +279,7 @@ nav a:hover {
   overflow: hidden;
 }
 
-/* Scanline overlay (always visible) */
+/* 스캔라인 오버레이 (상시 노출) */
 .project-preview.private::before {
   content: "";
   position: absolute;
@@ -315,78 +315,101 @@ nav a:hover {
   position: relative;
 }
 
-/* ACCESS RESTRICTED label */
+/* 접근 제한 HUD 오버레이 */
 .access-restricted-label {
   position: absolute;
-  z-index: 20; /* Higher than WebGL canvas */
-  font-family: 'Courier New', monospace;
-  font-size: 1.5rem;
-  font-weight: bold;
-  letter-spacing: 0.3em;
-  color: #3d3d3d;
-  text-shadow: 
-    0 0 10px #ff0040,
-    0 0 20px #ff0040,
-    2px 2px 0 #00ffcc,
-    -2px -2px 0 #ff00ff;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.2s;
-  text-align: center;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  background: radial-gradient(circle, rgba(255, 0, 64, 0.05) 0%, transparent 70%);
 }
 
 .project-card:hover .access-restricted-label {
   opacity: 1;
-  animation: textGlitchRGB 0.25s infinite;
+  background: radial-gradient(circle, rgba(255, 0, 64, 0.1) 0%, transparent 80%);
 }
 
-@keyframes textGlitchRGB {
-  0% {
-    transform: translate(0);
-    text-shadow: 
-      -2px 0 #ff0080,
-      2px 0 #00ffcc,
-      0 -1px #8000ff;
-  }
-  20% {
-    transform: translate(-2px, 1px) skewX(-2deg);
-    text-shadow: 
-      -3px 1px #ff0080,
-      3px -1px #00ffcc,
-      1px 1px #8000ff;
-  }
-  40% {
-    transform: translate(1px, -1px) skewX(1deg);
-    text-shadow: 
-      2px -1px #ff0080,
-      -2px 1px #00ffcc,
-      -1px -1px #8000ff;
-  }
-  60% {
-    transform: translate(-1px, 0px) skewX(-1deg);
-    text-shadow: 
-      -4px 0 #ff0080,
-      4px 0 #00ffcc,
-      0 2px #8000ff;
-  }
-  80% {
-    transform: translate(2px, 1px) skewX(2deg);
-    text-shadow: 
-      3px -1px #ff0080,
-      -3px 1px #00ffcc,
-      1px -1px #8000ff;
-  }
-  100% {
-    transform: translate(0);
-    text-shadow: 
-      -2px 0 #ff0080,
-      2px 0 #00ffcc,
-      0 -1px #8000ff;
-  }
+.hud-prefix {
+  font-family: 'Courier New', monospace;
+  font-size: 0.7rem;
+  color: #ff0040;
+  letter-spacing: 0.2rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.8;
+  font-weight: 800;
+}
+
+.hud-main {
+  font-family: var(--font-primary);
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: var(--color-text-primary);
+  letter-spacing: 0.15rem;
+  text-transform: uppercase;
+  text-shadow: 0 0 15px rgba(255, 0, 64, 0.5);
+  margin-bottom: 0.3rem;
+}
+
+.hud-id {
+  font-family: 'Courier New', monospace;
+  font-size: 0.65rem;
+  color: var(--color-accent-cyan);
+  background: rgba(0, 212, 255, 0.1);
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.1rem;
+  border: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+/* HUD 프레임 및 모서리 */
+.hud-frame {
+  position: absolute;
+  inset: var(--spacing-md);
+  opacity: 0;
+  transition: all 0.5s ease;
+  z-index: 15;
+  pointer-events: none;
+}
+
+.project-card:hover .hud-frame {
+  opacity: 1;
+  inset: var(--spacing-sm);
+}
+
+.hud-corner {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  border-color: #ff0040;
+  border-style: solid;
+  opacity: 0.8;
+}
+
+.top-left { top: 0; left: 0; border-width: 2px 0 0 2px; }
+.top-right { top: 0; right: 0; border-width: 2px 2px 0 0; }
+.bottom-left { bottom: 0; left: 0; border-width: 0 0 2px 2px; }
+.bottom-right { bottom: 0; right: 0; border-width: 0 2px 2px 0; }
+
+.project-card:hover .hud-main {
+  animation: hudTextGlitch 3s infinite;
+}
+
+@keyframes hudTextGlitch {
+  0%, 90%, 100% { transform: skew(0deg); text-shadow: 0 0 15px rgba(255, 0, 64, 0.5); }
+  92% { transform: skew(10deg); text-shadow: 2px 0 #00ffcc, -2px 0 #ff00ff; }
+  94% { transform: skew(-10deg); text-shadow: -2px 0 #00ffcc, 2px 0 #ff00ff; }
+  96% { transform: skew(5deg); opacity: 0.8; }
+  98% { transform: skew(0deg); text-shadow: 3px 0 #ff0040; }
 }
 
 
-/* Scanner */
+/* 스캐너 */
 .fingerprint-scanner {
   width: 120px;
   height: 140px;
@@ -394,7 +417,7 @@ nav a:hover {
   z-index: 1;
 }
 
-/* Reticle corners (targeting brackets) */
+/* 레티클 모서리 (타겟팅 브래킷) */
 .fp-reticle {
   position: absolute;
   inset: 0;
@@ -423,7 +446,7 @@ nav a:hover {
   border-width: 2px 2px 0 0;
 }
 
-/* Bottom corners via the scanner's own pseudo-elements */
+/* 스캐너 자체 가상 요소를 통한 하단 모서리 */
 .fingerprint-scanner::before {
   content: "";
   position: absolute;
@@ -452,7 +475,7 @@ nav a:hover {
   z-index: 4;
 }
 
-/* Fingerprint ridge pattern - layered ellipses */
+/* 지문 릿지 패턴 - 레이어드 타원 */
 .fp-ridges {
   position: absolute;
   top: 50%;
@@ -485,10 +508,10 @@ nav a:hover {
     radial-gradient(ellipse 50px 60px at 46% 52%, transparent 20px, rgba(0, 212, 255, 0.08) 21px, transparent 22px),
     radial-gradient(ellipse 56px 68px at 54% 50%, transparent 24px, rgba(0, 212, 255, 0.07) 25px, transparent 26px),
     radial-gradient(ellipse 62px 76px at 48% 54%, transparent 28px, rgba(0, 212, 255, 0.06) 29px, transparent 30px);
-  /* Outer ridges with slight offset for realism */
+  /* 사실감을 위한 약간의 오프셋이 적용된 외부 릿지 */
 }
 
-/* Scanning line with glow trail */
+/* 글로우 트레일이 포함된 스캔 라인 */
 .fp-scan-line {
   position: absolute;
   left: 10px;
@@ -510,7 +533,7 @@ nav a:hover {
   z-index: 3;
 }
 
-/* Trailing glow behind scan line */
+/* 스캔 라인 뒤의 잔상 글로우 */
 .fp-scan-line::after {
   content: "";
   position: absolute;
@@ -522,7 +545,7 @@ nav a:hover {
   pointer-events: none;
 }
 
-/* Status text */
+/* 상태 텍스트 */
 .fp-status {
   position: absolute;
   bottom: -22px;
@@ -538,14 +561,14 @@ nav a:hover {
   white-space: nowrap;
 }
 
-/* Transition on hover - scanner dims, glitch takes over */
+/* 호버 상태 전환 - 스캐너가 흐려지고 글리치 효과 활성화 */
 .project-card:hover .fingerprint-scanner {
   opacity: 0.2;
   transition: opacity 0.2s ease;
 }
 
 /* =====================
-   Problem-Solution Infographic
+   문제 해결 인포그래픽
 ===================== */
 .problem-solution {
   display: flex;
@@ -592,7 +615,7 @@ nav a:hover {
 }
 
 /* =====================
-   Tech Tags (Project Cards)
+   기술 태그 (프로젝트 카드)
 ===================== */
 .tech-tags {
   display: flex;
@@ -611,7 +634,7 @@ nav a:hover {
 }
 
 /* =====================
-   SoarPlaybook Special Card
+   미니 플레이북 에디터 비주얼 카드
 ===================== */
 .soar-visual {
   margin: var(--spacing-md) 0;
@@ -658,7 +681,7 @@ nav a:hover {
   margin-top: -4px;
 }
 
-/* Hover: fan out layers */
+/* 호버: 레이어 펼치기 */
 .soar-card:hover .playbook-layer[data-soar-layer="3"] {
   transform: rotateX(5deg) translateZ(30px) translateY(-8px);
   border-color: var(--color-accent-cyan);
@@ -679,7 +702,7 @@ nav a:hover {
   font-size: 1.1rem;
 }
 
-/* Automation flow diagram */
+/* 자동화 플로우 다이어그램 */
 .soar-flow {
   display: flex;
   align-items: center;
@@ -712,7 +735,7 @@ nav a:hover {
 .flow-arrow:nth-child(6) { animation-delay: 0.6s; }
 
 /* =====================
-   Tech Stack Layers (Experience Section)
+   기술 스택 레이어 (Experience 섹션)
 ===================== */
 #experience {
   margin-bottom: var(--spacing-2xl);
@@ -810,7 +833,7 @@ nav a:hover {
 }
 
 /* =====================
-   Buttons
+   버튼 스타일
 ===================== */
 .button-group {
   display: flex;
@@ -857,7 +880,7 @@ nav a:hover {
 }
 
 /* =====================
-   Footer
+   푸터
 ===================== */
 footer {
   text-align: center;
@@ -878,7 +901,7 @@ footer a:hover {
 }
 
 /* =====================
-   Animations
+   애니메이션
 ===================== */
 @keyframes fadeInUp {
   from {
@@ -955,7 +978,7 @@ footer a:hover {
 }
 
 /* =====================
-   Responsive Design
+   반응형 디자인
 ===================== */
 @media (max-width: 768px) {
   h1 {
@@ -1033,7 +1056,7 @@ footer a:hover {
 }
 
 /* =====================
-   Scrollbar Styling
+   스크롤바 스타일링
 ===================== */
 ::-webkit-scrollbar {
   width: 10px;
