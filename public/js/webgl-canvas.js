@@ -396,7 +396,7 @@ class MatrixRainBackground {
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        ctx.font = charSize + "px monospace";
+        ctx.font = charSize + "px 'Cascadia Code', monospace";
         ctx.textAlign = "center";
         ctx.textBaseline = "top";
 
@@ -473,7 +473,7 @@ class MatrixRainBackground {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       // 문자 그리기
-      ctx.font = charSize + "px monospace";
+      ctx.font = charSize + "px 'Cascadia Code', monospace";
       ctx.textAlign = "center";
       ctx.textBaseline = "top";
 
