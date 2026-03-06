@@ -30,8 +30,8 @@
   --spacing-2xl: 4rem;
 
   /* 타이포그래피 */
-  --font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
+  --font-primary:
+    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
   /* 효과 */
   --blur-glass: 20px;
@@ -357,16 +357,24 @@ nav a:hover {
   opacity: 0;
   pointer-events: none;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  background: radial-gradient(circle, rgba(255, 0, 64, 0.05) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 0, 64, 0.05) 0%,
+    transparent 70%
+  );
 }
 
 .project-card:hover .access-restricted-label {
   opacity: 1;
-  background: radial-gradient(circle, rgba(255, 0, 64, 0.1) 0%, transparent 80%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 0, 64, 0.1) 0%,
+    transparent 80%
+  );
 }
 
 .hud-prefix {
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
   font-size: 0.7rem;
   color: #ff0040;
   letter-spacing: 0.2rem;
@@ -387,7 +395,7 @@ nav a:hover {
 }
 
 .hud-id {
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
   font-size: 0.65rem;
   color: var(--color-accent-cyan);
   background: rgba(0, 212, 255, 0.1);
@@ -421,23 +429,59 @@ nav a:hover {
   opacity: 0.8;
 }
 
-.top-left { top: 0; left: 0; border-width: 2px 0 0 2px; }
-.top-right { top: 0; right: 0; border-width: 2px 2px 0 0; }
-.bottom-left { bottom: 0; left: 0; border-width: 0 0 2px 2px; }
-.bottom-right { bottom: 0; right: 0; border-width: 0 2px 2px 0; }
+.top-left {
+  top: 0;
+  left: 0;
+  border-width: 2px 0 0 2px;
+}
+.top-right {
+  top: 0;
+  right: 0;
+  border-width: 2px 2px 0 0;
+}
+.bottom-left {
+  bottom: 0;
+  left: 0;
+  border-width: 0 0 2px 2px;
+}
+.bottom-right {
+  bottom: 0;
+  right: 0;
+  border-width: 0 2px 2px 0;
+}
 
 .project-card:hover .hud-main {
   animation: hudTextGlitch 3s infinite;
 }
 
 @keyframes hudTextGlitch {
-  0%, 90%, 100% { transform: skew(0deg); text-shadow: 0 0 15px rgba(255, 0, 64, 0.5); }
-  92% { transform: skew(10deg); text-shadow: 2px 0 #00ffcc, -2px 0 #ff00ff; }
-  94% { transform: skew(-10deg); text-shadow: -2px 0 #00ffcc, 2px 0 #ff00ff; }
-  96% { transform: skew(5deg); opacity: 0.8; }
-  98% { transform: skew(0deg); text-shadow: 3px 0 #ff0040; }
+  0%,
+  90%,
+  100% {
+    transform: skew(0deg);
+    text-shadow: 0 0 15px rgba(255, 0, 64, 0.5);
+  }
+  92% {
+    transform: skew(10deg);
+    text-shadow:
+      2px 0 #00ffcc,
+      -2px 0 #ff00ff;
+  }
+  94% {
+    transform: skew(-10deg);
+    text-shadow:
+      -2px 0 #00ffcc,
+      2px 0 #ff00ff;
+  }
+  96% {
+    transform: skew(5deg);
+    opacity: 0.8;
+  }
+  98% {
+    transform: skew(0deg);
+    text-shadow: 3px 0 #ff0040;
+  }
 }
-
 
 /* 스캐너 */
 .fingerprint-scanner {
@@ -521,12 +565,42 @@ nav a:hover {
   inset: 0;
   border-radius: 42% 42% 46% 46%;
   background:
-    radial-gradient(ellipse 40px 50px at 50% 48%, transparent 14px, rgba(0, 212, 255, 0.12) 15px, transparent 16px),
-    radial-gradient(ellipse 34px 42px at 50% 46%, transparent 10px, rgba(0, 212, 255, 0.14) 11px, transparent 12px),
-    radial-gradient(ellipse 28px 35px at 52% 44%, transparent 7px, rgba(0, 212, 255, 0.15) 8px, transparent 9px),
-    radial-gradient(ellipse 22px 28px at 48% 45%, transparent 5px, rgba(0, 212, 255, 0.16) 6px, transparent 7px),
-    radial-gradient(ellipse 16px 21px at 50% 43%, transparent 3px, rgba(0, 212, 255, 0.18) 4px, transparent 5px),
-    radial-gradient(ellipse 10px 14px at 50% 44%, transparent 1px, rgba(0, 212, 255, 0.2) 2px, transparent 3px);
+    radial-gradient(
+      ellipse 40px 50px at 50% 48%,
+      transparent 14px,
+      rgba(0, 212, 255, 0.12) 15px,
+      transparent 16px
+    ),
+    radial-gradient(
+      ellipse 34px 42px at 50% 46%,
+      transparent 10px,
+      rgba(0, 212, 255, 0.14) 11px,
+      transparent 12px
+    ),
+    radial-gradient(
+      ellipse 28px 35px at 52% 44%,
+      transparent 7px,
+      rgba(0, 212, 255, 0.15) 8px,
+      transparent 9px
+    ),
+    radial-gradient(
+      ellipse 22px 28px at 48% 45%,
+      transparent 5px,
+      rgba(0, 212, 255, 0.16) 6px,
+      transparent 7px
+    ),
+    radial-gradient(
+      ellipse 16px 21px at 50% 43%,
+      transparent 3px,
+      rgba(0, 212, 255, 0.18) 4px,
+      transparent 5px
+    ),
+    radial-gradient(
+      ellipse 10px 14px at 50% 44%,
+      transparent 1px,
+      rgba(0, 212, 255, 0.2) 2px,
+      transparent 3px
+    );
 }
 
 .fp-ridges::after {
@@ -535,9 +609,24 @@ nav a:hover {
   inset: 0;
   border-radius: 42% 42% 46% 46%;
   background:
-    radial-gradient(ellipse 50px 60px at 46% 52%, transparent 20px, rgba(0, 212, 255, 0.08) 21px, transparent 22px),
-    radial-gradient(ellipse 56px 68px at 54% 50%, transparent 24px, rgba(0, 212, 255, 0.07) 25px, transparent 26px),
-    radial-gradient(ellipse 62px 76px at 48% 54%, transparent 28px, rgba(0, 212, 255, 0.06) 29px, transparent 30px);
+    radial-gradient(
+      ellipse 50px 60px at 46% 52%,
+      transparent 20px,
+      rgba(0, 212, 255, 0.08) 21px,
+      transparent 22px
+    ),
+    radial-gradient(
+      ellipse 56px 68px at 54% 50%,
+      transparent 24px,
+      rgba(0, 212, 255, 0.07) 25px,
+      transparent 26px
+    ),
+    radial-gradient(
+      ellipse 62px 76px at 48% 54%,
+      transparent 28px,
+      rgba(0, 212, 255, 0.06) 29px,
+      transparent 30px
+    );
   /* 사실감을 위한 약간의 오프셋이 적용된 외부 릿지 */
 }
 
@@ -547,7 +636,8 @@ nav a:hover {
   left: 10px;
   right: 10px;
   height: 2px;
-  background: linear-gradient(90deg,
+  background: linear-gradient(
+    90deg,
     transparent,
     rgba(0, 212, 255, 0.4) 15%,
     var(--color-accent-cyan) 50%,
@@ -760,9 +850,15 @@ nav a:hover {
   animation: arrowPulse 1.5s ease-in-out infinite;
 }
 
-.flow-arrow:nth-child(2) { animation-delay: 0s; }
-.flow-arrow:nth-child(4) { animation-delay: 0.3s; }
-.flow-arrow:nth-child(6) { animation-delay: 0.6s; }
+.flow-arrow:nth-child(2) {
+  animation-delay: 0s;
+}
+.flow-arrow:nth-child(4) {
+  animation-delay: 0.3s;
+}
+.flow-arrow:nth-child(6) {
+  animation-delay: 0.6s;
+}
 
 /* =====================
    기술 스택 레이어 (Experience 섹션)
@@ -1087,28 +1183,54 @@ footer {
 
 @keyframes colorShift {
   0% {
-    text-shadow: -2px 0 #ff0000, 2px 0 #00d4ff;
+    text-shadow:
+      -2px 0 #ff0000,
+      2px 0 #00d4ff;
   }
   100% {
-    text-shadow: 2px 0 #ff0000, -2px 0 #00d4ff;
+    text-shadow:
+      2px 0 #ff0000,
+      -2px 0 #00d4ff;
   }
 }
 
 @keyframes textFlicker {
-  0%, 100% { opacity: 0.8; }
-  50% { opacity: 0.5; }
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 @keyframes scanLine {
-  0% { top: 0; opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { top: 100%; opacity: 0; }
+  0% {
+    top: 0;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
 }
 
 @keyframes arrowPulse {
-  0%, 100% { opacity: 0.3; transform: translateX(0); }
-  50% { opacity: 1; transform: translateX(3px); }
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: translateX(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(3px);
+  }
 }
 
 /* =====================
@@ -1117,8 +1239,9 @@ footer {
 .reveal {
   opacity: 0;
   transform: translateY(40px);
-  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .reveal.revealed {
@@ -1277,4 +1400,293 @@ footer {
 .badge.private {
   background: #ff5252;
   color: #fff;
+}
+
+/* =====================
+   Rwasm 빌드 시각화 (Project Card)
+===================== */
+.rwasm-visual {
+  width: 100%;
+  height: 200px;
+  margin: var(--spacing-md) 0;
+  background: rgba(10, 14, 26, 0.4);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.build-track {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 90%;
+  margin-bottom: var(--spacing-md);
+  position: relative;
+  z-index: 2;
+}
+
+.build-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 80px;
+}
+
+.node-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(0, 212, 255, 0.05);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Cascadia Code", monospace;
+  font-size: 0.8rem;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+
+.node-rust .node-icon {
+  color: #f06529; /* Rust-ish Orange */
+  border-color: rgba(240, 101, 41, 0.3);
+}
+
+.node-wasm .node-icon {
+  color: #654ff0; /* Wasm-ish Purple/Blue */
+  border-color: rgba(101, 79, 240, 0.3);
+}
+
+.node-label {
+  font-size: 0.65rem;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+/* Rwasm Core Engine Node */
+.node-rwasm {
+  position: relative;
+}
+
+.node-icon-core {
+  width: 54px;
+  height: 54px;
+  background: radial-gradient(
+    circle,
+    var(--color-accent-blue) 0%,
+    transparent 70%
+  );
+  border: 2px solid var(--color-accent-cyan);
+  border-radius: 50%;
+  position: relative;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+  animation: coreRotate 4s linear infinite;
+}
+
+.node-icon-core::before,
+.node-icon-core::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border: 1px dashed var(--color-accent-cyan);
+  border-radius: 50%;
+  opacity: 0.5;
+}
+
+.node-icon-core::after {
+  inset: -8px;
+  border-style: solid;
+  border-width: 1px;
+  opacity: 0.2;
+  animation: corePulse 2s ease-in-out infinite;
+}
+
+/* Connector Lines */
+.build-connector {
+  flex-grow: 1;
+  height: 2px;
+  position: relative;
+  margin: 0 10px;
+}
+
+.connector-line {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 212, 255, 0.1);
+}
+
+.connector-pulse {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-accent-cyan),
+    transparent
+  );
+  animation: flowPulse 2s linear infinite;
+}
+
+.build-track div:nth-child(2) .connector-pulse {
+  animation-delay: 0s;
+}
+.build-track div:nth-child(4) .connector-pulse {
+  animation-delay: 1s;
+}
+
+/* Status Text */
+.build-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Cascadia Code", monospace;
+  font-size: 0.7rem;
+  color: var(--color-accent-cyan);
+  opacity: 0.8;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--color-accent-cyan);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--color-accent-cyan);
+  animation: dotBlink 1s ease-in-out infinite;
+}
+
+/* Animations */
+@keyframes coreRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes corePulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.2;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.4;
+  }
+}
+
+@keyframes flowPulse {
+  0% {
+    left: -20%;
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes dotBlink {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.8);
+  }
+}
+
+/* Card Hover Interaction */
+.project-card:hover .node-icon-core {
+  box-shadow: 0 0 30px var(--color-accent-cyan);
+  animation-duration: 2s;
+}
+
+.project-card:hover .connector-pulse {
+  animation-duration: 1s;
+}
+
+/* =====================
+   프로젝트 탭 스위처 스타일
+===================== */
+.project-tabs {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+}
+
+.tab-btn {
+  background: transparent;
+  border: 1px solid var(--color-glass-border);
+  color: var(--color-text-secondary);
+  padding: 10px 25px;
+  border-radius: 4px;
+  font-family: 'Cascadia Code', monospace;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: 0.1em;
+}
+
+.tab-btn .tab-decorator {
+  color: var(--color-accent-blue);
+  opacity: 0.5;
+  transition: all 0.3s ease;
+}
+
+.tab-btn:hover {
+  color: var(--color-text-primary);
+  border-color: rgba(0, 212, 255, 0.4);
+  background: rgba(0, 212, 255, 0.05);
+}
+
+.tab-btn.active {
+  color: var(--color-accent-cyan);
+  border-color: var(--color-accent-cyan);
+  background: rgba(0, 212, 255, 0.1);
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+}
+
+.tab-btn.active .tab-decorator {
+  opacity: 1;
+  text-shadow: 0 0 8px var(--color-accent-cyan);
+}
+
+/* 프로젝트 컨테이너 관리 */
+.projects-container {
+  display: none;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.projects-container.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
 }
