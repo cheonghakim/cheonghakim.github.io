@@ -12,7 +12,7 @@ Visit the live site here: **[https://cheonghakim.github.io](https://cheonghakim.
 - **Responsive Design**: Optimized for desktop and mobile.
 - **Modern UI**: Dark mode aesthetic with glassmorphism effects.
 
-## 🚀 Technologies
+## Technologies
 
 - HTML5, CSS3
 - JavaScript (ES6+)
