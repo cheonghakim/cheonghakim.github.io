@@ -21,6 +21,12 @@
   --color-glass-bg: transparent;
   --color-glass-border: rgba(0, 212, 255, 0.2);
 
+  /* 기술 카테고리 색상 */
+  --color-frontend: #00d4ff;
+  --color-backend: #00ff99;
+  --color-devops: #ff6b9d;
+  --color-security: #ff5252;
+
   /* 간격 변수 */
   --spacing-xs: 0.5rem;
   --spacing-sm: 1rem;
@@ -32,6 +38,7 @@
   /* 타이포그래피 */
   --font-primary:
     "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "Courier New", Courier, monospace;
 
   /* 효과 */
   --blur-glass: 20px;
@@ -50,6 +57,17 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   min-height: 100vh;
+}
+
+::selection {
+  background: var(--color-accent-cyan);
+  color: var(--color-bg-primary);
+  text-shadow: none;
+}
+
+::-moz-selection {
+  background: var(--color-accent-cyan);
+  color: var(--color-bg-primary);
 }
 
 /* =====================
@@ -155,13 +173,17 @@ nav {
 nav a {
   color: var(--color-text-primary);
   text-decoration: none;
-  font-weight: 500;
-  font-size: 1.1rem;
+  font-weight: 600;
+  font-size: 1rem;
   padding: var(--spacing-xs) var(--spacing-md);
   border-radius: var(--border-radius);
   transition: all var(--transition-speed) ease;
   position: relative;
   overflow: hidden;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.9rem;
 }
 
 nav a::before {
@@ -180,12 +202,29 @@ nav a::before {
   transition: width var(--transition-speed) ease;
 }
 
-nav a:hover::before {
-  width: 80%;
+nav a::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity var(--transition-speed) ease;
+  pointer-events: none;
 }
 
 nav a:hover {
   color: var(--color-accent-cyan);
+}
+
+nav a:hover::before {
+  width: 80%;
+}
+
+nav a:hover::after {
+  opacity: 1;
 }
 
 /* =====================
@@ -212,6 +251,8 @@ nav a:hover {
   position: relative;
   overflow: hidden;
   animation: fadeInUp 0.8s ease-out both;
+  display: flex;
+  flex-direction: column;
 }
 
 .project-card::before {
@@ -231,14 +272,30 @@ nav a:hover {
   pointer-events: none;
 }
 
+.project-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-accent-cyan), transparent);
+  opacity: 0;
+  transition: opacity var(--transition-speed) ease;
+}
+
 .project-card:hover::before {
+  opacity: 1;
+}
+
+.project-card:hover::after {
   opacity: 1;
 }
 
 .project-card:hover {
   transform: translateY(-8px);
   border-color: var(--color-accent-cyan);
-  box-shadow: 0 20px 60px rgba(0, 212, 255, 0.3);
+  box-shadow: 0 22px 65px rgba(0, 212, 255, 0.25), inset 0 1px 0 rgba(0, 212, 255, 0.1);
 }
 
 .project-card:nth-child(1) {
@@ -271,6 +328,23 @@ nav a:hover {
   font-weight: 700;
   margin-bottom: var(--spacing-sm);
   color: var(--color-text-primary);
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.project-card h2::before {
+  content: "▶";
+  color: var(--color-accent-cyan);
+  font-size: 0.8em;
+  opacity: 0;
+  animation: codeFlicker 3s ease-in-out infinite;
+  transition: opacity var(--transition-speed) ease;
+}
+
+.project-card:hover h2::before {
+  opacity: 1;
 }
 
 .project-description {
@@ -278,6 +352,7 @@ nav a:hover {
   color: var(--color-text-secondary);
   margin-bottom: var(--spacing-md);
   line-height: 1.7;
+  flex-grow: 1;
 }
 
 .project-preview {
@@ -287,7 +362,7 @@ nav a:hover {
   border-radius: 8px;
   object-fit: cover;
   border: 1px solid var(--color-glass-border);
-  transition: transform var(--transition-speed) ease;
+  transition: all var(--transition-speed) ease;
 }
 
 /* =====================
@@ -307,6 +382,21 @@ nav a:hover {
   border: 1px dashed var(--color-glass-border);
   position: relative;
   overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.project-card:hover .project-preview.private {
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.15) 10px,
+    rgba(0, 212, 255, 0.15) 10px,
+    rgba(0, 212, 255, 0.15) 20px
+  );
+  border-color: rgba(0, 212, 255, 0.6);
+  box-shadow: 
+    inset 0 0 20px rgba(0, 212, 255, 0.1),
+    0 0 20px rgba(0, 212, 255, 0.15);
 }
 
 /* 스캔라인 오버레이 (상시 노출) */
@@ -326,6 +416,18 @@ nav a:hover {
   );
   pointer-events: none;
   z-index: 2;
+  transition: all 0.3s ease;
+}
+
+.project-card:hover .project-preview.private::before {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 212, 255, 0.08) 2px,
+    rgba(0, 212, 255, 0.08) 4px
+  );
+  animation: scanlineFlicker 0.15s ease-in-out infinite;
 }
 
 .project-preview.private::after {
@@ -495,6 +597,7 @@ nav a:hover {
 .fp-reticle {
   position: absolute;
   inset: 0;
+  transition: all 0.3s ease;
 }
 
 .fp-reticle::before,
@@ -506,6 +609,7 @@ nav a:hover {
   border-color: var(--color-accent-cyan);
   border-style: solid;
   opacity: 0.6;
+  transition: all 0.3s ease;
 }
 
 .fp-reticle::before {
@@ -557,6 +661,7 @@ nav a:hover {
   transform: translate(-50%, -50%);
   width: 70px;
   height: 90px;
+  transition: all 0.3s ease;
 }
 
 .fp-ridges::before {
@@ -633,36 +738,57 @@ nav a:hover {
 /* 글로우 트레일이 포함된 스캔 라인 */
 .fp-scan-line {
   position: absolute;
-  left: 10px;
-  right: 10px;
-  height: 2px;
+  left: 8px;
+  right: 8px;
+  height: 1px;
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(0, 212, 255, 0.4) 15%,
-    var(--color-accent-cyan) 50%,
-    rgba(0, 212, 255, 0.4) 85%,
+    rgba(0, 212, 255, 0.3) 10%,
+    rgba(0, 255, 150, 0.5) 30%,
+    #00ffff 50%,
+    rgba(0, 255, 150, 0.5) 70%,
+    rgba(0, 212, 255, 0.3) 90%,
     transparent
   );
   box-shadow:
-    0 0 8px var(--color-accent-cyan),
-    0 0 20px rgba(0, 212, 255, 0.3),
-    0 -8px 20px rgba(0, 212, 255, 0.1);
-  animation: scanLine 2.5s ease-in-out infinite;
+    0 0 4px rgba(0, 255, 150, 0.6),
+    0 0 12px var(--color-accent-cyan),
+    0 0 24px rgba(0, 212, 255, 0.4),
+    0 0 40px rgba(0, 212, 255, 0.2),
+    0 -6px 16px rgba(0, 255, 150, 0.3),
+    0 6px 16px rgba(0, 255, 150, 0.1);
+  animation: scanLine 2.8s cubic-bezier(0.42, 0.0, 0.58, 1.0) infinite;
   top: 0;
   z-index: 3;
+  filter: blur(0.5px);
 }
 
 /* 스캔 라인 뒤의 잔상 글로우 */
 .fp-scan-line::after {
   content: "";
   position: absolute;
-  left: 0;
-  right: 0;
-  top: -20px;
-  height: 20px;
-  background: linear-gradient(to top, rgba(0, 212, 255, 0.15), transparent);
+  left: -2px;
+  right: -2px;
+  top: -30px;
+  height: 30px;
+  background: linear-gradient(to top, rgba(0, 255, 150, 0.2), rgba(0, 212, 255, 0.1), transparent);
+  box-shadow: 0 0 20px rgba(0, 255, 150, 0.2);
   pointer-events: none;
+}
+
+/* 스캔 라인 앞의 선행 글로우 */
+.fp-scan-line::before {
+  content: "";
+  position: absolute;
+  left: -4px;
+  right: -4px;
+  top: 2px;
+  height: 24px;
+  background: linear-gradient(to bottom, transparent, rgba(0, 255, 150, 0.15), transparent);
+  box-shadow: 0 0 16px rgba(0, 255, 150, 0.25);
+  pointer-events: none;
+  animation: scanGlitch 0.3s ease-in-out infinite;
 }
 
 /* 상태 텍스트 */
@@ -681,10 +807,78 @@ nav a:hover {
   white-space: nowrap;
 }
 
-/* 호버 상태 전환 - 스캐너가 흐려지고 글리치 효과 활성화 */
+/* 호버 상태 전환 - 스캐너 강화 및 동적 이펙트 */
 .project-card:hover .fingerprint-scanner {
-  opacity: 0.2;
-  transition: opacity 0.2s ease;
+  opacity: 1;
+  transition: opacity 0.3s ease, filter 0.3s ease;
+  filter: brightness(1.2) saturate(1.3);
+  animation: scannerPulse 1.2s ease-in-out infinite;
+}
+
+.project-card:hover .fp-reticle::before,
+.project-card:hover .fp-reticle::after {
+  opacity: 1;
+  border-color: #00ff99;
+  box-shadow: 0 0 8px rgba(0, 255, 150, 0.5);
+  transition: all 0.3s ease;
+}
+
+.project-card:hover .fp-scan-line {
+  animation: scanLine 2.0s cubic-bezier(0.42, 0.0, 0.58, 1.0) infinite;
+  box-shadow:
+    0 0 6px rgba(0, 255, 150, 0.8),
+    0 0 16px var(--color-accent-cyan),
+    0 0 32px rgba(0, 212, 255, 0.5),
+    0 0 50px rgba(0, 212, 255, 0.3),
+    0 -8px 24px rgba(0, 255, 150, 0.4);
+  transition: all 0.3s ease;
+}
+
+.project-card:hover .fp-ridges {
+  filter: brightness(1.15) drop-shadow(0 0 10px rgba(0, 212, 255, 0.4));
+  animation: ridgesPulse 1.5s ease-in-out infinite;
+}
+
+.project-card:hover .fp-status {
+  color: #00ff99;
+  text-shadow: 0 0 8px rgba(0, 255, 150, 0.6);
+  animation: statusGlow 1.2s ease-in-out infinite;
+}
+
+@keyframes scannerPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+@keyframes ridgesPulse {
+  0%, 100% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes statusGlow {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes scanlineFlicker {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
 }
 
 /* =====================
@@ -693,45 +887,71 @@ nav a:hover {
 .problem-solution {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
-  margin-bottom: var(--spacing-sm);
-  padding: var(--spacing-sm);
-  background: rgba(0, 212, 255, 0.03);
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.05) 0%, rgba(0, 212, 255, 0.02) 100%);
   border-radius: 8px;
   border-left: 3px solid var(--color-accent-cyan);
+  border: 1px solid rgba(0, 212, 255, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.problem-solution::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 212, 255, 0.02) 2px,
+    rgba(0, 212, 255, 0.02) 4px
+  );
+  pointer-events: none;
 }
 
 .ps-item {
   display: flex;
   align-items: flex-start;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-sm);
+  position: relative;
+  z-index: 1;
 }
 
 .ps-label {
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-size: 0.7rem;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 2px 8px;
-  border-radius: 4px;
+  letter-spacing: 0.1em;
+  padding: 4px 10px;
+  border-radius: 6px;
   white-space: nowrap;
   flex-shrink: 0;
+  font-family: var(--font-mono);
+  transition: all var(--transition-speed) ease;
 }
 
 .ps-item:first-child .ps-label {
-  background: rgba(255, 82, 82, 0.2);
-  color: #ff5252;
+  background: linear-gradient(135deg, rgba(255, 82, 82, 0.2), rgba(255, 82, 82, 0.1));
+  color: #ff7070;
+  border: 1px solid rgba(255, 82, 82, 0.3);
 }
 
 .ps-item:last-child .ps-label {
-  background: rgba(0, 212, 255, 0.2);
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 212, 255, 0.1));
   color: var(--color-accent-cyan);
+  border: 1px solid rgba(0, 212, 255, 0.3);
 }
 
 .ps-text {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: var(--color-text-secondary);
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 /* =====================
@@ -740,17 +960,87 @@ nav a:hover {
 .tech-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-top: var(--spacing-sm);
+  gap: 8px;
+  margin-top: var(--spacing-md);
 }
 
 .tech-tag-sm {
-  padding: 2px 10px;
+  padding: 4px 12px;
   font-size: 0.75rem;
+  font-weight: 600;
   background: rgba(0, 212, 255, 0.08);
-  border: 1px solid rgba(0, 212, 255, 0.2);
-  border-radius: 12px;
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  border-radius: 16px;
   color: var(--color-text-secondary);
+  transition: all var(--transition-speed) ease;
+  position: relative;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tech-tag-sm::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.2), transparent);
+  transition: left 0.6s ease;
+}
+
+.tech-tag-sm:hover {
+  border-color: var(--color-accent-cyan);
+  background: rgba(0, 212, 255, 0.15);
+  box-shadow: 0 0 12px rgba(0, 212, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.tech-tag-sm:hover::before {
+  left: 100%;
+}
+
+/* 기술 태그 카테고리별 색상 */
+.tech-tag-sm:nth-child(4n+1) {
+  border-color: rgba(0, 212, 255, 0.4);
+  color: var(--color-frontend);
+}
+
+.tech-tag-sm:nth-child(4n+1):hover {
+  border-color: var(--color-frontend);
+  box-shadow: 0 0 12px rgba(0, 212, 255, 0.4);
+}
+
+.tech-tag-sm:nth-child(4n+2) {
+  border-color: rgba(0, 255, 153, 0.4);
+  color: var(--color-backend);
+}
+
+.tech-tag-sm:nth-child(4n+2):hover {
+  border-color: var(--color-backend);
+  box-shadow: 0 0 12px rgba(0, 255, 153, 0.4);
+}
+
+.tech-tag-sm:nth-child(4n+3) {
+  border-color: rgba(255, 107, 157, 0.4);
+  color: var(--color-devops);
+}
+
+.tech-tag-sm:nth-child(4n+3):hover {
+  border-color: var(--color-devops);
+  box-shadow: 0 0 12px rgba(255, 107, 157, 0.4);
+}
+
+.tech-tag-sm:nth-child(4n+4) {
+  border-color: rgba(255, 82, 82, 0.4);
+  color: var(--color-security);
+}
+
+.tech-tag-sm:nth-child(4n+4):hover {
+  border-color: var(--color-security);
+  box-shadow: 0 0 12px rgba(255, 82, 82, 0.4);
 }
 
 /* =====================
@@ -868,23 +1158,35 @@ nav a:hover {
 }
 
 .section-title {
-  font-size: 2.2rem;
-  font-weight: 700;
+  font-size: 2.3rem;
+  font-weight: 800;
   text-align: center;
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--spacing-2xl);
   color: var(--color-text-primary);
   letter-spacing: -0.02em;
   position: relative;
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+}
+
+.section-title::before {
+  content: "═══════ ";
+  font-size: 1rem;
+  color: var(--color-accent-cyan);
+  opacity: 0.4;
+  margin-right: var(--spacing-sm);
+  animation: codeFlicker 3s ease-in-out infinite;
+  letter-spacing: 0.2em;
 }
 
 .section-title::after {
-  content: "";
-  display: block;
-  width: 40px;
-  height: 3px;
-  background: var(--color-accent-cyan);
-  margin: var(--spacing-sm) auto 0;
-  border-radius: 2px;
+  content: " ═══════";
+  font-size: 1rem;
+  color: var(--color-accent-cyan);
+  opacity: 0.4;
+  margin-left: var(--spacing-sm);
+  animation: codeFlicker 3.5s ease-in-out infinite;
+  letter-spacing: 0.2em;
 }
 
 .tech-layers {
@@ -1032,43 +1334,83 @@ nav a:hover {
   font-size: 1.05rem;
   color: var(--color-text-secondary);
   line-height: 1.8;
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+  position: relative;
+  padding-left: var(--spacing-md);
+}
+
+.about-text p::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--color-accent-cyan);
+  opacity: 0.5;
+  font-family: var(--font-mono);
 }
 
 .about-stats {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: var(--spacing-lg);
 }
 
 .stat-item {
   display: flex;
   flex-direction: column;
-  padding: var(--spacing-sm) var(--spacing-md);
-  background: var(--color-glass-bg);
-  border: 1px solid var(--color-glass-border);
+  padding: var(--spacing-lg) var(--spacing-lg);
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.05) 0%, rgba(0, 212, 255, 0.02) 100%);
+  border: 2px solid rgba(0, 212, 255, 0.2);
   border-radius: 12px;
   transition: all var(--transition-speed) ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--color-accent-cyan), transparent);
+  opacity: 0;
+  transition: opacity var(--transition-speed) ease;
+}
+
+.stat-item:hover::before {
+  opacity: 1;
 }
 
 .stat-item:hover {
   border-color: var(--color-accent-cyan);
-  box-shadow: 0 8px 30px rgba(0, 212, 255, 0.15);
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 212, 255, 0.05) 100%);
+  box-shadow: 0 12px 40px rgba(0, 212, 255, 0.2), inset 0 0 20px rgba(0, 212, 255, 0.05);
+  transform: translateY(-4px);
 }
 
 .stat-number {
-  font-size: 2rem;
+  font-size: 3rem;
   font-weight: 800;
   color: var(--color-accent-cyan);
   letter-spacing: -0.02em;
+  margin-bottom: var(--spacing-xs);
+  font-family: var(--font-mono);
+  animation: numberPulse 2s ease-in-out infinite;
+}
+
+.stat-item:hover .stat-number {
+  animation: numberPulse 1s ease-in-out infinite;
+  text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
 }
 
 .stat-label {
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: 0.85rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.15em;
   color: var(--color-text-secondary);
+  font-family: var(--font-mono);
 }
 
 /* =====================
@@ -1144,6 +1486,32 @@ footer {
   }
 }
 
+@keyframes codeFlicker {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  25% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  75% {
+    opacity: 0.4;
+  }
+}
+
+@keyframes numberPulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.05);
+    filter: brightness(1.2);
+  }
+}
+
 @keyframes pulse {
   0%,
   100% {
@@ -1208,16 +1576,49 @@ footer {
   0% {
     top: 0;
     opacity: 0;
+    filter: blur(0.5px) brightness(0.8);
   }
-  10% {
-    opacity: 1;
+  5% {
+    opacity: 0.6;
   }
-  90% {
+  8% {
     opacity: 1;
+    filter: blur(0.5px) brightness(1.3);
+  }
+  50% {
+    opacity: 1;
+    filter: blur(0.5px) brightness(1.0);
+  }
+  92% {
+    opacity: 1;
+    filter: blur(0.5px) brightness(1.0);
+  }
+  95% {
+    opacity: 0.6;
   }
   100% {
     top: 100%;
     opacity: 0;
+    filter: blur(0.5px) brightness(0.8);
+  }
+}
+
+@keyframes scanGlitch {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translateY(-2px);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(0);
+    opacity: 0.3;
+  }
+  75% {
+    transform: translateY(1px);
+    opacity: 0.4;
   }
 }
 
@@ -1391,15 +1792,27 @@ footer {
 }
 
 .badge {
-  font-size: 12px;
-  padding: 2px 6px;
-  border-radius: 4px;
-  margin-left: 6px;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  margin-left: 8px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: all var(--transition-speed) ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .badge.private {
-  background: #ff5252;
+  background: linear-gradient(135deg, #ff5252, #ff7070);
   color: #fff;
+  border: 1px solid rgba(255, 82, 82, 0.6);
+}
+
+.badge.private:hover {
+  box-shadow: 0 6px 20px rgba(255, 82, 82, 0.4);
+  transform: translateY(-2px);
 }
 
 /* =====================
@@ -1640,17 +2053,31 @@ footer {
   background: transparent;
   border: 1px solid var(--color-glass-border);
   color: var(--color-text-secondary);
-  padding: 10px 25px;
-  border-radius: 4px;
-  font-family: 'Cascadia Code', monospace;
-  font-size: 0.9rem;
-  font-weight: 600;
+  padding: 12px 28px;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   align-items: center;
   gap: 8px;
   letter-spacing: 0.1em;
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+}
+
+.tab-btn::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--color-accent-cyan);
+  transition: width 0.3s ease;
 }
 
 .tab-btn .tab-decorator {
@@ -1660,16 +2087,24 @@ footer {
 }
 
 .tab-btn:hover {
-  color: var(--color-text-primary);
-  border-color: rgba(0, 212, 255, 0.4);
-  background: rgba(0, 212, 255, 0.05);
+  color: var(--color-accent-cyan);
+  border-color: rgba(0, 212, 255, 0.5);
+  background: rgba(0, 212, 255, 0.08);
+}
+
+.tab-btn:hover::after {
+  width: 80%;
 }
 
 .tab-btn.active {
   color: var(--color-accent-cyan);
   border-color: var(--color-accent-cyan);
-  background: rgba(0, 212, 255, 0.1);
-  box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+  background: rgba(0, 212, 255, 0.12);
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.25), inset 0 0 15px rgba(0, 212, 255, 0.08);
+}
+
+.tab-btn.active::after {
+  width: 100%;
 }
 
 .tab-btn.active .tab-decorator {

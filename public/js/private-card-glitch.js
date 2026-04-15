@@ -83,10 +83,18 @@ class CardGlitchEffect {
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, width, height);
 
-    // 일부 패턴 추가
-    ctx.fillStyle = "rgba(0, 255, 200, 0.1)";
-    for (let i = 0; i < 20; i++) {
-      ctx.fillRect(Math.random() * width, Math.random() * height, 2, height);
+    // 수직 데이터 스트림 패턴 (바이오메트릭 스캐너 느낌)
+    for (let i = 0; i < 18; i++) {
+      const x = Math.random() * width;
+      const alpha = 0.04 + Math.random() * 0.08;
+      ctx.fillStyle = `rgba(0, 255, 70, ${alpha})`;
+      ctx.fillRect(x, Math.random() * height, 1, height * (0.3 + Math.random() * 0.7));
+    }
+    // 수평 데이터 라인 (희미한)
+    for (let i = 0; i < 8; i++) {
+      const y = Math.random() * height;
+      ctx.fillStyle = `rgba(0, 255, 70, 0.03)`;
+      ctx.fillRect(0, y, width, 1);
     }
 
     const texture = new THREE.CanvasTexture(canvas);
@@ -230,16 +238,21 @@ class PostEffect {
               color = texture2D(uTexture, uv + glitchOffset).rgb;
             }
             
-            // 블록 노이즈 추가
-            color += vec3(blockNoise * 0.3);
-            
-            // 스캔라인 추가
-            color += vec3(scanline);
-            
-            // 화이트 노이즈
-            float whiteNoise = (random(uv + vec2(t * 0.1)) - 0.5) * 0.1;
-            color += vec3(whiteNoise);
-            
+            // 블록 노이즈 - 초록 틴트
+            color += vec3(0.0, blockNoise * 0.25, blockNoise * 0.05);
+
+            // 스캔라인 - 초록 틴트
+            color += vec3(0.0, scanline * 1.2, scanline * 0.3);
+
+            // 화이트 노이즈 (약하게)
+            float whiteNoise = (random(uv + vec2(t * 0.1)) - 0.5) * 0.07;
+            color += vec3(whiteNoise * 0.4, whiteNoise, whiteNoise * 0.4);
+
+            // 초록 전체 틴트 강화
+            color.g *= 1.15;
+            color.r *= 0.7;
+            color.b *= 0.6;
+
             gl_FragColor = vec4(color, 1.0);
           }
         `,
@@ -256,52 +269,8 @@ class PostEffect {
   }
 }
 
-// 모든 PRIVATE 카드에 글리치 효과 초기화
+// CSS ACCESS DENIED 호버 효과로 대체됨 - WebGL 캔버스 비활성화
 function initPrivateCardGlitches() {
-  if (typeof THREE === "undefined") {
-    console.error("Three.js is required for glitch effects");
-    return;
-  }
-
-  console.log("Initializing PRIVATE card glitch effects...");
-
-  const allCards = document.querySelectorAll(".project-card");
-  const glitchInstances = [];
-
-  allCards.forEach((card) => {
-    // 카드에 PRIVATE 배지가 있는지 확인
-    const privateBadge = card.querySelector(".badge.private");
-    if (!privateBadge) return;
-
-    const preview = card.querySelector(".project-preview.private");
-    if (preview) {
-      console.log("Adding glitch to PRIVATE card:", card);
-      const glitch = new CardGlitchEffect(card, preview);
-      glitchInstances.push(glitch);
-    } else {
-      console.warn("PRIVATE card found but no preview element:", card);
-    }
-  });
-
-  console.log(`Initialized ${glitchInstances.length} glitch effects`);
-
-  // 창 크기 조정 처리
-  let resizeTimeout;
-  window.addEventListener("resize", () => {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => {
-      glitchInstances.forEach((g) => g.resize());
-    }, 250);
-  });
-}
-
-// DOM이 준비되고 Three.js가 로드되면 초기화
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initPrivateCardGlitches);
-} else {
-  if (typeof THREE !== "undefined") {
-    initPrivateCardGlitches();
-  } else {
-    setTimeout(initPrivateCardGlitches, 100);
-  }
+  // CSS 애니메이션으로 대체
+  return;
 }
