@@ -253,6 +253,7 @@ nav a:hover::after {
   animation: fadeInUp 0.8s ease-out both;
   display: flex;
   flex-direction: column;
+  align-self: start;
 }
 
 .project-card::before {
@@ -1041,6 +1042,58 @@ nav a:hover::after {
 .tech-tag-sm:nth-child(4n+4):hover {
   border-color: var(--color-security);
   box-shadow: 0 0 12px rgba(255, 82, 82, 0.4);
+}
+
+/* =====================
+   나의 역할 섹션
+===================== */
+.my-role {
+  margin: var(--spacing-md) 0;
+  padding: var(--spacing-md);
+  background: linear-gradient(
+    135deg,
+    rgba(0, 212, 255, 0.05),
+    rgba(0, 255, 153, 0.05)
+  );
+  border-left: 3px solid var(--color-frontend);
+  border-radius: 0.5rem;
+  font-family: var(--font-mono);
+}
+
+.role-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-frontend);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.75rem;
+}
+
+.role-items {
+  list-style: none;
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.role-items li {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.role-items li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  color: var(--color-frontend);
+  font-weight: bold;
+}
+
+.role-items li:hover {
+  color: var(--color-text-primary);
+  text-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
 }
 
 /* =====================
