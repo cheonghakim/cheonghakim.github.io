@@ -18,7 +18,7 @@
   --color-accent-black: #000000;
   --color-text-primary: #ffffff;
   --color-text-secondary: #a0aec0;
-  --color-glass-bg: transparent;
+  --color-glass-bg: rgba(10, 14, 26, 0.6);
   --color-glass-border: rgba(0, 212, 255, 0.2);
 
   /* 기술 카테고리 색상 */
@@ -38,7 +38,7 @@
   /* 타이포그래피 */
   --font-primary:
     "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-mono: "Courier New", Courier, monospace;
+  --font-mono: "Cascadia Code", "Courier New", Courier, monospace;
 
   /* 효과 */
   --blur-glass: 20px;
@@ -215,16 +215,74 @@ nav a::after {
   pointer-events: none;
 }
 
-nav a:hover {
+nav a:hover,
+nav a.active {
   color: var(--color-accent-cyan);
 }
 
-nav a:hover::before {
+nav a:hover::before,
+nav a.active::before {
   width: 80%;
 }
 
 nav a:hover::after {
   opacity: 1;
+}
+
+/* =====================
+   햄버거 메뉴 (모바일)
+===================== */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: rgba(10, 14, 26, 0.8);
+  border: 1px solid var(--color-glass-border);
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 200;
+  backdrop-filter: blur(10px);
+}
+
+.nav-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--color-accent-cyan);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.nav-toggle.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.nav-toggle.open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.nav-toggle.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* =====================
+   스크롤 인디케이터
+===================== */
+.scroll-indicator {
+  margin-top: var(--spacing-lg);
+  text-align: center;
+  animation: bounce 2s ease-in-out infinite;
+  color: var(--color-accent-cyan);
+  opacity: 0.5;
+  font-size: 1.1rem;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
 }
 
 /* =====================
@@ -324,8 +382,8 @@ nav a:hover::after {
   border: 2px solid var(--color-glass-border);
 }
 
-.project-card h2 {
-  font-size: 1.8rem;
+.project-card h3 {
+  font-size: 1.3rem;
   font-weight: 700;
   margin-bottom: var(--spacing-sm);
   color: var(--color-text-primary);
@@ -335,16 +393,15 @@ nav a:hover::after {
   gap: var(--spacing-sm);
 }
 
-.project-card h2::before {
+.project-card h3::before {
   content: "▶";
   color: var(--color-accent-cyan);
   font-size: 0.8em;
   opacity: 0;
-  animation: codeFlicker 3s ease-in-out infinite;
   transition: opacity var(--transition-speed) ease;
 }
 
-.project-card:hover h2::before {
+.project-card:hover h3::before {
   opacity: 1;
 }
 
@@ -759,10 +816,10 @@ nav a:hover::after {
     0 0 40px rgba(0, 212, 255, 0.2),
     0 -6px 16px rgba(0, 255, 150, 0.3),
     0 6px 16px rgba(0, 255, 150, 0.1);
-  animation: scanLine 2.8s cubic-bezier(0.42, 0.0, 0.58, 1.0) infinite;
   top: 0;
   z-index: 3;
   filter: blur(0.5px);
+  opacity: 0;
 }
 
 /* 스캔 라인 뒤의 잔상 글로우 */
@@ -789,7 +846,6 @@ nav a:hover::after {
   background: linear-gradient(to bottom, transparent, rgba(0, 255, 150, 0.15), transparent);
   box-shadow: 0 0 16px rgba(0, 255, 150, 0.25);
   pointer-events: none;
-  animation: scanGlitch 0.3s ease-in-out infinite;
 }
 
 /* 상태 텍스트 */
@@ -825,6 +881,7 @@ nav a:hover::after {
 }
 
 .project-card:hover .fp-scan-line {
+  opacity: 1;
   animation: scanLine 2.0s cubic-bezier(0.42, 0.0, 0.58, 1.0) infinite;
   box-shadow:
     0 0 6px rgba(0, 255, 150, 0.8),
@@ -1003,46 +1060,7 @@ nav a:hover::after {
   left: 100%;
 }
 
-/* 기술 태그 카테고리별 색상 */
-.tech-tag-sm:nth-child(4n+1) {
-  border-color: rgba(0, 212, 255, 0.4);
-  color: var(--color-frontend);
-}
-
-.tech-tag-sm:nth-child(4n+1):hover {
-  border-color: var(--color-frontend);
-  box-shadow: 0 0 12px rgba(0, 212, 255, 0.4);
-}
-
-.tech-tag-sm:nth-child(4n+2) {
-  border-color: rgba(0, 255, 153, 0.4);
-  color: var(--color-backend);
-}
-
-.tech-tag-sm:nth-child(4n+2):hover {
-  border-color: var(--color-backend);
-  box-shadow: 0 0 12px rgba(0, 255, 153, 0.4);
-}
-
-.tech-tag-sm:nth-child(4n+3) {
-  border-color: rgba(255, 107, 157, 0.4);
-  color: var(--color-devops);
-}
-
-.tech-tag-sm:nth-child(4n+3):hover {
-  border-color: var(--color-devops);
-  box-shadow: 0 0 12px rgba(255, 107, 157, 0.4);
-}
-
-.tech-tag-sm:nth-child(4n+4) {
-  border-color: rgba(255, 82, 82, 0.4);
-  color: var(--color-security);
-}
-
-.tech-tag-sm:nth-child(4n+4):hover {
-  border-color: var(--color-security);
-  box-shadow: 0 0 12px rgba(255, 82, 82, 0.4);
-}
+/* 기술 태그 — cyan 단일 색상 통일 */
 
 /* =====================
    나의 역할 섹션
@@ -1189,19 +1207,16 @@ nav a:hover::after {
 .flow-arrow {
   color: var(--color-accent-cyan);
   font-size: 1.2rem;
-  opacity: 0.6;
-  animation: arrowPulse 1.5s ease-in-out infinite;
+  opacity: 0.4;
 }
 
-.flow-arrow:nth-child(2) {
-  animation-delay: 0s;
+.soar-card:hover .flow-arrow {
+  animation: arrowPulse 1.5s ease-in-out infinite;
+  opacity: 0.6;
 }
-.flow-arrow:nth-child(4) {
-  animation-delay: 0.3s;
-}
-.flow-arrow:nth-child(6) {
-  animation-delay: 0.6s;
-}
+.soar-card:hover .flow-arrow:nth-child(2) { animation-delay: 0s; }
+.soar-card:hover .flow-arrow:nth-child(4) { animation-delay: 0.3s; }
+.soar-card:hover .flow-arrow:nth-child(6) { animation-delay: 0.6s; }
 
 /* =====================
    기술 스택 레이어 (Experience 섹션)
@@ -1228,7 +1243,6 @@ nav a:hover::after {
   color: var(--color-accent-cyan);
   opacity: 0.4;
   margin-right: var(--spacing-sm);
-  animation: codeFlicker 3s ease-in-out infinite;
   letter-spacing: 0.2em;
 }
 
@@ -1238,7 +1252,6 @@ nav a:hover::after {
   color: var(--color-accent-cyan);
   opacity: 0.4;
   margin-left: var(--spacing-sm);
-  animation: codeFlicker 3.5s ease-in-out infinite;
   letter-spacing: 0.2em;
 }
 
@@ -1252,8 +1265,8 @@ nav a:hover::after {
 }
 
 .tech-layer {
-  width: 80%;
-  max-width: 700px;
+  width: 85%;
+  max-width: 900px;
   padding: var(--spacing-lg);
   background: var(--color-glass-bg);
   backdrop-filter: blur(var(--blur-glass));
@@ -1266,20 +1279,26 @@ nav a:hover::after {
 }
 
 .tech-layer[data-layer="frontend"] {
-  transform: rotateX(15deg) translateZ(40px);
-  z-index: 3;
+  transform: rotateX(15deg) translateZ(60px);
+  z-index: 4;
 }
 
-.tech-layer[data-layer="backend"] {
-  transform: rotateX(15deg) translateZ(0px);
+.tech-layer[data-layer="realtime"] {
+  transform: rotateX(15deg) translateZ(20px);
+  z-index: 3;
+  margin-top: -20px;
+}
+
+.tech-layer[data-layer="automation"] {
+  transform: rotateX(15deg) translateZ(-20px);
   z-index: 2;
-  margin-top: -10px;
+  margin-top: -20px;
 }
 
 .tech-layer[data-layer="infra"] {
-  transform: rotateX(15deg) translateZ(-40px);
+  transform: rotateX(15deg) translateZ(-60px);
   z-index: 1;
-  margin-top: -10px;
+  margin-top: -20px;
 }
 
 .tech-layer:hover {
@@ -1449,11 +1468,9 @@ nav a:hover::after {
   letter-spacing: -0.02em;
   margin-bottom: var(--spacing-xs);
   font-family: var(--font-mono);
-  animation: numberPulse 2s ease-in-out infinite;
 }
 
 .stat-item:hover .stat-number {
-  animation: numberPulse 1s ease-in-out infinite;
   text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
 }
 
@@ -1740,9 +1757,29 @@ footer {
     gap: var(--spacing-md);
   }
 
+  .nav-toggle {
+    display: flex;
+  }
+
   nav {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
     flex-direction: column;
-    gap: var(--spacing-sm);
+    gap: var(--spacing-xs);
+    padding: 4.5rem var(--spacing-md) var(--spacing-md);
+    background: rgba(10, 14, 26, 0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0, 212, 255, 0.15);
+    z-index: 150;
+    margin-bottom: 0;
+  }
+
+  nav.open {
+    display: flex;
   }
 
   .container {
