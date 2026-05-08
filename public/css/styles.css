@@ -1348,6 +1348,7 @@ nav a:hover::after {
   display: flex;
   gap: var(--spacing-sm);
   flex-wrap: wrap;
+  margin-top: var(--spacing-md);
 }
 
 .btn {
