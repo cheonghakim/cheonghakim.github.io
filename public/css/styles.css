@@ -1906,6 +1906,17 @@ footer {
   transform: translateY(-2px);
 }
 
+.badge.theme {
+  background: linear-gradient(135deg, #f5a623, #f7c948);
+  color: #1a1a1a;
+  border: 1px solid rgba(245, 166, 35, 0.6);
+}
+
+.badge.theme:hover {
+  box-shadow: 0 6px 20px rgba(245, 166, 35, 0.4);
+  transform: translateY(-2px);
+}
+
 /* =====================
    Rwasm 빌드 시각화 (Project Card)
 ===================== */
