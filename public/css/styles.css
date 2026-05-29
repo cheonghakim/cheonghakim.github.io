@@ -1907,6 +1907,8 @@ footer {
 }
 
 .badge.theme {
+  display: inline-flex;
+  align-items: center;
   background: linear-gradient(135deg, #f5a623, #f7c948);
   color: #1a1a1a;
   border: 1px solid rgba(245, 166, 35, 0.6);
