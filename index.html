@@ -109,7 +109,7 @@
       </section>
 
       <!-- 프로젝트 섹션 -->
-      <section id="projects" class="reveal">
+      <section id="projects">
         <h2 class="section-title">Projects</h2>
 
         <!-- 프로젝트 탭 스위처 -->
@@ -683,7 +683,6 @@
               </div>
             </article>
 
-            <!-- 프로젝트 10: Rust WASM Playground -->
             <article class="project-card" data-card-index="10">
               <h3>High Grid</h3>
               <p class="project-description">
@@ -707,7 +706,7 @@
                 >
               </div>
             </article>
-
+            <!-- 프로젝트 10: Rust WASM Playground -->
             <article class="project-card" data-card-index="11">
               <h3>Rust WASM Playground</h3>
               <p class="project-description">
@@ -940,8 +939,18 @@
           });
         });
 
-        // 스크롤 리빌 애니메이션 (Intersection Observer)
+        // 스크롤 리빌 애니메이션 (Intersection Observer + 스크롤 폴백)
         var revealSections = document.querySelectorAll(".reveal");
+        function checkReveal() {
+          revealSections.forEach(function (section) {
+            if (!section.classList.contains("revealed")) {
+              var rect = section.getBoundingClientRect();
+              if (rect.top < window.innerHeight * 0.95) {
+                section.classList.add("revealed");
+              }
+            }
+          });
+        }
         var observer = new IntersectionObserver(
           function (entries) {
             entries.forEach(function (entry) {
@@ -951,11 +960,13 @@
               }
             });
           },
-          { threshold: 0.1 },
+          { threshold: 0 },
         );
         revealSections.forEach(function (section) {
           observer.observe(section);
         });
+        window.addEventListener("scroll", checkReveal, { passive: true });
+        checkReveal();
 
         // 스크롤 스파이 — 현재 섹션 nav 하이라이트
         var navLinks = document.querySelectorAll("#main-nav a[href^='#']");
