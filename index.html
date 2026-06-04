@@ -97,7 +97,7 @@
               <span class="stat-label">Years Exp.</span>
             </div>
             <div class="stat-item">
-              <span class="stat-number">15+</span>
+              <span class="stat-number">16+</span>
               <span class="stat-label">Projects</span>
             </div>
             <div class="stat-item">
@@ -634,6 +634,33 @@
               </div>
             </article>
 
+            <!-- EventLens -->
+            <article class="project-card" data-card-index="8">
+              <h3>EventLens</h3>
+              <p class="project-description">
+                엔터프라이즈 환경에 특화된 보안 이벤트 뷰어입니다.
+              </p>
+              <img
+                src="public/imgs/eventlens.png"
+                alt="EventLens Preview"
+                class="project-preview"
+              />
+              <div class="button-group">
+                <a
+                  href="https://cheonghakim.github.io/event-lens"
+                  class="btn btn-primary"
+                  target="_blank"
+                  >LIVE DEMO</a
+                >
+                <a
+                  href="https://github.com/cheonghakim/event-lens"
+                  class="btn"
+                  target="_blank"
+                  >GITHUB</a
+                >
+              </div>
+            </article>
+
             <!-- 프로젝트 8: HTML Overlay Node -->
             <article class="project-card" data-card-index="8">
               <h3>HTML Overlay Node</h3>
@@ -711,7 +738,7 @@
               <h3>Rust WASM Playground</h3>
               <p class="project-description">
                 Rust로 구현한 연산 로직을 wasm-pack으로 컴파일해 브라우저에서
-                직접 실행하는 인터랙티브 WebAssembly 체험 데모입니다.
+                직접 실행하는 인터랙티브 WebAssembly 체험 에디터입니다.
               </p>
               <img
                 src="public/imgs/wasm_playground.png"
@@ -920,6 +947,12 @@
       </footer>
     </div>
 
+    <!-- 라이트박스 -->
+    <div id="lightbox" aria-hidden="true">
+      <button id="lightbox-close" aria-label="닫기">✕</button>
+      <img id="lightbox-img" src="" alt="" />
+    </div>
+
     <!-- 스크립트 -->
     <script src="public/js/webgl-canvas.js"></script>
     <script src="public/js/private-card-glitch.js"></script>
@@ -1011,6 +1044,38 @@
             });
           });
         }
+
+        // 라이트박스
+        var lightbox = document.getElementById("lightbox");
+        var lightboxImg = document.getElementById("lightbox-img");
+        var lightboxClose = document.getElementById("lightbox-close");
+
+        document
+          .querySelectorAll("img.project-preview")
+          .forEach(function (img) {
+            img.style.cursor = "zoom-in";
+            img.addEventListener("click", function () {
+              lightboxImg.src = img.src;
+              lightboxImg.alt = img.alt;
+              lightbox.classList.add("open");
+              lightbox.setAttribute("aria-hidden", "false");
+              document.body.style.overflow = "hidden";
+            });
+          });
+
+        function closeLightbox() {
+          lightbox.classList.remove("open");
+          lightbox.setAttribute("aria-hidden", "true");
+          document.body.style.overflow = "";
+        }
+
+        lightboxClose.addEventListener("click", closeLightbox);
+        lightbox.addEventListener("click", function (e) {
+          if (e.target === lightbox) closeLightbox();
+        });
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") closeLightbox();
+        });
 
         // 프로젝트 탭 전환 로직
         var tabBtns = document.querySelectorAll(".tab-btn");
