@@ -7,7 +7,10 @@
       name="description"
       content="보안관제 도메인 프론트엔드 엔지니어 김청하의 포트폴리오. Vue.js, Three.js, Rust WebAssembly 기반 실시간 보안 시각화 전문"
     />
-    <meta name="keywords" content="포트폴리오, WebGL, 프로젝트, 개발자" />
+    <meta
+      name="keywords"
+      content="보안관제, 프론트엔드 개발자, SIEM, SOAR, Vue.js, Rust, WebAssembly, Three.js, 실시간 시각화, 대시보드, Security Engineer, 포트폴리오"
+    />
     <meta name="author" content="Cheonghakim" />
 
     <!-- 오픈 그래프 메타 태그 -->
@@ -20,6 +23,11 @@
       content="보안 엔지니어 & 프론트엔드 개발자 김청하의 포트폴리오"
     />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://cheonghakim.github.io" />
+    <meta
+      property="og:image"
+      content="https://cheonghakim.github.io/public/imgs/landing.png"
+    />
 
     <title>Cheongha Kim | Security Engineer & Frontend Developer</title>
 
@@ -68,7 +76,7 @@
       <nav id="main-nav">
         <a href="#about">About</a>
         <a href="#projects">Projects</a>
-        <a href="#experience">Experience</a>
+        <a href="#experience">Skills</a>
         <a href="https://github.com/cheonghakim" target="_blank">GitHub</a>
         <a href="#contact">Contact</a>
       </nav>
@@ -112,22 +120,13 @@
       <section id="projects">
         <h2 class="section-title">Projects</h2>
 
-        <!-- 프로젝트 탭 스위처 -->
-        <div class="project-tabs">
-          <button class="tab-btn active" data-tab="professional">
-            <span class="tab-decorator">[</span>
-            MISSION LOGS
-            <span class="tab-decorator">]</span>
-          </button>
-          <button class="tab-btn" data-tab="personal">
-            <span class="tab-decorator">[</span>
-            LABORATORY
-            <span class="tab-decorator">]</span>
-          </button>
-        </div>
-
         <!-- Professional Projects Grid -->
-        <div class="projects-container active" id="professional">
+        <h3 class="section-sub-title">
+          <span class="tab-decorator">[</span>
+          MISSION LOGS
+          <span class="tab-decorator">]</span>
+        </h3>
+        <div class="projects-container" id="professional">
           <div class="projects-grid">
             <!-- Project 1: BujaMarket -->
             <article class="project-card" data-card-index="0">
@@ -609,6 +608,11 @@
         </div>
 
         <!-- Personal Projects Grid -->
+        <h3 class="section-sub-title">
+          <span class="tab-decorator">[</span>
+          LABORATORY
+          <span class="tab-decorator">]</span>
+        </h3>
         <div class="projects-container" id="personal">
           <div class="projects-grid">
             <!-- DataCore Theme -->
@@ -624,6 +628,11 @@
                 alt="DataCore Theme Preview"
                 class="project-preview"
               />
+              <div class="tech-tags">
+                <span class="tech-tag-sm">Vue 3</span>
+                <span class="tech-tag-sm">TypeScript</span>
+                <span class="tech-tag-sm">Vite</span>
+              </div>
               <div class="button-group">
                 <a
                   href="https://datacore.log-trace.net/"
@@ -646,6 +655,10 @@
                 alt="Web OS UI Preview"
                 class="project-preview"
               />
+              <div class="tech-tags">
+                <span class="tech-tag-sm">Vue 3</span>
+                <span class="tech-tag-sm">Vite</span>
+              </div>
               <div class="button-group">
                 <a
                   href="https://webos.log-trace.net"
@@ -667,6 +680,9 @@
                 alt="EventLens Preview"
                 class="project-preview"
               />
+              <div class="tech-tags">
+                <span class="tech-tag-sm">Javascript</span>
+              </div>
               <div class="button-group">
                 <a
                   href="https://cheonghakim.github.io/event-lens"
@@ -694,6 +710,10 @@
                 alt="HTML Overlay Node Preview"
                 class="project-preview"
               />
+              <div class="tech-tags">
+                <span class="tech-tag-sm">Javascript</span>
+                <span class="tech-tag-sm">Canvas api</span>
+              </div>
               <div class="button-group">
                 <a
                   href="https://cheonghakim.github.io/HTML-overlay-node/"
@@ -720,6 +740,10 @@
                 alt="High Tree Preview"
                 class="project-preview"
               />
+              <div class="tech-tags">
+                <span class="tech-tag-sm">JavaScript</span>
+                <span class="tech-tag-sm">Virtual Scroll</span>
+              </div>
               <div class="button-group">
                 <a
                   href="https://cheonghakim.github.io/high-tree/"
@@ -744,6 +768,11 @@
                 alt="High Grid Preview"
                 class="project-preview"
               />
+              <div class="tech-tags">
+                <span class="tech-tag-sm">Vue.js</span>
+                <span class="tech-tag-sm">Web Worker</span>
+                <span class="tech-tag-sm">Virtual Scroll</span>
+              </div>
               <div class="button-group">
                 <a
                   href="https://cheonghakim.github.io/high-grid/"
@@ -767,6 +796,11 @@
                 alt="wasm_playground Preview"
                 class="project-preview"
               />
+              <div class="tech-tags">
+                <span class="tech-tag-sm">Rust</span>
+                <span class="tech-tag-sm">WebAssembly</span>
+                <span class="tech-tag-sm">wasm-pack</span>
+              </div>
               <div class="button-group">
                 <a
                   href="https://github.com/cheonghakim/rust-wasm-playground/blob/main/README.md"
@@ -789,6 +823,11 @@
                 alt="LogTrace Preview"
                 class="project-preview"
               />
+              <div class="tech-tags">
+                <span class="tech-tag-sm">Vue.js</span>
+                <span class="tech-tag-sm">Log Analysis</span>
+                <span class="tech-tag-sm">Regex Engine</span>
+              </div>
               <div class="button-group">
                 <a
                   href="https://log-trace.net/"
@@ -811,6 +850,11 @@
                 alt="TopoSpace Preview"
                 class="project-preview"
               />
+              <div class="tech-tags">
+                <span class="tech-tag-sm">Three.js</span>
+                <span class="tech-tag-sm">WebGL</span>
+                <span class="tech-tag-sm">TypeScript</span>
+              </div>
               <div class="button-group">
                 <a
                   href="https://cheonghakim.github.io/topo-space/"
@@ -861,6 +905,11 @@
                   <span class="status-dot"></span>
                   <span class="status-text">BUILDING OPTIMIZED BINARY...</span>
                 </div>
+              </div>
+              <div class="tech-tags">
+                <span class="tech-tag-sm">Rust</span>
+                <span class="tech-tag-sm">WebAssembly</span>
+                <span class="tech-tag-sm">wasm-pack</span>
               </div>
               <div class="button-group">
                 <a
@@ -1097,32 +1146,6 @@
         });
         document.addEventListener("keydown", function (e) {
           if (e.key === "Escape") closeLightbox();
-        });
-
-        // 프로젝트 탭 전환 로직
-        var tabBtns = document.querySelectorAll(".tab-btn");
-        var containers = document.querySelectorAll(".projects-container");
-
-        tabBtns.forEach(function (btn) {
-          btn.addEventListener("click", function () {
-            var targetTab = btn.getAttribute("data-tab");
-
-            // 버튼 상태 업데이트
-            tabBtns.forEach(function (b) {
-              return b.classList.remove("active");
-            });
-            btn.classList.add("active");
-
-            // 컨테이너 상태 업데이트
-            containers.forEach(function (container) {
-              if (container.id === targetTab) {
-                container.classList.add("active");
-                // 탭 전환 시 그리드 내부 요소들이 다시 리빌되도록 유도 (필요한 경우)
-              } else {
-                container.classList.remove("active");
-              }
-            });
-          });
         });
       });
     </script>
