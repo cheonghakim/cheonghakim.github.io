@@ -388,9 +388,9 @@
               </div>
             </article>
 
-            <!-- 프로젝트 4: PROM LIGHT2 -->
+            <!-- 프로젝트 4: PROM LITE2 -->
             <article class="project-card" data-card-index="4" tabindex="0">
-              <h3>PROM LIGHT2 <span class="badge private">PRIVATE</span></h3>
+              <h3>PROM LITE2 <span class="badge private">PRIVATE</span></h3>
               <p class="project-description">
                 보안 장비 로그를 수집하고 탐지 룰을 관리하는 서비스입니다.
               </p>
@@ -412,7 +412,7 @@
               </div>
               <img
                 src="public/imgs/dashboard.png"
-                alt="PROM LIGHT2"
+                alt="PROM LITE2"
                 class="project-preview"
               />
               <div class="tech-tags">
@@ -481,7 +481,7 @@
                 <span class="tech-tag-sm">Vanilla JS</span>
                 <span class="tech-tag-sm">Three.js</span>
                 <span class="tech-tag-sm">Pixi.js</span>
-                <span class="tech-tag-sm">SNMP</span>
+                <span class="tech-tag-sm">ICMP/SNMP</span>
                 <span class="tech-tag-sm">NMS</span>
                 <span class="tech-tag-sm">WebSockets</span>
                 <span class="tech-tag-sm">REST API</span>
@@ -1033,7 +1033,7 @@
             </div>
             <div class="layer-content">
               <div class="tech-tag">NMS Architecture</div>
-              <div class="tech-tag">SNMP Traffic Monitoring</div>
+              <div class="tech-tag">ICMP/SNMP Traffic Monitoring</div>
               <div class="tech-tag">Server Health Monitoring</div>
               <div class="tech-tag">Linux System Engineering</div>
               <div class="tech-tag">Endpoint Security</div>
@@ -1309,15 +1309,25 @@
             role: "20인 규모 태스크포스(TF) 프론트엔드 리드로써 컨벤션 정립 및 상태 관리 아키텍처 주도. 개발 및 품질 관리 공로 표창 수상.",
             tech: "Vue.js, TypeScript, Pixi.js, WebGL",
           },
+          4: {
+            title: "PROM LITE2",
+            description: "보안 장비 로그 수집 및 탐지 룰 관리 서비스",
+            problem:
+              "시간당 9억 건(초당 약 25만 건) 규모의 로그 수신 시 테이블 렌더링 지연으로 UI 멈춤 현상 발생",
+            solution:
+              "가상 스크롤(virtual scroll) 적용 및 렌더링 청크 분리로 FPS 안정화",
+            role: "Pixi.js 기반 실시간 보안 로그 시각화 및 탐지 룰 관리 UI 구현. 가상 스크롤·청크 렌더링 도입으로 대용량 수신 환경의 UI 멈춤 제거. JavaScript → TypeScript 마이그레이션 주도.",
+            tech: "Vue.js, TypeScript, Pixi.js, Log Engine, WebSocket, REST API",
+          },
           5: {
             title: "Argus",
             description: "네트워크 및 시스템 인프라 실시간 모니터링 NMS 플랫폼",
             problem:
-              "다기종 분산 장비의 SNMP 및 상태 데이터 실시간 모니터링 연결의 부하",
+              "다기종 분산 장비의 ICMP/SNMP 및 상태 데이터 실시간 모니터링 연결의 부하",
             solution:
               "WebGL 3D 및 2D 하이브리드 토폴로지 시각화 맵 엔진 및 대용량 그리드 구축",
             role: "Three.js와 Pixi.js를 조합한 2D/3D 하이브리드 네트워크 장비 구성 맵 개발. 실시간 상태 모니터링 UI 및 대형 그리드 컴포넌트 구현.",
-            tech: "Vanilla JS, Three.js, Pixi.js, SNMP, WebSockets",
+            tech: "Vanilla JS, Three.js, Pixi.js, ICMP/SNMP, WebSockets",
           },
           6: {
             title: "PROM-ATS",
