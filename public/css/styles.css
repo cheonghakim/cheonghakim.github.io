@@ -2471,90 +2471,6 @@ footer {
 }
 
 /* =====================
-   실시간 보안 로그 스트림 터미널 (Hero)
-===================== */
-.terminal-stream-container {
-  max-width: 600px;
-  margin: var(--spacing-lg) auto 0;
-  background: rgba(5, 7, 12, 0.85);
-  border: 1px solid rgba(0, 212, 255, 0.25);
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 212, 255, 0.05);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  font-family: var(--font-mono);
-  text-align: left;
-  animation: fadeInUp 0.8s ease-out 0.5s both;
-}
-
-.terminal-header {
-  background: rgba(10, 14, 26, 0.95);
-  padding: 8px 14px;
-  border-bottom: 1px solid rgba(0, 212, 255, 0.15);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.terminal-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  display: inline-block;
-}
-
-.terminal-dot.red { background-color: #ff5f56; }
-.terminal-dot.yellow { background-color: #ffbd2e; }
-.terminal-dot.green { background-color: #27c93f; }
-
-.terminal-title {
-  font-size: 0.75rem;
-  color: var(--color-text-secondary);
-  margin-left: 8px;
-  letter-spacing: 0.05em;
-}
-
-.terminal-body {
-  padding: 12px 14px;
-  height: 110px;
-  overflow-y: auto;
-  font-size: 0.75rem;
-  line-height: 1.5;
-  color: var(--color-text-secondary);
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-/* 스크롤바 커스텀 */
-.terminal-body::-webkit-scrollbar {
-  width: 4px;
-}
-.terminal-body::-webkit-scrollbar-track {
-  background: transparent;
-}
-.terminal-body::-webkit-scrollbar-thumb {
-  background: rgba(0, 212, 255, 0.2);
-  border-radius: 2px;
-}
-.terminal-body::-webkit-scrollbar-thumb:hover {
-  background: var(--color-accent-cyan);
-}
-
-.log-line {
-  white-space: pre-wrap;
-  word-break: break-all;
-}
-
-.log-line.text-system { color: var(--color-accent-cyan); }
-.log-line.text-warn { color: #f7c948; }
-.log-line.text-alert { color: #ff5252; }
-.log-line.text-success { color: #00ff99; }
-.log-line.text-info { color: #a0aec0; }
-
-
-/* =====================
    프로젝트 필터 탭 (Projects Section)
 ===================== */
 .projects-filter-bar {
@@ -2670,6 +2586,41 @@ footer {
 
 .modal-overlay.open .modal-content.linux-terminal {
   transform: scale(1);
+  /* 열리는 순간 화면 지터 + RGB 색수차 글리치 */
+  animation: modalGlitchIn 0.38s steps(1, end);
+}
+
+@keyframes modalGlitchIn {
+  0% {
+    transform: scale(1.02) translate(-8px, 4px) skewX(2deg);
+    box-shadow: -6px 0 0 rgba(255, 0, 80, 0.7), 6px 0 0 rgba(0, 140, 255, 0.7);
+    opacity: 0.55;
+  }
+  15% {
+    transform: scale(0.99) translate(6px, -3px);
+    box-shadow: 5px 0 0 rgba(255, 0, 80, 0.5), -5px 0 0 rgba(0, 140, 255, 0.5);
+    opacity: 0.85;
+  }
+  30% {
+    transform: translate(-4px, 2px) skewX(-1.5deg);
+    box-shadow: -3px 0 0 rgba(255, 0, 80, 0.45), 3px 0 0 rgba(0, 140, 255, 0.45);
+    opacity: 1;
+  }
+  48% {
+    transform: translate(3px, -1px);
+    box-shadow: 3px 0 0 rgba(255, 0, 80, 0.3), -3px 0 0 rgba(0, 140, 255, 0.3);
+  }
+  65% {
+    transform: translate(-2px, 1px);
+    box-shadow: -2px 0 0 rgba(255, 0, 80, 0.25), 2px 0 0 rgba(0, 140, 255, 0.25);
+  }
+  80% {
+    transform: translate(1px, 0);
+    box-shadow: 0 20px 80px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 255, 150, 0.1);
+  }
+  100% {
+    transform: none;
+  }
 }
 
 .terminal-window-header {
@@ -2743,6 +2694,45 @@ footer {
   background-size: 100% 3px, 3px 100%;
   pointer-events: none;
   z-index: 10;
+  overflow: hidden;
+  /* 미세한 인광 플리커 */
+  animation: crtFlicker 3.2s steps(1, end) infinite;
+}
+
+/* 천천히 흘러내리는 밝은 스캔밴드 */
+.crt-overlay::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 28%;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(0, 255, 150, 0.045) 40%,
+    rgba(0, 255, 150, 0.09) 50%,
+    rgba(0, 255, 150, 0.045) 60%,
+    transparent
+  );
+  animation: crtScanBand 6.5s linear infinite;
+}
+
+@keyframes crtFlicker {
+  0% { opacity: 1; }
+  7% { opacity: 0.78; }
+  9% { opacity: 1; }
+  36% { opacity: 0.9; }
+  38% { opacity: 1; }
+  61% { opacity: 0.82; }
+  63% { opacity: 1; }
+  84% { opacity: 0.92; }
+  86% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+@keyframes crtScanBand {
+  0% { top: -28%; }
+  100% { top: 100%; }
 }
 
 .terminal-content {
@@ -2761,6 +2751,7 @@ footer {
 .prompt-user {
   color: #33ff66;
   font-weight: bold;
+  text-shadow: 0 0 6px rgba(51, 255, 102, 0.45);
 }
 
 .prompt-colon {
@@ -2770,6 +2761,7 @@ footer {
 .prompt-path {
   color: #3399ff;
   font-weight: bold;
+  text-shadow: 0 0 6px rgba(51, 153, 255, 0.4);
 }
 
 .prompt-char {
@@ -2783,6 +2775,7 @@ footer {
 .cursor-blink {
   animation: cursorBlink 1s step-end infinite;
   color: #ffffff;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.5);
 }
 
 @keyframes cursorBlink {
@@ -2796,16 +2789,56 @@ footer {
   word-break: break-all;
 }
 
-.term-success { color: #33ff66; }
-.term-warn { color: #f7c948; }
-.term-error { color: #ff5252; }
-.term-info { color: #00d4ff; }
-.term-label { color: #00d4ff; font-weight: bold; }
+/* CRT 인광(phosphor bleed) 글로우 */
+.term-success { color: #33ff66; text-shadow: 0 0 7px rgba(51, 255, 102, 0.45); }
+.term-warn { color: #f7c948; text-shadow: 0 0 7px rgba(247, 201, 72, 0.4); }
+.term-error { color: #ff5252; text-shadow: 0 0 7px rgba(255, 82, 82, 0.45); }
+.term-info { color: #00d4ff; text-shadow: 0 0 7px rgba(0, 212, 255, 0.4); }
+.term-label { color: #00d4ff; font-weight: bold; text-shadow: 0 0 7px rgba(0, 212, 255, 0.4); }
 
 .term-progress {
   color: #33ff66;
   font-weight: bold;
   font-family: var(--font-mono);
+  text-shadow: 0 0 7px rgba(51, 255, 102, 0.45);
+}
+
+/* 아직 해독되지 않은 암호문 구간 */
+.term-noise {
+  color: rgba(51, 255, 102, 0.38);
+  text-shadow: none;
+}
+
+/* 브루트포스 키 시도 피드 */
+.term-keyfeed {
+  color: rgba(0, 212, 255, 0.55);
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+}
+
+/* ACCESS GRANTED ASCII 배너 */
+.term-ascii {
+  color: #33ff66;
+  text-shadow: 0 0 9px rgba(51, 255, 102, 0.65);
+  white-space: pre;
+  font-size: min(0.8rem, 2.3vw);
+  line-height: 1.3;
+  margin-bottom: 0;
+  animation: bannerFlash 0.7s ease-out;
+}
+
+@keyframes bannerFlash {
+  0% {
+    opacity: 0;
+    text-shadow: 0 0 24px rgba(51, 255, 102, 1);
+  }
+  30% {
+    opacity: 1;
+    text-shadow: 0 0 18px rgba(51, 255, 102, 0.9);
+  }
+  100% {
+    text-shadow: 0 0 9px rgba(51, 255, 102, 0.65);
+  }
 }
 
 /* 터미널 내부 전용 스크롤바 커스텀 (얇고 리눅스에 어울리는 플랫한 다크 그레이 색상) */

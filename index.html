@@ -63,21 +63,6 @@
           <a href="#contact" class="btn">연락하기</a>
         </div>
 
-        <!-- 실시간 보안 이벤트 스트림 터미널 -->
-        <div class="terminal-stream-container">
-          <div class="terminal-header">
-            <span class="terminal-dot red"></span>
-            <span class="terminal-dot yellow"></span>
-            <span class="terminal-dot green"></span>
-            <span class="terminal-title">sec-event-monitor.sh</span>
-          </div>
-          <div class="terminal-body" id="stream-logs">
-            <div class="log-line text-system">
-              Initializing Security Log Monitor...
-            </div>
-          </div>
-        </div>
-
         <div class="scroll-indicator" aria-hidden="true">▼</div>
       </header>
 
@@ -1221,90 +1206,6 @@
         });
 
         // =====================
-        // 실시간 보안 터미널 스트림 시뮬레이션
-        // =====================
-        var streamLogs = document.getElementById("stream-logs");
-        var logTemplates = [
-          {
-            type: "info",
-            text: "Initializing WebGL context... Matrix background rendering (FPS: 60)",
-          },
-          { type: "info", text: "WASM engine verification status: VALIDATED" },
-          {
-            type: "success",
-            text: "Rust WebAssembly module successfully loaded (size: 42.1KB)",
-          },
-          {
-            type: "system",
-            text: "Establishing secure WebSocket connection to SIEM cluster...",
-          },
-          {
-            type: "success",
-            text: "Connection active. SSL handshaking complete.",
-          },
-          {
-            type: "info",
-            text: "Starting thread monitoring. 4 event processing queues registered.",
-          },
-          {
-            type: "warn",
-            text: "High traffic detected. Enabling Virtual Scroll cache buffers.",
-          },
-          {
-            type: "info",
-            text: "Garbage collection complete. Memory overhead reduced by 24.5%",
-          },
-          {
-            type: "alert",
-            text: "Unauthorized port scan detected on local node: BLOCKED by Firewall",
-          },
-          {
-            type: "success",
-            text: "Decryption token generated dynamically for secure assets.",
-          },
-          {
-            type: "info",
-            text: "SOAR automation triggers verified: 14 active templates loaded.",
-          },
-          {
-            type: "system",
-            text: "NMS daemon status: RUNNING. Monitoring 148 security endpoints.",
-          },
-        ];
-
-        function addLogLine() {
-          if (!streamLogs) return;
-          var template =
-            logTemplates[Math.floor(Math.random() * logTemplates.length)];
-          var now = new Date();
-          var timeStr = "[" + now.toISOString().slice(11, 19) + "] ";
-
-          var line = document.createElement("div");
-          line.className = "log-line text-" + template.type;
-          line.textContent = timeStr + template.text;
-
-          streamLogs.appendChild(line);
-          streamLogs.scrollTop = streamLogs.scrollHeight;
-
-          while (streamLogs.childNodes.length > 30) {
-            streamLogs.removeChild(streamLogs.firstChild);
-          }
-        }
-
-        function queueNextLog() {
-          var delay = 2000 + Math.random() * 2000;
-          setTimeout(function () {
-            addLogLine();
-            queueNextLog();
-          }, delay);
-        }
-
-        for (var i = 0; i < 3; i++) {
-          setTimeout(addLogLine, i * 400);
-        }
-        setTimeout(queueNextLog, 2000);
-
-        // =====================
         // 프로젝트 탭 필터링 로직
         // =====================
         var filterButtons = document.querySelectorAll(".filter-btn");
@@ -1462,13 +1363,20 @@
           secureModal.classList.remove("open");
           var typedCommand = document.getElementById("terminal-typed-command");
           var termOutput = document.getElementById("decrypt-terminal-output");
+          var inputCursor = document.getElementById("terminal-input-cursor");
 
           typedCommand.textContent = "";
           termOutput.textContent = "";
+          inputCursor.style.visibility = "visible";
 
           activeTypewriterTimers.forEach(clearTimeout);
           activeTypewriterTimers = [];
           clearInterval(decryptProgressInterval);
+
+          // 배경 매트릭스 서지 동기화 — 침입 연출
+          if (window.__matrixBg) {
+            window.__matrixBg.triggerSurge();
+          }
 
           secureModal.style.display = "flex";
           setTimeout(function () {
@@ -1487,7 +1395,8 @@
               var t = setTimeout(typeCommand, 20);
               activeTypewriterTimers.push(t);
             } else {
-              // 명령어 타이핑 완료 -> 시스템 실행 로그 출력 시작
+              // 명령어 타이핑 완료 -> 입력줄 커서 숨김 (커서는 출력 끝의 새 프롬프트로 이동)
+              inputCursor.style.visibility = "hidden";
               startBootSequence(cardIndex);
             }
           }
@@ -1528,29 +1437,84 @@
             950,
           );
 
-          // 프로그레스 바 라인 생성
+          // 프로그레스 바 라인 생성 — 정체/급등을 섞은 불규칙 크래킹 연출
           var progressDelay = 1200;
           var tBar = setTimeout(function () {
             var progressLine = document.createElement("div");
             progressLine.className = "terminal-line term-progress";
             termOutput.appendChild(progressLine);
 
+            // 시도 중인 키가 실시간으로 갱신되는 피드 라인
+            var keyLine = document.createElement("div");
+            keyLine.className = "terminal-line term-keyfeed";
+            termOutput.appendChild(keyLine);
+
+            function randomHex(len) {
+              var chars = "0123456789ABCDEF";
+              var out = "";
+              for (var i = 0; i < len; i++) {
+                out += chars.charAt(Math.floor(Math.random() * 16));
+              }
+              return out;
+            }
+
             var progress = 0;
+            var stallTicks = 0;
+            var brokeThrough = false;
+            updateProgressBar(progressLine, 0);
+
             decryptProgressInterval = setInterval(function () {
-              progress += Math.floor(Math.random() * 8) + 4;
+              // 바가 정체 중에도 키 시도는 계속 돌아가는 것처럼 보이게
+              keyLine.textContent =
+                "keys tested: 0x" +
+                randomHex(8) +
+                "  0x" +
+                randomHex(8) +
+                "  rate: " +
+                (0.8 + Math.random() * 1.6).toFixed(2) +
+                "M keys/s";
+
+              if (stallTicks > 0) {
+                stallTicks--;
+                return;
+              }
+
+              if (progress >= 97 && !brokeThrough) {
+                // 97% 정체 후 최종 돌파
+                brokeThrough = true;
+                progress = 100;
+              } else if (Math.random() < 0.14 && progress > 15) {
+                // 무작위 정체 구간
+                stallTicks = 3 + Math.floor(Math.random() * 6);
+                return;
+              } else if (Math.random() < 0.22) {
+                // 갑작스런 돌파 점프
+                progress += 8 + Math.floor(Math.random() * 10);
+              } else {
+                progress += 1 + Math.floor(Math.random() * 4);
+              }
+
+              if (progress >= 97 && !brokeThrough) {
+                progress = 97;
+                stallTicks = 6 + Math.floor(Math.random() * 5);
+              }
+
               if (progress >= 100) {
                 progress = 100;
                 clearInterval(decryptProgressInterval);
                 updateProgressBar(progressLine, progress);
+                keyLine.className = "terminal-line term-success";
+                keyLine.textContent = "KEY MATCH FOUND: 0x" + randomHex(16);
 
                 // 복호화 완료 -> 본문 데이터 출력
-                setTimeout(function () {
+                var tDone = setTimeout(function () {
                   startDecryptedOutput(cardIndex);
-                }, 300);
+                }, 350);
+                activeTypewriterTimers.push(tDone);
               } else {
                 updateProgressBar(progressLine, progress);
               }
-            }, 50);
+            }, 70);
           }, progressDelay);
           activeTypewriterTimers.push(tBar);
         }
@@ -1607,24 +1571,50 @@
               textSpan.className = valueClass || "";
               line.appendChild(textSpan);
 
+              // 아직 해독되지 않은 구간 — 난수 문자로 표시
+              var noiseSpan = document.createElement("span");
+              noiseSpan.className = "term-noise";
+              line.appendChild(noiseSpan);
+
+              var scrambleChars = "ABCDEF0123456789$#%&@*+=?<>/";
+              var body = secureModal.querySelector(".terminal-window-body");
+
               var charIdx = 0;
               var typedLabel = label + " : ";
               function typeLabel() {
                 if (charIdx < typedLabel.length) {
                   labelSpan.textContent += typedLabel.charAt(charIdx);
                   charIdx++;
-                  setTimeout(typeLabel, 4);
+                  var t = setTimeout(typeLabel, 4);
+                  activeTypewriterTimers.push(t);
                 } else {
                   charIdx = 0;
                   typeValue();
                 }
               }
 
+              // 암호문이 왼쪽부터 평문으로 해독되며 굳어지는 스크램블 연출
               function typeValue() {
                 if (charIdx < value.length) {
-                  textSpan.textContent += value.charAt(charIdx);
+                  textSpan.textContent = value.slice(0, charIdx);
+
+                  var scrambleLen = Math.min(10, value.length - charIdx);
+                  var noise = "";
+                  for (var i = 0; i < scrambleLen; i++) {
+                    noise += scrambleChars.charAt(
+                      Math.floor(Math.random() * scrambleChars.length),
+                    );
+                  }
+                  noiseSpan.textContent = noise;
+
+                  body.scrollTop = body.scrollHeight;
                   charIdx++;
-                  setTimeout(typeValue, 6);
+                  var t = setTimeout(typeValue, 12);
+                  activeTypewriterTimers.push(t);
+                } else {
+                  textSpan.textContent = value;
+                  noiseSpan.textContent = "";
+                  body.scrollTop = body.scrollHeight;
                 }
               }
 
@@ -1634,6 +1624,15 @@
           }
 
           var tHeader = setTimeout(function () {
+            // ACCESS GRANTED ASCII 배너
+            appendLineInstant(
+              "▄▀█ █▀▀ █▀▀ █▀▀ █▀ █▀   █▀▀ █▀█ ▄▀█ █▄░█ ▀█▀ █▀▀ █▀▄",
+              "term-ascii",
+            );
+            appendLineInstant(
+              "█▀█ █▄▄ █▄▄ ██▄ ▄█ ▄█   █▄█ █▀▄ █▀█ █░▀█ ░█░ ██▄ █▄▀",
+              "term-ascii",
+            );
             appendLineInstant(
               "--------------------------------------------------",
               "term-info",
@@ -1650,7 +1649,7 @@
           }, delay);
           activeTypewriterTimers.push(tHeader);
 
-          delay += 250;
+          delay += 500;
           queueTextOutput(
             "PROJECT_NAME",
             data.title,
@@ -1784,6 +1783,8 @@
     <!-- 기밀 복호화 모달 (Linux Terminal Modal) -->
     <div id="secure-modal" class="modal-overlay" aria-hidden="true">
       <div class="modal-content linux-terminal">
+        <!-- CRT 효과 오버레이 (헤더 포함 전체 창 커버) -->
+        <div class="crt-overlay"></div>
         <div class="terminal-window-header">
           <div class="terminal-controls">
             <span
@@ -1799,8 +1800,6 @@
           >
         </div>
         <div class="terminal-window-body">
-          <!-- CRT 효과 오버레이 -->
-          <div class="crt-overlay"></div>
           <div class="terminal-content">
             <!-- Bash 프롬프트 입력 시뮬레이션 -->
             <div class="bash-input-line">
@@ -1809,7 +1808,7 @@
               ><span class="prompt-path">~/projects/private</span
               ><span class="prompt-char">$</span>
               <span class="typed-command" id="terminal-typed-command"></span
-              ><span class="cursor-blink">_</span>
+              ><span class="cursor-blink" id="terminal-input-cursor">_</span>
             </div>
             <!-- 복호화 진행 상태 (터미널 출력용) -->
             <div id="decrypt-terminal-output"></div>
