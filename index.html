@@ -62,6 +62,22 @@
           <a href="#projects" class="btn btn-primary">프로젝트 보기</a>
           <a href="#contact" class="btn">연락하기</a>
         </div>
+
+        <!-- 실시간 보안 이벤트 스트림 터미널 -->
+        <div class="terminal-stream-container">
+          <div class="terminal-header">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title">sec-event-monitor.sh</span>
+          </div>
+          <div class="terminal-body" id="stream-logs">
+            <div class="log-line text-system">
+              Initializing Security Log Monitor...
+            </div>
+          </div>
+        </div>
+
         <div class="scroll-indicator" aria-hidden="true">▼</div>
       </header>
 
@@ -120,8 +136,27 @@
       <section id="projects">
         <h2 class="section-title">Projects</h2>
 
+        <!-- 프로젝트 필터 탭 -->
+        <div class="projects-filter-bar">
+          <button class="filter-btn active" data-filter="all">
+            <span class="btn-decorator">[</span> ALL OPERATIONS
+            <span class="btn-decorator">]</span>
+          </button>
+          <button class="filter-btn" data-filter="professional">
+            <span class="btn-decorator">[</span> MISSION LOGS
+            <span class="btn-decorator">]</span>
+          </button>
+          <button class="filter-btn" data-filter="personal">
+            <span class="btn-decorator">[</span> LABORATORY
+            <span class="btn-decorator">]</span>
+          </button>
+        </div>
+
         <!-- Professional Projects Grid -->
-        <h3 class="section-sub-title">
+        <h3
+          class="section-sub-title projects-section-header"
+          id="header-professional"
+        >
           <span class="tab-decorator">[</span>
           MISSION LOGS
           <span class="tab-decorator">]</span>
@@ -129,7 +164,7 @@
         <div class="projects-container" id="professional">
           <div class="projects-grid">
             <!-- Project 1: BujaMarket -->
-            <article class="project-card" data-card-index="0">
+            <article class="project-card" data-card-index="0" tabindex="0">
               <h3>의류부자재 플랫폼(B2C/B2B)</h3>
               <p class="project-description">
                 AI 이미지 검색 기반 의류부자재 B2C/B2B 거래 플랫폼입니다.
@@ -171,7 +206,7 @@
               </div>
             </article>
 
-            <article class="project-card" data-card-index="1">
+            <article class="project-card" data-card-index="1" tabindex="0">
               <h3>
                 AI 데이터 수집 스크래퍼<span class="badge private"
                   >PRIVATE</span
@@ -233,7 +268,7 @@
             </article>
 
             <!-- 프로젝트 2: ServiceDesk -->
-            <article class="project-card" data-card-index="2">
+            <article class="project-card" data-card-index="2" tabindex="0">
               <h3>ServiceDesk<span class="badge private">PRIVATE</span></h3>
               <p class="project-description">
                 보안 이벤트 관리·알림·대응을 통합한 실시간 보안관제
@@ -308,7 +343,7 @@
             </article>
 
             <!-- 프로젝트 3: 국방부 기밀 프로젝트 -->
-            <article class="project-card" data-card-index="3">
+            <article class="project-card" data-card-index="3" tabindex="0">
               <h3>
                 국방부 기밀 프로젝트<span class="badge private">PRIVATE</span>
               </h3>
@@ -369,7 +404,7 @@
             </article>
 
             <!-- 프로젝트 4: PROM LIGHT2 -->
-            <article class="project-card" data-card-index="4">
+            <article class="project-card" data-card-index="4" tabindex="0">
               <h3>PROM LIGHT2 <span class="badge private">PRIVATE</span></h3>
               <p class="project-description">
                 보안 장비 로그를 수집하고 탐지 룰을 관리하는 서비스입니다.
@@ -419,7 +454,7 @@
             </article>
 
             <!-- 프로젝트 5: Argus -->
-            <article class="project-card" data-card-index="5">
+            <article class="project-card" data-card-index="5" tabindex="0">
               <h3>Argus <span class="badge private">PRIVATE</span></h3>
               <p class="project-description">
                 서버/서비스 실시간 모니터링을 위한 NMS 서비스 입니다.
@@ -477,7 +512,7 @@
             </article>
 
             <!-- 프로젝트 6: PROM-ATS -->
-            <article class="project-card" data-card-index="6">
+            <article class="project-card" data-card-index="6" tabindex="0">
               <h3>PROM-ATS <span class="badge private">PRIVATE</span></h3>
               <p class="project-description">
                 사회공학적 공격 경로를 점검하고 보안 취약점을 검증하는 침투
@@ -536,7 +571,11 @@
             </article>
 
             <!-- 프로젝트 7: SoarPlaybook -->
-            <article class="project-card soar-card" data-card-index="7">
+            <article
+              class="project-card soar-card"
+              data-card-index="7"
+              tabindex="0"
+            >
               <h3>SoarPlaybook <span class="badge private">PRIVATE</span></h3>
               <p class="project-description">
                 보안관제 자동화를 위한 서비스입니다. 레이어 아키텍처로 플레이북
@@ -608,7 +647,10 @@
         </div>
 
         <!-- Personal Projects Grid -->
-        <h3 class="section-sub-title">
+        <h3
+          class="section-sub-title projects-section-header"
+          id="header-personal"
+        >
           <span class="tab-decorator">[</span>
           LABORATORY
           <span class="tab-decorator">]</span>
@@ -616,7 +658,7 @@
         <div class="projects-container" id="personal">
           <div class="projects-grid">
             <!-- DataCore Theme -->
-            <article class="project-card" data-card-index="7">
+            <article class="project-card" data-card-index="8" tabindex="0">
               <h3>DataCore <span class="badge theme">THEME</span></h3>
               <p class="project-description">
                 SIEM·보안관제·관리자 서비스에 바로 적용 가능한 Vue3 대시보드
@@ -650,7 +692,7 @@
             </article>
 
             <!-- Web OS UI Theme -->
-            <article class="project-card" data-card-index="8">
+            <article class="project-card" data-card-index="9" tabindex="0">
               <h3>Web OS UI <span class="badge theme">THEME</span></h3>
               <p class="project-description">
                 웹 기반 운영체제 UI 테마입니다. 데스크탑 환경을 그대로 웹에서
@@ -682,7 +724,7 @@
             </article>
 
             <!-- EventLens -->
-            <article class="project-card" data-card-index="9">
+            <article class="project-card" data-card-index="10" tabindex="0">
               <h3>EventLens</h3>
               <p class="project-description">
                 엔터프라이즈 환경에 특화된 보안 이벤트 뷰어입니다.
@@ -712,7 +754,7 @@
             </article>
 
             <!-- 프로젝트 8: HTML Overlay Node -->
-            <article class="project-card" data-card-index="8">
+            <article class="project-card" data-card-index="11" tabindex="0">
               <h3>HTML Overlay Node</h3>
               <p class="project-description">
                 HTML 요소를 오버레이 할 수 있는 사용자 정의 노드 모듈입니다.
@@ -743,7 +785,7 @@
             </article>
 
             <!-- 프로젝트 9: High Tree -->
-            <article class="project-card" data-card-index="9">
+            <article class="project-card" data-card-index="12" tabindex="0">
               <h3>High Tree</h3>
               <p class="project-description">
                 기존 트리 라이브러리의 대용량 노드 렌더링 한계를 해결하기 위해
@@ -774,7 +816,7 @@
               </div>
             </article>
 
-            <article class="project-card" data-card-index="10">
+            <article class="project-card" data-card-index="13" tabindex="0">
               <h3>High Grid</h3>
               <p class="project-description">
                 엔터프라이즈급 데이터 그리드 라이브러리로, 대용량 데이터 렌더링,
@@ -807,7 +849,7 @@
               </div>
             </article>
             <!-- 프로젝트 10: Rust WASM Playground -->
-            <article class="project-card" data-card-index="11">
+            <article class="project-card" data-card-index="14" tabindex="0">
               <h3>Rust WASM Playground</h3>
               <p class="project-description">
                 Rust로 구현한 연산 로직을 wasm-pack으로 컴파일해 브라우저에서
@@ -834,7 +876,7 @@
             </article>
 
             <!-- 프로젝트 12: LogTrace -->
-            <article class="project-card" data-card-index="12">
+            <article class="project-card" data-card-index="15" tabindex="0">
               <h3>LogTrace</h3>
               <p class="project-description">
                 Apache / Nginx 액세스 로그를 업로드하면 SQL Injection, XSS, 경로
@@ -862,7 +904,7 @@
             </article>
 
             <!-- 프로젝트 14: TopoSpace -->
-            <article class="project-card" data-card-index="14">
+            <article class="project-card" data-card-index="16" tabindex="0">
               <h3>TopoSpace</h3>
               <p class="project-description">
                 Three.js 기반 인터랙티브 3D 네트워크 토폴로지 시각화
@@ -895,7 +937,7 @@
             </article>
 
             <!-- 프로젝트 11: Rwasm -->
-            <article class="project-card" data-card-index="13">
+            <article class="project-card" data-card-index="17" tabindex="0">
               <h3>Rwasm</h3>
               <p class="project-description">
                 러스트를 웹에서 쉽게 가져와 사용할 수 있도록 만든 래퍼입니다.
@@ -1045,12 +1087,15 @@
     <!-- 라이트박스 -->
     <div id="lightbox" aria-hidden="true">
       <button id="lightbox-close" aria-label="닫기">✕</button>
-      <img id="lightbox-img" src="" alt="" />
+      <img
+        id="lightbox-img"
+        src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+        alt="선택된 이미지 원본"
+      />
     </div>
 
     <!-- 스크립트 -->
     <script src="public/js/webgl-canvas.js"></script>
-    <script src="public/js/private-card-glitch.js"></script>
 
     <!-- 상호작용 및 스크롤 애니메이션 스크립트 -->
     <script>
@@ -1113,7 +1158,7 @@
               }
             });
           },
-          { threshold: 0.4 },
+          { threshold: 0.02 },
         );
         pageSections.forEach(function (section) {
           spyObserver.observe(section);
@@ -1162,6 +1207,9 @@
           lightbox.classList.remove("open");
           lightbox.setAttribute("aria-hidden", "true");
           document.body.style.overflow = "";
+          lightboxImg.src =
+            "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+          lightboxImg.alt = "";
         }
 
         lightboxClose.addEventListener("click", closeLightbox);
@@ -1171,7 +1219,605 @@
         document.addEventListener("keydown", function (e) {
           if (e.key === "Escape") closeLightbox();
         });
+
+        // =====================
+        // 실시간 보안 터미널 스트림 시뮬레이션
+        // =====================
+        var streamLogs = document.getElementById("stream-logs");
+        var logTemplates = [
+          {
+            type: "info",
+            text: "Initializing WebGL context... Matrix background rendering (FPS: 60)",
+          },
+          { type: "info", text: "WASM engine verification status: VALIDATED" },
+          {
+            type: "success",
+            text: "Rust WebAssembly module successfully loaded (size: 42.1KB)",
+          },
+          {
+            type: "system",
+            text: "Establishing secure WebSocket connection to SIEM cluster...",
+          },
+          {
+            type: "success",
+            text: "Connection active. SSL handshaking complete.",
+          },
+          {
+            type: "info",
+            text: "Starting thread monitoring. 4 event processing queues registered.",
+          },
+          {
+            type: "warn",
+            text: "High traffic detected. Enabling Virtual Scroll cache buffers.",
+          },
+          {
+            type: "info",
+            text: "Garbage collection complete. Memory overhead reduced by 24.5%",
+          },
+          {
+            type: "alert",
+            text: "Unauthorized port scan detected on local node: BLOCKED by Firewall",
+          },
+          {
+            type: "success",
+            text: "Decryption token generated dynamically for secure assets.",
+          },
+          {
+            type: "info",
+            text: "SOAR automation triggers verified: 14 active templates loaded.",
+          },
+          {
+            type: "system",
+            text: "NMS daemon status: RUNNING. Monitoring 148 security endpoints.",
+          },
+        ];
+
+        function addLogLine() {
+          if (!streamLogs) return;
+          var template =
+            logTemplates[Math.floor(Math.random() * logTemplates.length)];
+          var now = new Date();
+          var timeStr = "[" + now.toISOString().slice(11, 19) + "] ";
+
+          var line = document.createElement("div");
+          line.className = "log-line text-" + template.type;
+          line.textContent = timeStr + template.text;
+
+          streamLogs.appendChild(line);
+          streamLogs.scrollTop = streamLogs.scrollHeight;
+
+          while (streamLogs.childNodes.length > 30) {
+            streamLogs.removeChild(streamLogs.firstChild);
+          }
+        }
+
+        function queueNextLog() {
+          var delay = 2000 + Math.random() * 2000;
+          setTimeout(function () {
+            addLogLine();
+            queueNextLog();
+          }, delay);
+        }
+
+        for (var i = 0; i < 3; i++) {
+          setTimeout(addLogLine, i * 400);
+        }
+        setTimeout(queueNextLog, 2000);
+
+        // =====================
+        // 프로젝트 탭 필터링 로직
+        // =====================
+        var filterButtons = document.querySelectorAll(".filter-btn");
+        var containerProfessional = document.getElementById("professional");
+        var containerPersonal = document.getElementById("personal");
+        var headerProfessional = document.getElementById("header-professional");
+        var headerPersonal = document.getElementById("header-personal");
+
+        filterButtons.forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            filterButtons.forEach(function (b) {
+              b.classList.remove("active");
+            });
+            btn.classList.add("active");
+
+            var filter = btn.getAttribute("data-filter");
+
+            if (filter === "all") {
+              fadeInSection(containerProfessional, headerProfessional);
+              fadeInSection(containerPersonal, headerPersonal);
+            } else if (filter === "professional") {
+              fadeInSection(containerProfessional, headerProfessional);
+              fadeOutSection(containerPersonal, headerPersonal);
+            } else if (filter === "personal") {
+              fadeOutSection(containerProfessional, headerProfessional);
+              fadeInSection(containerPersonal, headerPersonal);
+            }
+          });
+        });
+
+        function fadeOutSection(container, header) {
+          if (container) {
+            container.classList.remove("fade-in");
+            container.classList.add("fade-out");
+          }
+          if (header) {
+            header.classList.remove("fade-in");
+            header.classList.add("fade-out");
+          }
+        }
+
+        function fadeInSection(container, header) {
+          if (container) {
+            container.classList.remove("fade-out");
+            container.classList.add("fade-in");
+          }
+          if (header) {
+            header.classList.remove("fade-out");
+            header.classList.add("fade-in");
+          }
+        }
+
+        // =====================
+        // 비공개 프로젝트 클릭 시 보안 복호화 모달 트리거
+        // =====================
+        var secureModal = document.getElementById("secure-modal");
+        var secureModalClose = document.getElementById("secure-modal-close");
+        var progressBarFill = secureModal
+          ? secureModal.querySelector(".progress-bar-fill")
+          : null;
+        var progressStatus = secureModal
+          ? secureModal.querySelector(".progress-status")
+          : null;
+        var decryptLoader = document.getElementById("decrypt-loader");
+        var decryptResult = document.getElementById("decrypt-result");
+        var terminalTextContainer = document.getElementById(
+          "decrypt-terminal-text",
+        );
+        var decryptProgressInterval = null;
+        var isDecrypting = false;
+        var activeTypewriterTimers = [];
+
+        var privateProjectDetails = {
+          1: {
+            title: "AI 데이터 수집 스크래퍼",
+            description: "AI 학습 데이터 수집 자동화 및 정제/라벨링 플랫폼",
+            problem:
+              "단순 반복형 수집 작업의 비효율 및 SPA 렌더링 사이트 스크래핑 제한",
+            solution:
+              "Node.js + Puppeteer 기반의 무인 분산 스크래퍼 및 웹 캔버스 편집 툴 통합",
+            role: "SPA 렌더링 타이밍 감지 알고리즘 설계 및 대규모 이미지 드래그 앤 드롭 라벨링 인터페이스 개발. 데이터 수집 파이프라인(Puppeteer) 연동 및 정제 로직 백엔드 구현.",
+            tech: "Vue.js, Node.js, Puppeteer, REST API",
+          },
+          2: {
+            title: "ServiceDesk",
+            description:
+              "보안위협 대응 자동화 및 대용량 보안 이벤트 통합 관제 서비스",
+            problem:
+              "대용량 실시간 보안 로그의 무작위 유입 및 처리 프로세스의 브라우저 렉 유발",
+            solution:
+              "Rust WASM을 활용한 다중 필터링 스레드 구축 및 가상 스크롤 렌더링 최적화",
+            role: "Rust WebAssembly 바이너리로 검색/필터링 등 핵심 연산을 이식하여 메인 스레드 연산 오프로드 주도. Web Worker를 이용한 복잡 구조 트리 탐색 및 Service Worker 기반 로컬 리소스 캐싱 도입.",
+            tech: "Vue.js, Rust WebAssembly, Web Worker, Service Worker, WebSocket, TypeScript",
+          },
+          3: {
+            title: "국방부 기밀 프로젝트",
+            description: "기밀",
+            problem: "실시간 2D/3D 연계 렌더링 성능 부족",
+            solution:
+              "WebGL/Pixi.js 기반의 고성능 자산 토폴로지 렌더링 아키텍처 도입 및 최적화",
+            role: "20인 규모 태스크포스(TF) 프론트엔드 리드로써 컨벤션 정립 및 상태 관리 아키텍처 주도. 개발 및 품질 관리 공로 표창 수상.",
+            tech: "Vue.js, TypeScript, Pixi.js, WebGL",
+          },
+          5: {
+            title: "Argus",
+            description: "네트워크 및 시스템 인프라 실시간 모니터링 NMS 플랫폼",
+            problem:
+              "다기종 분산 장비의 SNMP 및 상태 데이터 실시간 모니터링 연결의 부하",
+            solution:
+              "WebGL 3D 및 2D 하이브리드 토폴로지 시각화 맵 엔진 및 대용량 그리드 구축",
+            role: "Three.js와 Pixi.js를 조합한 2D/3D 하이브리드 네트워크 장비 구성 맵 개발. 실시간 상태 모니터링 UI 및 대형 그리드 컴포넌트 구현.",
+            tech: "Vanilla JS, Three.js, Pixi.js, SNMP, WebSockets",
+          },
+          6: {
+            title: "PROM-ATS",
+            description:
+              "사회공학적 모의 훈련 및 취약점 검증 침투 테스트 플랫폼",
+            problem:
+              "사용자 시나리오 기반의 동적 공격 경로 설계 및 리포팅 유연성 부족",
+            solution: "Vanilla JS 기반 드래그 앤 드롭 노드 플로우 에디터 구현",
+            role: "Vanilla JS로 노드 에디터 인터페이스를 제작하여 시나리오 빌더 제공. 공격 결과 실시간 타임라인 및 반응형 대시보드 시각화 구현.",
+            tech: "Vanilla JS, Node Editor, REST API",
+          },
+          7: {
+            title: "SoarPlaybook",
+            description: "보안 위협 대응(SOAR) 자동화 워크플로우 설계 플랫폼",
+            problem:
+              "수백 개에 달하는 대응 플레이북의 중복 관리로 인한 리소스 소모 및 유지보수성 저하",
+            solution:
+              "레이어 기반 플레이북 트리 아키텍처 및 플레이북 에디터 개발",
+            role: "레이어 설계가 적용된 플레이북 에디터 UI/UX 기획 및 구현. litegraph.js의 직렬화 로그 매핑 엔진 제작.",
+            tech: "Vue.js, Rust WebAssembly, SOAR Engine, Server-Sent Events",
+          },
+        };
+
+        var privateCards = document.querySelectorAll(".project-card");
+        privateCards.forEach(function (card) {
+          var badge = card.querySelector(".badge.private");
+          if (!badge) return;
+
+          var idxAttr = card.getAttribute("data-card-index");
+
+          card.style.cursor = "pointer";
+          card.addEventListener("click", function (e) {
+            if (e.target.closest(".btn")) return;
+            openSecureModal(idxAttr);
+          });
+        });
+
+        function openSecureModal(cardIndex) {
+          if (isDecrypting) return;
+          isDecrypting = true;
+
+          // 리셋
+          secureModal.classList.remove("open");
+          var typedCommand = document.getElementById("terminal-typed-command");
+          var termOutput = document.getElementById("decrypt-terminal-output");
+
+          typedCommand.textContent = "";
+          termOutput.textContent = "";
+
+          activeTypewriterTimers.forEach(clearTimeout);
+          activeTypewriterTimers = [];
+          clearInterval(decryptProgressInterval);
+
+          secureModal.style.display = "flex";
+          setTimeout(function () {
+            secureModal.classList.add("open");
+          }, 10);
+          document.body.style.overflow = "hidden";
+
+          // 1단계: 명령어 타이핑 연출
+          var command = "./decrypt_secret_assets.sh --mission-id=" + cardIndex;
+          var charIdx = 0;
+
+          function typeCommand() {
+            if (charIdx < command.length) {
+              typedCommand.textContent += command.charAt(charIdx);
+              charIdx++;
+              var t = setTimeout(typeCommand, 20);
+              activeTypewriterTimers.push(t);
+            } else {
+              // 명령어 타이핑 완료 -> 시스템 실행 로그 출력 시작
+              startBootSequence(cardIndex);
+            }
+          }
+
+          var initialDelay = setTimeout(typeCommand, 300);
+          activeTypewriterTimers.push(initialDelay);
+        }
+
+        function startBootSequence(cardIndex) {
+          var termOutput = document.getElementById("decrypt-terminal-output");
+
+          function appendLine(text, className, delay) {
+            var t = setTimeout(function () {
+              var line = document.createElement("div");
+              line.className = "terminal-line " + (className || "");
+              line.textContent = text;
+              termOutput.appendChild(line);
+              var body = secureModal.querySelector(".terminal-window-body");
+              body.scrollTop = body.scrollHeight;
+            }, delay);
+            activeTypewriterTimers.push(t);
+          }
+
+          appendLine("Connecting to secure enclave...", "term-info", 150);
+          appendLine(
+            "Sending authentication challenge... OK",
+            "term-success",
+            400,
+          );
+          appendLine(
+            "Bypassing firewalls (1024-bit RSA key injected)...",
+            "term-warn",
+            700,
+          );
+          appendLine(
+            "Loading brute-force decryption blocks...",
+            "term-info",
+            950,
+          );
+
+          // 프로그레스 바 라인 생성
+          var progressDelay = 1200;
+          var tBar = setTimeout(function () {
+            var progressLine = document.createElement("div");
+            progressLine.className = "terminal-line term-progress";
+            termOutput.appendChild(progressLine);
+
+            var progress = 0;
+            decryptProgressInterval = setInterval(function () {
+              progress += Math.floor(Math.random() * 8) + 4;
+              if (progress >= 100) {
+                progress = 100;
+                clearInterval(decryptProgressInterval);
+                updateProgressBar(progressLine, progress);
+
+                // 복호화 완료 -> 본문 데이터 출력
+                setTimeout(function () {
+                  startDecryptedOutput(cardIndex);
+                }, 300);
+              } else {
+                updateProgressBar(progressLine, progress);
+              }
+            }, 50);
+          }, progressDelay);
+          activeTypewriterTimers.push(tBar);
+        }
+
+        function updateProgressBar(lineEl, progress) {
+          var totalBlocks = 30;
+          var filledBlocks = Math.floor((progress / 100) * totalBlocks);
+          var emptyBlocks = totalBlocks - filledBlocks;
+          var barStr =
+            "Decrypting: [" +
+            "█".repeat(filledBlocks) +
+            "░".repeat(emptyBlocks) +
+            "] " +
+            progress +
+            "%";
+          lineEl.textContent = barStr;
+
+          var body = secureModal.querySelector(".terminal-window-body");
+          body.scrollTop = body.scrollHeight;
+        }
+
+        function startDecryptedOutput(cardIndex) {
+          var termOutput = document.getElementById("decrypt-terminal-output");
+          var data = privateProjectDetails[cardIndex] || {
+            title: "기밀 자산",
+            description: "상세 스펙 접근이 차단되어 있습니다.",
+            problem: "비공개 프로토콜",
+            solution: "비공개 솔루션",
+            role: "리드 프론트엔드 엔지니어 역할 수행",
+            tech: "비공개 기술 스택",
+          };
+
+          function appendLineInstant(text, className) {
+            var line = document.createElement("div");
+            line.className = "terminal-line " + (className || "");
+            line.textContent = text;
+            termOutput.appendChild(line);
+            var body = secureModal.querySelector(".terminal-window-body");
+            body.scrollTop = body.scrollHeight;
+            return line;
+          }
+
+          var delay = 0;
+
+          function queueTextOutput(label, value, labelClass, valueClass, d) {
+            var t = setTimeout(function () {
+              var line = appendLineInstant("", "");
+
+              var labelSpan = document.createElement("span");
+              labelSpan.className = labelClass || "term-label";
+              line.appendChild(labelSpan);
+
+              var textSpan = document.createElement("span");
+              textSpan.className = valueClass || "";
+              line.appendChild(textSpan);
+
+              var charIdx = 0;
+              var typedLabel = label + " : ";
+              function typeLabel() {
+                if (charIdx < typedLabel.length) {
+                  labelSpan.textContent += typedLabel.charAt(charIdx);
+                  charIdx++;
+                  setTimeout(typeLabel, 4);
+                } else {
+                  charIdx = 0;
+                  typeValue();
+                }
+              }
+
+              function typeValue() {
+                if (charIdx < value.length) {
+                  textSpan.textContent += value.charAt(charIdx);
+                  charIdx++;
+                  setTimeout(typeValue, 6);
+                }
+              }
+
+              typeLabel();
+            }, d);
+            activeTypewriterTimers.push(t);
+          }
+
+          var tHeader = setTimeout(function () {
+            appendLineInstant(
+              "--------------------------------------------------",
+              "term-info",
+            );
+            appendLineInstant(
+              "MISSION ACCOMPLISHED // RECORD FOR SYSTEM_ID: #" +
+                (Math.floor(Math.random() * 800) + 100),
+              "term-success",
+            );
+            appendLineInstant(
+              "--------------------------------------------------",
+              "term-info",
+            );
+          }, delay);
+          activeTypewriterTimers.push(tHeader);
+
+          delay += 250;
+          queueTextOutput(
+            "PROJECT_NAME",
+            data.title,
+            "term-label term-success",
+            "term-success",
+            delay,
+          );
+
+          delay += 400;
+          queueTextOutput(
+            "MISSION_DESC",
+            data.description,
+            "term-label term-info",
+            "",
+            delay,
+          );
+
+          delay += 500;
+          queueTextOutput(
+            "OBSTACLE    ",
+            data.problem,
+            "term-label term-error",
+            "term-error",
+            delay,
+          );
+
+          delay += 550;
+          queueTextOutput(
+            "SOLUTION    ",
+            data.solution,
+            "term-label term-success",
+            "term-success",
+            delay,
+          );
+
+          delay += 600;
+          queueTextOutput(
+            "MY_ROLE     ",
+            data.role,
+            "term-label term-warn",
+            "",
+            delay,
+          );
+
+          delay += 700;
+          queueTextOutput(
+            "TECH_STACK  ",
+            data.tech,
+            "term-label term-success",
+            "term-success",
+            delay,
+          );
+
+          delay += 900;
+          var tFooter = setTimeout(function () {
+            appendLineInstant(
+              "--------------------------------------------------",
+              "term-info",
+            );
+            appendLineInstant(
+              "SESSION CLOSED. CONNECTION TERMINATED.",
+              "term-warn",
+            );
+
+            var lastPrompt = document.createElement("div");
+            lastPrompt.className = "terminal-line";
+
+            var userSpan = document.createElement("span");
+            userSpan.className = "prompt-user";
+            userSpan.textContent = "guest@cheongha-node";
+
+            var colonSpan = document.createElement("span");
+            colonSpan.className = "prompt-colon";
+            colonSpan.textContent = ":";
+
+            var pathSpan = document.createElement("span");
+            pathSpan.className = "prompt-path";
+            pathSpan.textContent = "~/projects/private";
+
+            var charSpan = document.createElement("span");
+            charSpan.className = "prompt-char";
+            charSpan.textContent = "$ ";
+
+            var cursorBlink = document.createElement("span");
+            cursorBlink.className = "cursor-blink";
+            cursorBlink.textContent = "_";
+
+            lastPrompt.appendChild(userSpan);
+            lastPrompt.appendChild(colonSpan);
+            lastPrompt.appendChild(pathSpan);
+            lastPrompt.appendChild(charSpan);
+            lastPrompt.appendChild(cursorBlink);
+
+            termOutput.appendChild(lastPrompt);
+            var body = secureModal.querySelector(".terminal-window-body");
+            body.scrollTop = body.scrollHeight;
+
+            isDecrypting = false;
+          }, delay);
+          activeTypewriterTimers.push(tFooter);
+        }
+
+        function closeSecureModal() {
+          clearInterval(decryptProgressInterval);
+          activeTypewriterTimers.forEach(clearTimeout);
+          activeTypewriterTimers = [];
+
+          if (secureModal) {
+            secureModal.classList.remove("open");
+            setTimeout(function () {
+              secureModal.style.display = "none";
+              isDecrypting = false;
+            }, 300);
+          }
+          document.body.style.overflow = "";
+        }
+
+        if (secureModalClose) {
+          secureModalClose.addEventListener("click", closeSecureModal);
+        }
+        if (secureModal) {
+          secureModal.addEventListener("click", function (e) {
+            if (e.target === secureModal) closeSecureModal();
+          });
+        }
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") closeSecureModal();
+        });
       });
     </script>
+    <!-- 기밀 복호화 모달 (Linux Terminal Modal) -->
+    <div id="secure-modal" class="modal-overlay" aria-hidden="true">
+      <div class="modal-content linux-terminal">
+        <div class="terminal-window-header">
+          <div class="terminal-controls">
+            <span
+              class="control-dot close"
+              id="secure-modal-close"
+              aria-label="터미널 닫기"
+            ></span>
+            <span class="control-dot minimize"></span>
+            <span class="control-dot maximize"></span>
+          </div>
+          <span class="terminal-window-title"
+            >guest@cheongha-node: ~/projects/private</span
+          >
+        </div>
+        <div class="terminal-window-body">
+          <!-- CRT 효과 오버레이 -->
+          <div class="crt-overlay"></div>
+          <div class="terminal-content">
+            <!-- Bash 프롬프트 입력 시뮬레이션 -->
+            <div class="bash-input-line">
+              <span class="prompt-user">guest@cheongha-node</span
+              ><span class="prompt-colon">:</span
+              ><span class="prompt-path">~/projects/private</span
+              ><span class="prompt-char">$</span>
+              <span class="typed-command" id="terminal-typed-command"></span
+              ><span class="cursor-blink">_</span>
+            </div>
+            <!-- 복호화 진행 상태 (터미널 출력용) -->
+            <div id="decrypt-terminal-output"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WebGL 배경 캔버스 스크립트 등 -->
   </body>
 </html>
