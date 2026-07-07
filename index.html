@@ -745,7 +745,7 @@
                 HTML 요소를 오버레이 할 수 있는 사용자 정의 노드 모듈입니다.
               </p>
               <img
-                src="public/imgs/html-overlay-node-1.0.0.png"
+                src="public/imgs/html-overlay-node-1.0.2.png"
                 alt="HTML Overlay Node Preview"
                 class="project-preview"
               />
@@ -1793,21 +1793,35 @@
     <!-- 기밀 복호화 모달 (Linux Terminal Modal) -->
     <div id="secure-modal" class="modal-overlay" aria-hidden="true">
       <div class="modal-content linux-terminal">
+        <!-- 사이버 코너 데코레이션 -->
+        <div class="terminal-corner top-left"></div>
+        <div class="terminal-corner top-right"></div>
+        <div class="terminal-corner bottom-left"></div>
+        <div class="terminal-corner bottom-right"></div>
         <!-- CRT 효과 오버레이 (헤더 포함 전체 창 커버) -->
         <div class="crt-overlay"></div>
         <div class="terminal-window-header">
-          <div class="terminal-controls">
-            <span
-              class="control-dot close"
-              id="secure-modal-close"
-              aria-label="터미널 닫기"
-            ></span>
-            <span class="control-dot minimize"></span>
-            <span class="control-dot maximize"></span>
-          </div>
           <span class="terminal-window-title"
             >guest@cheongha-node: ~/projects/private</span
           >
+          <div class="terminal-controls">
+            <button class="control-btn minimize" aria-label="터미널 최소화">
+              <svg viewBox="0 0 10 10" width="10" height="10">
+                <rect x="0" y="5" width="10" height="1" fill="currentColor"/>
+              </svg>
+            </button>
+            <button class="control-btn maximize" aria-label="터미널 최대화">
+              <svg viewBox="0 0 10 10" width="10" height="10">
+                <rect x="1" y="1" width="8" height="8" fill="none" stroke="currentColor" stroke-width="1"/>
+              </svg>
+            </button>
+            <button class="control-btn close" id="secure-modal-close" aria-label="터미널 닫기">
+              <svg viewBox="0 0 10 10" width="10" height="10">
+                <line x1="1" y1="1" x2="9" y2="9" stroke="currentColor" stroke-width="1.2"/>
+                <line x1="9" y1="1" x2="1" y2="9" stroke="currentColor" stroke-width="1.2"/>
+              </svg>
+            </button>
+          </div>
         </div>
         <div class="terminal-window-body">
           <div class="terminal-content">
