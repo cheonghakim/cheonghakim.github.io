@@ -77,8 +77,8 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   z-index: 0;
   pointer-events: none;
 }
@@ -142,6 +142,7 @@ h1 {
   font-weight: 400;
   line-height: 1.8;
   animation: fadeInUp 0.8s ease-out 0.3s both;
+  word-break: keep-all;
 }
 
 .hero-cta {
@@ -1453,9 +1454,17 @@ nav a:hover::after {
 
 .about-content {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  /* minmax(0, ...) 로 그리드 트랙 최소값을 0으로 두어
+     자식의 min-content 너비가 트랙을 뷰포트 밖으로 밀어내는 가로 오버플로 방지 */
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
   gap: var(--spacing-xl);
   align-items: start;
+}
+
+/* 그리드/플렉스 자식이 콘텐츠보다 좁게 줄어들 수 있도록 min-width 해제 */
+.about-text,
+.about-stats {
+  min-width: 0;
 }
 
 .about-text p {
@@ -1802,6 +1811,9 @@ footer {
     font-size: 2.8rem;
   }
 
+  .subtitle br {
+    display: none;
+  }
 
   .hero-greeting {
     font-size: 0.8rem;
@@ -1809,22 +1821,36 @@ footer {
 
   .subtitle {
     font-size: 1.1rem;
+    word-break: keep-all;
   }
 
   .about-content {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--spacing-lg);
   }
 
   .about-stats {
     flex-direction: row;
     justify-content: center;
+    min-width: 0;
   }
 
   .stat-item {
-    flex: 1;
+    flex: 1 1 0;
+    min-width: 0;
+    padding: var(--spacing-md) var(--spacing-sm);
     align-items: center;
     text-align: center;
+  }
+
+  .stat-number {
+    /* 좁은 3열 카드 안에 "Award" 등이 넘치지 않도록 소폭 축소 */
+    font-size: 2.2rem;
+  }
+
+  .stat-label {
+    /* 좁은 폭에서 긴 라벨(Defense Commendation 등)이 카드 밖으로 넘치지 않게 */
+    overflow-wrap: anywhere;
   }
 
   .projects-grid {
@@ -1912,6 +1938,14 @@ footer {
 }
 
 @media (max-width: 480px) {
+  .container {
+    padding: var(--spacing-md) var(--spacing-sm);
+  }
+
+  .about-text p {
+    padding-left: 1.2rem;
+  }
+
   h1 {
     font-size: 2.2rem;
   }
@@ -2574,11 +2608,9 @@ footer {
   width: 90%;
   max-width: 700px;
   background: #090c10;
-  border: 1px solid rgba(0, 255, 150, 0.35);
-  border-radius: 8px;
-  outline: 1px solid rgba(0, 255, 150, 0.12);
-  outline-offset: -5px;
-  box-shadow: 
+  border: 1px solid rgba(0, 255, 150, 0.25);
+  border-radius: 3px;
+  box-shadow:
     0 25px 90px rgba(0, 0, 0, 0.95), 
     0 0 45px rgba(0, 255, 150, 0.18),
     inset 0 0 25px rgba(0, 255, 150, 0.05);
@@ -2592,40 +2624,38 @@ footer {
 /* 사이버 코너 데코레이션 */
 .terminal-corner {
   position: absolute;
-  width: 14px;
-  height: 14px;
-  border-color: rgba(0, 255, 150, 0.85);
+  width: 24px;
+  height: 24px;
+  /* 프레임보다 밝은 그린 + 발광으로 HUD 타게팅 브래킷처럼 또렷하게 */
+  border-color: rgba(30, 255, 170, 1);
   border-style: solid;
+  filter: drop-shadow(0 0 5px rgba(0, 255, 150, 0.85));
   pointer-events: none;
   z-index: 20;
 }
 
 .terminal-corner.top-left {
-  top: -1px;
-  left: -1px;
-  border-width: 3px 0 0 3px;
-  border-top-left-radius: 8px;
+  top: -3px;
+  left: -3px;
+  border-width: 2px 0 0 2px;
 }
 
 .terminal-corner.top-right {
-  top: -1px;
-  right: -1px;
-  border-width: 3px 3px 0 0;
-  border-top-right-radius: 8px;
+  top: -3px;
+  right: -3px;
+  border-width: 2px 2px 0 0;
 }
 
 .terminal-corner.bottom-left {
-  bottom: -1px;
-  left: -1px;
-  border-width: 0 0 3px 3px;
-  border-bottom-left-radius: 8px;
+  bottom: -3px;
+  left: -3px;
+  border-width: 0 0 2px 2px;
 }
 
 .terminal-corner.bottom-right {
-  bottom: -1px;
-  right: -1px;
-  border-width: 0 3px 3px 0;
-  border-bottom-right-radius: 8px;
+  bottom: -3px;
+  right: -3px;
+  border-width: 0 2px 2px 0;
 }
 
 .modal-overlay.open .modal-content.linux-terminal {
@@ -2918,3 +2948,88 @@ footer {
 .terminal-window-body::-webkit-scrollbar-thumb:hover {
   background: #5c6370;
 }
+
+/* =====================
+   기밀 복호화 모달 모바일 및 폴드 화면 최적화
+===================== */
+@media (max-width: 768px) {
+  .modal-overlay {
+    align-items: flex-start; /* 화면 세로가 작아 모달이 잘릴 때 위에서부터 정상 렌더링되게 설정 */
+    overflow-y: auto;        /* 모달 전체 높이가 화면보다 클 때 스크롤 가능하게 처리 */
+    padding: 1.5rem 0.5rem;   /* 가장자리 여백 최적화 */
+  }
+
+  .modal-content.linux-terminal {
+    width: 95%; /* 폴드 등 좁은 화면에서 가로 가용 영역 최대화 */
+    margin: 0 auto;
+  }
+
+  .terminal-window-header {
+    padding: 8px 12px;
+  }
+
+  .terminal-window-title {
+    padding: 0 80px 0 8px; /* 타이틀 패딩 축소로 좁은 화면 영역 확보 */
+    text-align: left;       /* 모바일 가독성을 위해 왼쪽 정렬 */
+    font-size: 0.7rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* 제목이 너무 길면 말줄임 처리 */
+  }
+
+  .terminal-controls {
+    right: 12px;
+  }
+
+  .control-btn {
+    width: 28px; /* 터치 영역 개선을 위해 소폭 확대 */
+    height: 28px;
+  }
+
+  .terminal-window-body {
+    min-height: 240px; /* 기존 380px에서 모바일용으로 줄임 */
+    max-height: 60vh;  /* 화면 높이에 비례하여 유연하게 높이 조절 */
+    padding: var(--spacing-sm);
+  }
+
+  /* 프로젝트 필터 바 모바일 대응 (가로 넘침 방지) */
+  .projects-filter-bar {
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .filter-btn {
+    padding: 6px 14px;
+    font-size: 0.75rem;
+  }
+}
+
+/* 초소형 화면 (가로 480px 이하) 추가 최적화 */
+@media (max-width: 480px) {
+  /* Rwasm 빌드 시각화 모바일 축소 (가로 잘림 방지) */
+  .build-node {
+    width: 60px;
+  }
+
+  .node-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 0.7rem;
+  }
+
+  .node-icon-core {
+    width: 42px;
+    height: 42px;
+  }
+
+  .node-label {
+    font-size: 0.55rem;
+  }
+
+  .build-connector {
+    margin: 0 4px;
+  }
+}
+
+
