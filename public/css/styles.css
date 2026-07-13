@@ -410,16 +410,29 @@ nav a:hover::after {
   gap: var(--spacing-sm);
 }
 
+/* 평소엔 폭까지 접어 자리를 비우고(음수 마진으로 flex gap도 상쇄),
+   호버 시 펼쳐지며 제목을 오른쪽으로 밀어낸다 */
 .project-card h3::before {
   content: "▶";
   color: var(--color-accent-cyan);
   font-size: 0.8em;
   opacity: 0;
-  transition: opacity var(--transition-speed) ease;
+  width: 0;
+  margin-right: calc(-1 * var(--spacing-sm));
+  transform: translateX(-0.4em);
+  transition:
+    opacity var(--transition-speed) ease,
+    width var(--transition-speed) ease,
+    margin-right var(--transition-speed) ease,
+    transform var(--transition-speed) ease;
 }
 
-.project-card:hover h3::before {
+.project-card:hover h3::before,
+.project-card:focus-visible h3::before {
   opacity: 1;
+  width: 1em;
+  margin-right: 0;
+  transform: translateX(0);
 }
 
 .project-description {
@@ -1162,6 +1175,66 @@ nav a:hover::after {
 .role-items li:hover {
   color: var(--color-text-primary);
   text-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
+}
+
+/* =====================
+   비공개 카드 복호화 CTA
+===================== */
+/* margin-top:auto는 카드에 남는 공간이 있을 때만 벌어지므로,
+   앞 요소에 최소 간격을 따로 준다 */
+.tech-tags:has(+ .decrypt-cta) {
+  margin-bottom: var(--spacing-md);
+}
+
+.decrypt-cta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding: 0.75rem var(--spacing-md);
+  background: rgba(0, 212, 255, 0.04);
+  border: 1px dashed rgba(0, 212, 255, 0.35);
+  border-radius: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.project-card:hover .decrypt-cta,
+.project-card:focus-visible .decrypt-cta {
+  background: rgba(0, 212, 255, 0.1);
+  border-color: var(--color-frontend);
+}
+
+.decrypt-prompt {
+  color: var(--color-frontend);
+  font-weight: bold;
+}
+
+.decrypt-cmd {
+  color: var(--color-text-secondary);
+}
+
+.project-card:hover .decrypt-cmd {
+  color: var(--color-text-primary);
+  text-shadow: 0 0 8px rgba(0, 212, 255, 0.35);
+}
+
+/* 커서 점멸 — 입력 대기 중인 터미널처럼 */
+.decrypt-cmd::after {
+  content: "_";
+  color: var(--color-frontend);
+  animation: cursorBlink 1.1s step-end infinite;
+}
+
+.decrypt-hint {
+  margin-left: auto;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  color: rgba(0, 212, 255, 0.6);
+  white-space: nowrap;
 }
 
 /* =====================
@@ -2095,6 +2168,31 @@ footer {
   border: 1px solid rgba(245, 166, 35, 0.6);
 }
 
+/* 배지 2개가 붙는 카드 — h3의 flex gap이 배지 사이까지 벌리지 않도록 묶는다 */
+.badge-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.badge-group .badge {
+  margin-left: 0;
+}
+
+/* 연구과제(R&D) — 배지가 두 개 붙는 카드가 있어 채도를 낮춰 PRIVATE와 구분 */
+.badge.rnd {
+  background: transparent;
+  color: var(--color-frontend);
+  border: 1px solid rgba(0, 212, 255, 0.55);
+  box-shadow: none;
+}
+
+.badge.rnd:hover {
+  background: rgba(0, 212, 255, 0.12);
+  box-shadow: 0 6px 20px rgba(0, 212, 255, 0.25);
+  transform: translateY(-2px);
+}
+
 .badge.theme:hover {
   box-shadow: 0 6px 20px rgba(245, 166, 35, 0.4);
   transform: translateY(-2px);
@@ -2907,6 +3005,26 @@ footer {
   color: rgba(0, 212, 255, 0.55);
   font-size: 0.75rem;
   letter-spacing: 0.03em;
+}
+
+/* 아키텍처 다이어그램 — 모노스페이스 정렬 유지 (줄바꿈 금지) */
+.term-diagram {
+  color: rgba(0, 212, 255, 0.85);
+  text-shadow: 0 0 6px rgba(0, 212, 255, 0.3);
+  white-space: pre;
+  word-break: normal;
+  overflow-x: auto;
+  font-size: min(0.78rem, 2.6vw);
+  line-height: 1.5;
+  margin-bottom: 0;
+}
+
+/* BENCHMARK 표 — 열 정렬 유지 */
+.term-table {
+  white-space: pre;
+  word-break: normal;
+  overflow-x: auto;
+  font-size: min(0.8rem, 2.7vw);
 }
 
 /* ACCESS GRANTED ASCII 배너 */
