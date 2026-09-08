@@ -18,6 +18,9 @@ class MatrixRainBackground {
     this.clock = new THREE.Clock();
 
     this.chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ<>{}[]|/\\:;.=-+*";
+    this.reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
 
     this.initThreeJS();
     this.createHexGrid();
@@ -528,6 +531,12 @@ class MatrixRainBackground {
   }
 
   animate() {
+    // 모션 감소 설정 사용자: 정적인 한 프레임만 그리고 애니메이션 루프를 시작하지 않음
+    if (this.reducedMotion) {
+      this.renderer.render(this.scene, this.camera);
+      return;
+    }
+
     var delta = this.clock.getDelta();
 
     this.updateCameraFromScroll();

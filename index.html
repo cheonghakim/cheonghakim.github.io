@@ -106,12 +106,12 @@
               <span class="stat-label">Years Exp.</span>
             </div>
             <div class="stat-item">
-              <span class="stat-number">17+</span>
+              <span class="stat-number">23+</span>
               <span class="stat-label">Projects</span>
             </div>
             <div class="stat-item">
               <span class="stat-number">Award</span>
-              <span class="stat-label">Defense Commendation</span>
+              <span class="stat-label">Company Commendation</span>
             </div>
           </div>
         </div>
@@ -122,16 +122,31 @@
         <h2 class="section-title">Projects</h2>
 
         <!-- 프로젝트 필터 탭 -->
-        <div class="projects-filter-bar">
-          <button class="filter-btn active" data-filter="all">
+        <div class="projects-filter-bar" role="tablist" aria-label="프로젝트 필터">
+          <button
+            class="filter-btn active"
+            data-filter="all"
+            role="tab"
+            aria-selected="true"
+          >
             <span class="btn-decorator">[</span> ALL OPERATIONS
             <span class="btn-decorator">]</span>
           </button>
-          <button class="filter-btn" data-filter="professional">
+          <button
+            class="filter-btn"
+            data-filter="professional"
+            role="tab"
+            aria-selected="false"
+          >
             <span class="btn-decorator">[</span> MISSION LOGS
             <span class="btn-decorator">]</span>
           </button>
-          <button class="filter-btn" data-filter="personal">
+          <button
+            class="filter-btn"
+            data-filter="personal"
+            role="tab"
+            aria-selected="false"
+          >
             <span class="btn-decorator">[</span> LABORATORY
             <span class="btn-decorator">]</span>
           </button>
@@ -1353,9 +1368,13 @@
         var navToggle = document.getElementById("nav-toggle");
         var mainNav = document.getElementById("main-nav");
         if (navToggle && mainNav) {
+          navToggle.setAttribute("aria-expanded", "false");
+          navToggle.setAttribute("aria-controls", "main-nav");
+
           navToggle.addEventListener("click", function () {
             var isOpen = mainNav.classList.toggle("open");
             navToggle.classList.toggle("open", isOpen);
+            navToggle.setAttribute("aria-expanded", String(isOpen));
             navToggle.setAttribute(
               "aria-label",
               isOpen ? "메뉴 닫기" : "메뉴 열기",
@@ -1365,8 +1384,18 @@
             link.addEventListener("click", function () {
               mainNav.classList.remove("open");
               navToggle.classList.remove("open");
+              navToggle.setAttribute("aria-expanded", "false");
               navToggle.setAttribute("aria-label", "메뉴 열기");
             });
+          });
+          document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape" && mainNav.classList.contains("open")) {
+              mainNav.classList.remove("open");
+              navToggle.classList.remove("open");
+              navToggle.setAttribute("aria-expanded", "false");
+              navToggle.setAttribute("aria-label", "메뉴 열기");
+              navToggle.focus();
+            }
           });
         }
 
@@ -1374,17 +1403,33 @@
         var lightbox = document.getElementById("lightbox");
         var lightboxImg = document.getElementById("lightbox-img");
         var lightboxClose = document.getElementById("lightbox-close");
+        var lastLightboxTrigger = null;
+
+        function openLightbox(img) {
+          lastLightboxTrigger = document.activeElement;
+          lightboxImg.src = img.src;
+          lightboxImg.alt = img.alt;
+          lightbox.classList.add("open");
+          lightbox.setAttribute("aria-hidden", "false");
+          document.body.style.overflow = "hidden";
+          lightboxClose.focus();
+        }
 
         document
           .querySelectorAll("img.project-preview")
           .forEach(function (img) {
             img.style.cursor = "zoom-in";
+            img.setAttribute("tabindex", "0");
+            img.setAttribute("role", "button");
+            img.setAttribute("aria-label", "이미지 원본 크게 보기: " + img.alt);
             img.addEventListener("click", function () {
-              lightboxImg.src = img.src;
-              lightboxImg.alt = img.alt;
-              lightbox.classList.add("open");
-              lightbox.setAttribute("aria-hidden", "false");
-              document.body.style.overflow = "hidden";
+              openLightbox(img);
+            });
+            img.addEventListener("keydown", function (e) {
+              if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
+                e.preventDefault();
+                openLightbox(img);
+              }
             });
           });
 
@@ -1395,14 +1440,25 @@
           lightboxImg.src =
             "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
           lightboxImg.alt = "";
+          if (lastLightboxTrigger && lastLightboxTrigger.focus) {
+            lastLightboxTrigger.focus();
+          }
         }
 
         lightboxClose.addEventListener("click", closeLightbox);
         lightbox.addEventListener("click", function (e) {
           if (e.target === lightbox) closeLightbox();
         });
-        document.addEventListener("keydown", function (e) {
-          if (e.key === "Escape") closeLightbox();
+        lightbox.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") {
+            closeLightbox();
+            return;
+          }
+          // 라이트박스 안에서 Tab 포커스가 빠져나가지 않도록 유지 (포커스 가능 요소가 닫기 버튼 하나뿐)
+          if (e.key === "Tab") {
+            e.preventDefault();
+            lightboxClose.focus();
+          }
         });
 
         // =====================
@@ -1418,8 +1474,10 @@
           btn.addEventListener("click", function () {
             filterButtons.forEach(function (b) {
               b.classList.remove("active");
+              b.setAttribute("aria-selected", "false");
             });
             btn.classList.add("active");
+            btn.setAttribute("aria-selected", "true");
 
             var filter = btn.getAttribute("data-filter");
 
@@ -1477,6 +1535,7 @@
         var decryptProgressInterval = null;
         var isDecrypting = false;
         var activeTypewriterTimers = [];
+        var lastModalTrigger = null;
 
         // 카드에는 요약(설명/Problem/Solution/태그)만 두고,
         // 모달은 카드에 담을 수 없는 심층 정보만 담는다.
@@ -1773,21 +1832,73 @@
           },
         };
 
-        var privateCards = document.querySelectorAll(".project-card");
-        privateCards.forEach(function (card) {
-          var badge = card.querySelector(".badge.private");
-          if (!badge) return;
+        var UNLOCK_STORAGE_KEY = "decryptedMissionIds";
 
+        function getUnlockedIds() {
+          try {
+            return new Set(
+              JSON.parse(sessionStorage.getItem(UNLOCK_STORAGE_KEY) || "[]"),
+            );
+          } catch (e) {
+            return new Set();
+          }
+        }
+
+        function markUnlocked(cardIndex) {
+          try {
+            var ids = getUnlockedIds();
+            ids.add(String(cardIndex));
+            sessionStorage.setItem(
+              UNLOCK_STORAGE_KEY,
+              JSON.stringify(Array.from(ids)),
+            );
+          } catch (e) {}
+        }
+
+        var allProjectCards = document.querySelectorAll(".project-card");
+        function getCardTitle(card) {
+          var titleClone = card.querySelector("h3").cloneNode(true);
+          titleClone
+            .querySelectorAll(".badge, .badge-group")
+            .forEach(function (el) {
+              el.remove();
+            });
+          return titleClone.textContent.trim();
+        }
+
+        allProjectCards.forEach(function (card) {
           var idxAttr = card.getAttribute("data-card-index");
+          var isPrivate = !!card.querySelector(".badge.private");
 
           card.style.cursor = "pointer";
+          card.setAttribute("role", "button");
+          card.setAttribute(
+            "aria-label",
+            (isPrivate ? "비공개 프로젝트 상세 보기: " : "프로젝트 상세 보기: ") +
+              getCardTitle(card),
+          );
+
+          function triggerCard() {
+            openSecureModal(idxAttr, isPrivate, card);
+          }
+
           card.addEventListener("click", function (e) {
-            if (e.target.closest(".btn")) return;
-            openSecureModal(idxAttr);
+            // 이미지(라이트박스)나 버튼(외부 링크)은 카드 자체의 모달 오픈과 별개로 동작
+            if (e.target.closest(".btn, .project-preview")) return;
+            triggerCard();
+          });
+
+          card.addEventListener("keydown", function (e) {
+            // 포커스가 카드 자신에 있을 때만 반응 — 내부 링크/버튼의 키 입력과 겹치지 않도록
+            if (e.target !== card) return;
+            if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
+              e.preventDefault();
+              triggerCard();
+            }
           });
         });
 
-        function openSecureModal(cardIndex) {
+        function openSecureModal(cardIndex, isPrivate, cardEl) {
           if (isDecrypting) return;
           isDecrypting = true;
 
@@ -1805,16 +1916,45 @@
           activeTypewriterTimers = [];
           clearInterval(decryptProgressInterval);
 
-          // 배경 매트릭스 서지 동기화 — 침입 연출
-          if (window.__matrixBg) {
-            window.__matrixBg.triggerSurge();
-          }
-
           secureModal.style.display = "flex";
+          secureModal.setAttribute("aria-hidden", "false");
           setTimeout(function () {
             secureModal.classList.add("open");
           }, 10);
           document.body.style.overflow = "hidden";
+          lastModalTrigger = cardEl || document.activeElement;
+          var tModalFocus = setTimeout(function () {
+            if (secureModalClose) secureModalClose.focus();
+          }, 20);
+          activeTypewriterTimers.push(tModalFocus);
+
+          // 공개 프로젝트: 침입/디크립팅 연출 없이 바로 기록을 출력
+          if (!isPrivate) {
+            typedCommand.textContent = "./inspect_project.sh --id=" + cardIndex;
+            inputCursor.style.visibility = "hidden";
+            var tPublic = setTimeout(function () {
+              startPublicOutput(cardEl);
+            }, 150);
+            activeTypewriterTimers.push(tPublic);
+            return;
+          }
+
+          // 이번 세션에 이미 해제한 적 있는 비공개 프로젝트: 반복되는 디크립팅 연출 생략
+          if (getUnlockedIds().has(String(cardIndex))) {
+            typedCommand.textContent =
+              "./decrypt_secret_assets.sh --mission-id=" + cardIndex;
+            inputCursor.style.visibility = "hidden";
+            var tUnlocked = setTimeout(function () {
+              startDecryptedOutput(cardIndex);
+            }, 150);
+            activeTypewriterTimers.push(tUnlocked);
+            return;
+          }
+
+          // 배경 매트릭스 서지 동기화 — 침입 연출
+          if (window.__matrixBg) {
+            window.__matrixBg.triggerSurge();
+          }
 
           // 1단계: 명령어 타이핑 연출
           var command = "./decrypt_secret_assets.sh --mission-id=" + cardIndex;
@@ -1824,7 +1964,7 @@
             if (charIdx < command.length) {
               typedCommand.textContent += command.charAt(charIdx);
               charIdx++;
-              var t = setTimeout(typeCommand, 20);
+              var t = setTimeout(typeCommand, 10);
               activeTypewriterTimers.push(t);
             } else {
               // 명령어 타이핑 완료 -> 입력줄 커서 숨김 (커서는 출력 끝의 새 프롬프트로 이동)
@@ -1833,7 +1973,7 @@
             }
           }
 
-          var initialDelay = setTimeout(typeCommand, 300);
+          var initialDelay = setTimeout(typeCommand, 150);
           activeTypewriterTimers.push(initialDelay);
         }
 
@@ -1852,25 +1992,25 @@
             activeTypewriterTimers.push(t);
           }
 
-          appendLine("Connecting to secure enclave...", "term-info", 150);
+          appendLine("Connecting to secure enclave...", "term-info", 75);
           appendLine(
             "Sending authentication challenge... OK",
             "term-success",
-            400,
+            200,
           );
           appendLine(
             "Bypassing firewalls (1024-bit RSA key injected)...",
             "term-warn",
-            700,
+            350,
           );
           appendLine(
             "Loading brute-force decryption blocks...",
             "term-info",
-            950,
+            475,
           );
 
           // 프로그레스 바 라인 생성 — 정체/급등을 섞은 불규칙 크래킹 연출
-          var progressDelay = 1200;
+          var progressDelay = 600;
           var tBar = setTimeout(function () {
             var progressLine = document.createElement("div");
             progressLine.className = "terminal-line term-progress";
@@ -1915,9 +2055,9 @@
                 // 97% 정체 후 최종 돌파
                 brokeThrough = true;
                 progress = 100;
-              } else if (Math.random() < 0.14 && progress > 15) {
+              } else if (Math.random() < 0.07 && progress > 15) {
                 // 무작위 정체 구간
-                stallTicks = 3 + Math.floor(Math.random() * 6);
+                stallTicks = 2 + Math.floor(Math.random() * 3);
                 return;
               } else if (Math.random() < 0.22) {
                 // 갑작스런 돌파 점프
@@ -1928,7 +2068,7 @@
 
               if (progress >= 97 && !brokeThrough) {
                 progress = 97;
-                stallTicks = 6 + Math.floor(Math.random() * 5);
+                stallTicks = 4 + Math.floor(Math.random() * 3);
               }
 
               if (progress >= 100) {
@@ -1941,12 +2081,12 @@
                 // 복호화 완료 -> 본문 데이터 출력
                 var tDone = setTimeout(function () {
                   startDecryptedOutput(cardIndex);
-                }, 350);
+                }, 175);
                 activeTypewriterTimers.push(tDone);
               } else {
                 updateProgressBar(progressLine, progress);
               }
-            }, 70);
+            }, 35);
           }, progressDelay);
           activeTypewriterTimers.push(tBar);
         }
@@ -1968,273 +2108,115 @@
           body.scrollTop = body.scrollHeight;
         }
 
-        function startDecryptedOutput(cardIndex) {
+        // 한글(전각) 문자를 2칸으로 계산해 모노스페이스 정렬을 맞춘다
+        function padRight(str, width) {
+          var w = 0;
+          for (var i = 0; i < str.length; i++) {
+            w += str.charCodeAt(i) > 0x2e7f ? 2 : 1;
+          }
+          return str + " ".repeat(Math.max(1, width - w));
+        }
+
+        function appendLineInstant(text, className) {
           var termOutput = document.getElementById("decrypt-terminal-output");
-          var data = privateProjectDetails[cardIndex] || {
-            title: "기밀 자산",
-            meta: {
-              duration: "비공개",
-              team: "비공개",
-              position: "비공개",
-            },
-            metrics: [],
-            arch: [],
-            decision: null,
-            trouble: "",
-            role: "리드 프론트엔드 엔지니어 역할 수행",
-            tech: "비공개 기술 스택",
-          };
+          var line = document.createElement("div");
+          line.className = "terminal-line " + (className || "");
+          line.textContent = text;
+          termOutput.appendChild(line);
+          var body = secureModal.querySelector(".terminal-window-body");
+          body.scrollTop = body.scrollHeight;
+          return line;
+        }
 
-          function appendLineInstant(text, className) {
-            var line = document.createElement("div");
-            line.className = "terminal-line " + (className || "");
-            line.textContent = text;
-            termOutput.appendChild(line);
+        function queueTextOutput(label, value, labelClass, valueClass, d) {
+          var t = setTimeout(function () {
+            var line = appendLineInstant("", "");
+
+            var labelSpan = document.createElement("span");
+            labelSpan.className = labelClass || "term-label";
+            line.appendChild(labelSpan);
+
+            var textSpan = document.createElement("span");
+            textSpan.className = valueClass || "";
+            line.appendChild(textSpan);
+
+            // 아직 해독되지 않은 구간 — 난수 문자로 표시
+            var noiseSpan = document.createElement("span");
+            noiseSpan.className = "term-noise";
+            line.appendChild(noiseSpan);
+
+            var scrambleChars = "ABCDEF0123456789$#%&@*+=?<>/";
             var body = secureModal.querySelector(".terminal-window-body");
-            body.scrollTop = body.scrollHeight;
-            return line;
-          }
 
-          var delay = 0;
-
-          function queueTextOutput(label, value, labelClass, valueClass, d) {
-            var t = setTimeout(function () {
-              var line = appendLineInstant("", "");
-
-              var labelSpan = document.createElement("span");
-              labelSpan.className = labelClass || "term-label";
-              line.appendChild(labelSpan);
-
-              var textSpan = document.createElement("span");
-              textSpan.className = valueClass || "";
-              line.appendChild(textSpan);
-
-              // 아직 해독되지 않은 구간 — 난수 문자로 표시
-              var noiseSpan = document.createElement("span");
-              noiseSpan.className = "term-noise";
-              line.appendChild(noiseSpan);
-
-              var scrambleChars = "ABCDEF0123456789$#%&@*+=?<>/";
-              var body = secureModal.querySelector(".terminal-window-body");
-
-              var charIdx = 0;
-              var typedLabel = label + " : ";
-              function typeLabel() {
-                if (charIdx < typedLabel.length) {
-                  labelSpan.textContent += typedLabel.charAt(charIdx);
-                  charIdx++;
-                  var t = setTimeout(typeLabel, 4);
-                  activeTypewriterTimers.push(t);
-                } else {
-                  charIdx = 0;
-                  typeValue();
-                }
+            var charIdx = 0;
+            var typedLabel = label + " : ";
+            function typeLabel() {
+              if (charIdx < typedLabel.length) {
+                labelSpan.textContent += typedLabel.charAt(charIdx);
+                charIdx++;
+                var t = setTimeout(typeLabel, 2);
+                activeTypewriterTimers.push(t);
+              } else {
+                charIdx = 0;
+                typeValue();
               }
-
-              // 암호문이 왼쪽부터 평문으로 해독되며 굳어지는 스크램블 연출
-              function typeValue() {
-                if (charIdx < value.length) {
-                  textSpan.textContent = value.slice(0, charIdx);
-
-                  var scrambleLen = Math.min(10, value.length - charIdx);
-                  var noise = "";
-                  for (var i = 0; i < scrambleLen; i++) {
-                    noise += scrambleChars.charAt(
-                      Math.floor(Math.random() * scrambleChars.length),
-                    );
-                  }
-                  noiseSpan.textContent = noise;
-
-                  body.scrollTop = body.scrollHeight;
-                  charIdx++;
-                  var t = setTimeout(typeValue, 12);
-                  activeTypewriterTimers.push(t);
-                } else {
-                  textSpan.textContent = value;
-                  noiseSpan.textContent = "";
-                  body.scrollTop = body.scrollHeight;
-                }
-              }
-
-              typeLabel();
-            }, d);
-            activeTypewriterTimers.push(t);
-          }
-
-          // 섹션 구분 헤더 — [ SECTION ] 형태
-          function queueSection(title, d) {
-            var t = setTimeout(function () {
-              appendLineInstant("", "");
-              appendLineInstant("[ " + title + " ]", "term-label");
-            }, d);
-            activeTypewriterTimers.push(t);
-          }
-
-          // 여러 줄을 한 줄씩 스트리밍하듯 출력
-          function queueLines(lines, className, d, step) {
-            lines.forEach(function (text, i) {
-              var t = setTimeout(
-                function () {
-                  appendLineInstant(text, className);
-                },
-                d + i * (step || 60),
-              );
-              activeTypewriterTimers.push(t);
-            });
-            return lines.length * (step || 60);
-          }
-
-          // 한글(전각) 문자를 2칸으로 계산해 모노스페이스 정렬을 맞춘다
-          function padRight(str, width) {
-            var w = 0;
-            for (var i = 0; i < str.length; i++) {
-              w += str.charCodeAt(i) > 0x2e7f ? 2 : 1;
             }
-            return str + " ".repeat(Math.max(1, width - w));
-          }
 
-          var tHeader = setTimeout(function () {
-            // ACCESS GRANTED ASCII 배너
-            appendLineInstant(
-              "▄▀█ █▀▀ █▀▀ █▀▀ █▀ █▀   █▀▀ █▀█ ▄▀█ █▄░█ ▀█▀ █▀▀ █▀▄",
-              "term-ascii",
-            );
-            appendLineInstant(
-              "█▀█ █▄▄ █▄▄ ██▄ ▄█ ▄█   █▄█ █▀▄ █▀█ █░▀█ ░█░ ██▄ █▄▀",
-              "term-ascii",
-            );
-            appendLineInstant(
-              "--------------------------------------------------",
-              "term-info",
-            );
-            appendLineInstant(
-              "MISSION ACCOMPLISHED // RECORD FOR SYSTEM_ID: #" +
-                (Math.floor(Math.random() * 800) + 100),
-              "term-success",
-            );
-            appendLineInstant(
-              "--------------------------------------------------",
-              "term-info",
-            );
-          }, delay);
-          activeTypewriterTimers.push(tHeader);
+            // 암호문이 왼쪽부터 평문으로 해독되며 굳어지는 스크램블 연출
+            function typeValue() {
+              if (charIdx < value.length) {
+                textSpan.textContent = value.slice(0, charIdx);
 
-          delay += 500;
-          queueTextOutput(
-            "PROJECT_NAME",
-            data.title,
-            "term-label term-success",
-            "term-success",
-            delay,
-          );
+                var scrambleLen = Math.min(10, value.length - charIdx);
+                var noise = "";
+                for (var i = 0; i < scrambleLen; i++) {
+                  noise += scrambleChars.charAt(
+                    Math.floor(Math.random() * scrambleChars.length),
+                  );
+                }
+                noiseSpan.textContent = noise;
 
-          // ── 프로젝트 메타 ──────────────────────────────
-          var meta = data.meta || {};
-          delay += 500;
-          queueSection("MISSION BRIEF", delay);
-          delay += 120;
-          delay += queueLines(
-            [
-              "  " + padRight("DURATION", 12) + ": " + (meta.duration || "-"),
-              "  " + padRight("TEAM SIZE", 12) + ": " + (meta.team || "-"),
-              "  " + padRight("POSITION", 12) + ": " + (meta.position || "-"),
-            ],
-            "term-info term-table",
-            delay,
-          );
-
-          // ── 아키텍처 다이어그램 ────────────────────────
-          if (data.arch && data.arch.length) {
-            delay += 250;
-            queueSection("ARCHITECTURE", delay);
-            delay += 120;
-            delay += queueLines(data.arch, "term-diagram", delay, 70);
-          }
-
-          // ── 정량 지표 (Before → After) ─────────────────
-          if (data.metrics && data.metrics.length) {
-            delay += 300;
-            queueSection("BENCHMARK", delay);
-            delay += 120;
-            delay += queueLines(
-              [
-                "  " +
-                  padRight("METRIC", 28) +
-                  padRight("BEFORE", 22) +
-                  "AFTER",
-              ],
-              "term-info term-table",
-              delay,
-            );
-            var metricLines = data.metrics.map(function (m) {
-              // [지표, before, after] — 개선 폭을 화살표로 대비
-              if (m.length >= 3 && m[2] !== undefined && m[2] !== "") {
-                return (
-                  "  " + padRight(m[0], 28) + padRight(m[1], 22) + "→  " + m[2]
-                );
+                body.scrollTop = body.scrollHeight;
+                charIdx++;
+                var t = setTimeout(typeValue, 6);
+                activeTypewriterTimers.push(t);
+              } else {
+                textSpan.textContent = value;
+                noiseSpan.textContent = "";
+                body.scrollTop = body.scrollHeight;
               }
-              // [지표, 값] — 비교 대상이 없는 단일 실측치
-              return "  " + padRight(m[0], 28) + m[1];
-            });
-            delay += queueLines(
-              metricLines,
-              "term-success term-table",
-              delay,
-              110,
+            }
+
+            typeLabel();
+          }, d);
+          activeTypewriterTimers.push(t);
+        }
+
+        // 섹션 구분 헤더 — [ SECTION ] 형태
+        function queueSection(title, d) {
+          var t = setTimeout(function () {
+            appendLineInstant("", "");
+            appendLineInstant("[ " + title + " ]", "term-label");
+          }, d);
+          activeTypewriterTimers.push(t);
+        }
+
+        // 여러 줄을 한 줄씩 스트리밍하듯 출력
+        function queueLines(lines, className, d, step) {
+          lines.forEach(function (text, i) {
+            var t = setTimeout(
+              function () {
+                appendLineInstant(text, className);
+              },
+              d + i * (step || 30),
             );
-          }
+            activeTypewriterTimers.push(t);
+          });
+          return lines.length * (step || 30);
+        }
 
-          // ── 기술 선택의 근거 ───────────────────────────
-          if (data.decision) {
-            delay += 300;
-            queueSection("DESIGN DECISION", delay);
-            delay += 120;
-            delay += queueLines(
-              ["  CHOSEN   : " + data.decision.choice],
-              "term-success",
-              delay,
-            );
-            delay += queueLines(
-              ["  WHY      : " + data.decision.why],
-              "term-warn",
-              delay,
-            );
-            delay += queueLines(
-              ["  REJECTED : " + data.decision.rejected],
-              "term-error",
-              delay,
-            );
-          }
-
-          // ── 트러블슈팅 ─────────────────────────────────
-          if (data.trouble) {
-            delay += 300;
-            queueSection("TROUBLESHOOTING LOG", delay);
-            delay += 120;
-            delay += queueLines(["  " + data.trouble], "term-warn", delay);
-          }
-
-          delay += 400;
-          queueSection("RECORD", delay);
-          delay += 200;
-          queueTextOutput(
-            "MY_ROLE     ",
-            data.role,
-            "term-label term-warn",
-            "",
-            delay,
-          );
-
-          delay += 700;
-          queueTextOutput(
-            "TECH_STACK  ",
-            data.tech,
-            "term-label term-success",
-            "term-success",
-            delay,
-          );
-
-          delay += 900;
+        // 터미널 하단 종료 프롬프트 — 비공개/공개 출력 공통, cardIndexToUnlock이 있으면 세션에 해제 상태 기록
+        function renderClosingPrompt(delay, cardIndexToUnlock) {
           var tFooter = setTimeout(function () {
             appendLineInstant(
               "--------------------------------------------------",
@@ -2274,13 +2256,321 @@
             lastPrompt.appendChild(charSpan);
             lastPrompt.appendChild(cursorBlink);
 
+            var termOutput = document.getElementById("decrypt-terminal-output");
             termOutput.appendChild(lastPrompt);
             var body = secureModal.querySelector(".terminal-window-body");
             body.scrollTop = body.scrollHeight;
 
+            if (cardIndexToUnlock !== undefined && cardIndexToUnlock !== null) {
+              markUnlocked(cardIndexToUnlock);
+            }
             isDecrypting = false;
           }, delay);
           activeTypewriterTimers.push(tFooter);
+        }
+
+        // 카드 DOM에서 공개 프로젝트 정보를 읽어온다 (별도 데이터 사본을 두지 않음)
+        function extractPublicProjectData(cardEl) {
+          var descEl = cardEl.querySelector(".project-description");
+
+          var problemSolution = [];
+          cardEl
+            .querySelectorAll(".problem-solution .ps-item")
+            .forEach(function (item) {
+              var label = item.querySelector(".ps-label");
+              var text = item.querySelector(".ps-text");
+              if (label && text) {
+                problemSolution.push([
+                  label.textContent.trim(),
+                  text.textContent.trim(),
+                ]);
+              }
+            });
+
+          var role = [];
+          cardEl
+            .querySelectorAll(".my-role .role-items li")
+            .forEach(function (li) {
+              role.push(li.textContent.trim());
+            });
+
+          var tech = [];
+          cardEl
+            .querySelectorAll(".tech-tags .tech-tag-sm")
+            .forEach(function (tag) {
+              tech.push(tag.textContent.trim());
+            });
+
+          var links = [];
+          cardEl.querySelectorAll(".button-group a").forEach(function (a) {
+            links.push({
+              label: a.textContent.trim(),
+              href: a.getAttribute("href"),
+            });
+          });
+
+          return {
+            title: getCardTitle(cardEl),
+            description: descEl ? descEl.textContent.trim() : "",
+            problemSolution: problemSolution,
+            role: role,
+            tech: tech.join(", "),
+            links: links,
+          };
+        }
+
+        // 공개 프로젝트: 디크립팅 연출 없이 카드에 이미 공개된 정보를 터미널 형식으로만 출력
+        function startPublicOutput(cardEl) {
+          var data = extractPublicProjectData(cardEl);
+          var delay = 0;
+
+          var tHeader = setTimeout(function () {
+            appendLineInstant(
+              "--------------------------------------------------",
+              "term-info",
+            );
+            appendLineInstant(
+              "RECORD LOADED // PUBLIC ARCHIVE",
+              "term-success",
+            );
+            appendLineInstant(
+              "--------------------------------------------------",
+              "term-info",
+            );
+          }, delay);
+          activeTypewriterTimers.push(tHeader);
+
+          delay += 200;
+          queueTextOutput(
+            "PROJECT_NAME",
+            data.title,
+            "term-label term-success",
+            "term-success",
+            delay,
+          );
+
+          if (data.description) {
+            delay += 250;
+            queueSection("DESCRIPTION", delay);
+            delay += 60;
+            delay += queueLines(["  " + data.description], "term-info", delay);
+          }
+
+          if (data.problemSolution.length) {
+            delay += 150;
+            queueSection("PROBLEM / SOLUTION", delay);
+            delay += 60;
+            data.problemSolution.forEach(function (pair) {
+              delay += queueLines(
+                ["  " + pair[0].toUpperCase() + " : " + pair[1]],
+                "term-warn",
+                delay,
+              );
+            });
+          }
+
+          if (data.role.length) {
+            delay += 150;
+            queueSection("ROLE", delay);
+            delay += 60;
+            delay += queueLines(
+              data.role.map(function (item) {
+                return "  - " + item;
+              }),
+              "term-info",
+              delay,
+              30,
+            );
+          }
+
+          delay += 200;
+          queueTextOutput(
+            "TECH_STACK  ",
+            data.tech,
+            "term-label term-success",
+            "term-success",
+            delay,
+          );
+
+          if (data.links.length) {
+            delay += 350;
+            queueSection("LINKS", delay);
+            delay += 60;
+            delay += queueLines(
+              data.links.map(function (link) {
+                return "  " + link.label + " : " + link.href;
+              }),
+              "term-info",
+              delay,
+              30,
+            );
+          }
+
+          delay += 300;
+          renderClosingPrompt(delay, null);
+        }
+
+        function startDecryptedOutput(cardIndex) {
+          var data = privateProjectDetails[cardIndex] || {
+            title: "기밀 자산",
+            meta: {
+              duration: "비공개",
+              team: "비공개",
+              position: "비공개",
+            },
+            metrics: [],
+            arch: [],
+            decision: null,
+            trouble: "",
+            role: "리드 프론트엔드 엔지니어 역할 수행",
+            tech: "비공개 기술 스택",
+          };
+
+          var delay = 0;
+
+          var tHeader = setTimeout(function () {
+            // ACCESS GRANTED ASCII 배너
+            appendLineInstant(
+              "▄▀█ █▀▀ █▀▀ █▀▀ █▀ █▀   █▀▀ █▀█ ▄▀█ █▄░█ ▀█▀ █▀▀ █▀▄",
+              "term-ascii",
+            );
+            appendLineInstant(
+              "█▀█ █▄▄ █▄▄ ██▄ ▄█ ▄█   █▄█ █▀▄ █▀█ █░▀█ ░█░ ██▄ █▄▀",
+              "term-ascii",
+            );
+            appendLineInstant(
+              "--------------------------------------------------",
+              "term-info",
+            );
+            appendLineInstant(
+              "MISSION ACCOMPLISHED // RECORD FOR SYSTEM_ID: #" +
+                (Math.floor(Math.random() * 800) + 100),
+              "term-success",
+            );
+            appendLineInstant(
+              "--------------------------------------------------",
+              "term-info",
+            );
+          }, delay);
+          activeTypewriterTimers.push(tHeader);
+
+          delay += 250;
+          queueTextOutput(
+            "PROJECT_NAME",
+            data.title,
+            "term-label term-success",
+            "term-success",
+            delay,
+          );
+
+          // ── 프로젝트 메타 ──────────────────────────────
+          var meta = data.meta || {};
+          delay += 250;
+          queueSection("MISSION BRIEF", delay);
+          delay += 60;
+          delay += queueLines(
+            [
+              "  " + padRight("DURATION", 12) + ": " + (meta.duration || "-"),
+              "  " + padRight("TEAM SIZE", 12) + ": " + (meta.team || "-"),
+              "  " + padRight("POSITION", 12) + ": " + (meta.position || "-"),
+            ],
+            "term-info term-table",
+            delay,
+          );
+
+          // ── 아키텍처 다이어그램 ────────────────────────
+          if (data.arch && data.arch.length) {
+            delay += 125;
+            queueSection("ARCHITECTURE", delay);
+            delay += 60;
+            delay += queueLines(data.arch, "term-diagram", delay, 35);
+          }
+
+          // ── 정량 지표 (Before → After) ─────────────────
+          if (data.metrics && data.metrics.length) {
+            delay += 150;
+            queueSection("BENCHMARK", delay);
+            delay += 60;
+            delay += queueLines(
+              [
+                "  " +
+                  padRight("METRIC", 28) +
+                  padRight("BEFORE", 22) +
+                  "AFTER",
+              ],
+              "term-info term-table",
+              delay,
+            );
+            var metricLines = data.metrics.map(function (m) {
+              // [지표, before, after] — 개선 폭을 화살표로 대비
+              if (m.length >= 3 && m[2] !== undefined && m[2] !== "") {
+                return (
+                  "  " + padRight(m[0], 28) + padRight(m[1], 22) + "→  " + m[2]
+                );
+              }
+              // [지표, 값] — 비교 대상이 없는 단일 실측치
+              return "  " + padRight(m[0], 28) + m[1];
+            });
+            delay += queueLines(
+              metricLines,
+              "term-success term-table",
+              delay,
+              55,
+            );
+          }
+
+          // ── 기술 선택의 근거 ───────────────────────────
+          if (data.decision) {
+            delay += 150;
+            queueSection("DESIGN DECISION", delay);
+            delay += 60;
+            delay += queueLines(
+              ["  CHOSEN   : " + data.decision.choice],
+              "term-success",
+              delay,
+            );
+            delay += queueLines(
+              ["  WHY      : " + data.decision.why],
+              "term-warn",
+              delay,
+            );
+            delay += queueLines(
+              ["  REJECTED : " + data.decision.rejected],
+              "term-error",
+              delay,
+            );
+          }
+
+          // ── 트러블슈팅 ─────────────────────────────────
+          if (data.trouble) {
+            delay += 150;
+            queueSection("TROUBLESHOOTING LOG", delay);
+            delay += 60;
+            delay += queueLines(["  " + data.trouble], "term-warn", delay);
+          }
+
+          delay += 200;
+          queueSection("RECORD", delay);
+          delay += 100;
+          queueTextOutput(
+            "MY_ROLE     ",
+            data.role,
+            "term-label term-warn",
+            "",
+            delay,
+          );
+
+          delay += 350;
+          queueTextOutput(
+            "TECH_STACK  ",
+            data.tech,
+            "term-label term-success",
+            "term-success",
+            delay,
+          );
+
+          delay += 450;
+          renderClosingPrompt(delay, cardIndex);
         }
 
         function closeSecureModal() {
@@ -2290,12 +2580,23 @@
 
           if (secureModal) {
             secureModal.classList.remove("open");
+            secureModal.setAttribute("aria-hidden", "true");
+            var modalContent = secureModal.querySelector(".modal-content");
+            if (modalContent) {
+              modalContent.classList.remove(
+                "terminal-minimized",
+                "terminal-maximized",
+              );
+            }
             setTimeout(function () {
               secureModal.style.display = "none";
               isDecrypting = false;
             }, 300);
           }
           document.body.style.overflow = "";
+          if (lastModalTrigger && lastModalTrigger.focus) {
+            lastModalTrigger.focus();
+          }
         }
 
         if (secureModalClose) {
@@ -2305,10 +2606,67 @@
           secureModal.addEventListener("click", function (e) {
             if (e.target === secureModal) closeSecureModal();
           });
+
+          // 포커스 트랩 — 모달이 열려 있는 동안 Tab이 배경으로 빠져나가지 않도록 유지
+          secureModal.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") {
+              closeSecureModal();
+              return;
+            }
+            if (e.key !== "Tab") return;
+
+            var focusable = Array.prototype.slice
+              .call(
+                secureModal.querySelectorAll(
+                  'button, [href], [tabindex]:not([tabindex="-1"])',
+                ),
+              )
+              .filter(function (el) {
+                return el.offsetParent !== null;
+              });
+            if (!focusable.length) return;
+
+            var first = focusable[0];
+            var last = focusable[focusable.length - 1];
+            if (e.shiftKey && document.activeElement === first) {
+              e.preventDefault();
+              last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+              e.preventDefault();
+              first.focus();
+            }
+          });
         }
-        document.addEventListener("keydown", function (e) {
-          if (e.key === "Escape") closeSecureModal();
-        });
+
+        // 최소화 / 최대화 컨트롤 — 눌러도 반응 없던 장식용 버튼을 실제로 동작하게 연결
+        var secureModalMinimize = document.getElementById(
+          "secure-modal-minimize",
+        );
+        var secureModalMaximize = document.getElementById(
+          "secure-modal-maximize",
+        );
+        if (secureModalMinimize) {
+          secureModalMinimize.addEventListener("click", function () {
+            var modalContent = secureModal.querySelector(".modal-content");
+            var isMinimized =
+              modalContent.classList.toggle("terminal-minimized");
+            secureModalMinimize.setAttribute(
+              "aria-label",
+              isMinimized ? "터미널 펼치기" : "터미널 최소화",
+            );
+          });
+        }
+        if (secureModalMaximize) {
+          secureModalMaximize.addEventListener("click", function () {
+            var modalContent = secureModal.querySelector(".modal-content");
+            var isMaximized =
+              modalContent.classList.toggle("terminal-maximized");
+            secureModalMaximize.setAttribute(
+              "aria-label",
+              isMaximized ? "터미널 원래 크기로" : "터미널 최대화",
+            );
+          });
+        }
       });
     </script>
     <!-- 기밀 복호화 모달 (Linux Terminal Modal) -->
@@ -2326,12 +2684,20 @@
             >guest@cheongha-node: ~/projects/private</span
           >
           <div class="terminal-controls">
-            <button class="control-btn minimize" aria-label="터미널 최소화">
+            <button
+              class="control-btn minimize"
+              id="secure-modal-minimize"
+              aria-label="터미널 최소화"
+            >
               <svg viewBox="0 0 10 10" width="10" height="10">
                 <rect x="0" y="5" width="10" height="1" fill="currentColor" />
               </svg>
             </button>
-            <button class="control-btn maximize" aria-label="터미널 최대화">
+            <button
+              class="control-btn maximize"
+              id="secure-modal-maximize"
+              aria-label="터미널 최대화"
+            >
               <svg viewBox="0 0 10 10" width="10" height="10">
                 <rect
                   x="1"
