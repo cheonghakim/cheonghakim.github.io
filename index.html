@@ -16,11 +16,11 @@
     <!-- 오픈 그래프 메타 태그 -->
     <meta
       property="og:title"
-      content="Cheongha Kim | Security Engineer & Frontend Developer"
+      content="Cheongha Kim | 보안관제 프론트엔드 엔지니어"
     />
     <meta
       property="og:description"
-      content="보안 엔지니어 & 프론트엔드 개발자 김청하의 포트폴리오"
+      content="복잡한 보안 데이터를 읽기 쉬운 화면으로 만드는 보안관제 프론트엔드 엔지니어 김청하의 포트폴리오"
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://cheonghakim.github.io" />
@@ -29,7 +29,7 @@
       content="https://cheonghakim.github.io/public/imgs/og-image.png"
     />
 
-    <title>Cheongha Kim | Security Engineer & Frontend Developer</title>
+    <title>Cheongha Kim | 보안관제 프론트엔드 엔지니어</title>
 
     <link rel="stylesheet" href="public/css/styles.css" />
     <link
@@ -52,14 +52,17 @@
     <div class="container">
       <!-- 히어로 섹션 -->
       <header class="hero">
-        <p class="hero-greeting">Security Engineer & Frontend Developer</p>
+        <p class="hero-greeting">보안관제 프론트엔드 엔지니어</p>
         <h1>Cheongha Kim</h1>
         <p class="subtitle">
-          실시간 보안 이벤트 시각화부터 Rust WASM 성능 최적화까지,<br />보안관제
-          도메인에 특화된 프론트엔드를 만듭니다.
+          복잡한 보안 데이터를 읽기 쉬운 화면으로 만들고,<br />
+          대규모 이벤트 처리의 병목을 해결합니다.
         </p>
+        <p class="hero-tech-line">Vue · 실시간 시각화 · Rust WebAssembly</p>
         <div class="hero-cta">
-          <a href="#projects" class="btn btn-primary">프로젝트 보기</a>
+          <a href="#projects-flagship" class="btn btn-primary"
+            >대표 프로젝트 보기</a
+          >
           <a href="#contact" class="btn">연락하기</a>
         </div>
 
@@ -96,8 +99,8 @@
             </p>
             <p>
               국방 관련 보안 프로젝트에서 프론트엔드 리드를 맡아 아키텍처 설계와
-              팀 코드 컨벤션 수립을 주도했으며, 정시 납품 및 품질 달성으로
-              표창을 수여받았습니다.
+              팀 코드 컨벤션 수립을 주도했으며, 국방부로부터 만족스럽다는 평가를
+              받았고 그 성과를 인정받아 사내에서 PM 우수성과 표창을 받았습니다.
             </p>
           </div>
           <div class="about-stats">
@@ -111,7 +114,7 @@
             </div>
             <div class="stat-item">
               <span class="stat-number">Award</span>
-              <span class="stat-label">Company Commendation</span>
+              <span class="stat-label">Commendation</span>
             </div>
           </div>
         </div>
@@ -121,8 +124,26 @@
       <section id="projects">
         <h2 class="section-title">Projects</h2>
 
+        <!-- 먼저 볼 프로젝트: 대표 사례 3건 바로가기 -->
+        <div class="flagship-jump" id="projects-flagship">
+          <span class="flagship-jump-label">먼저 볼 프로젝트</span>
+          <a href="#project-4" class="flagship-jump-link">
+            <span class="flagship-jump-tag">DASHBOARD</span>대시보드 제품 보기
+          </a>
+          <a href="#project-2" class="flagship-jump-link">
+            <span class="flagship-jump-tag">PERFORMANCE</span>성능 최적화 보기
+          </a>
+          <a href="#project-7" class="flagship-jump-link">
+            <span class="flagship-jump-tag">LEADERSHIP</span>기술 리딩 보기
+          </a>
+        </div>
+
         <!-- 프로젝트 필터 탭 -->
-        <div class="projects-filter-bar" role="tablist" aria-label="프로젝트 필터">
+        <div
+          class="projects-filter-bar"
+          role="tablist"
+          aria-label="프로젝트 필터"
+        >
           <button
             class="filter-btn active"
             data-filter="all"
@@ -197,11 +218,11 @@
               <div class="my-role">
                 <span class="role-label">My Frontend Role</span>
                 <ul class="role-items">
-                  <li>프로젝트 기획 및 설계</li>
+                  <li>기존 서비스 리뉴얼 총괄 및 신규 기능 기획</li>
                   <li>상품 템플릿 엔진 개발 및 적용</li>
                   <li>AI 이미지 검색 UI/UX 디자인</li>
                   <li>SEO 최적화</li>
-                  <li>리뉴얼 및 유지보수</li>
+                  <li>유지보수</li>
                 </ul>
               </div>
             </article>
@@ -233,6 +254,7 @@
                 </div>
               </div>
               <div class="project-preview private">
+                <span class="category-chip chip-green">DATA COLLECTION</span>
                 <div class="hud-frame">
                   <div class="hud-corner top-left"></div>
                   <div class="hud-corner top-right"></div>
@@ -248,7 +270,7 @@
                   <div class="fp-reticle"></div>
                   <div class="fp-ridges"></div>
                   <div class="fp-scan-line"></div>
-                  <div class="fp-status">SCANNING</div>
+                  <div class="fp-status">SCRAPING</div>
                 </div>
               </div>
               <div class="tech-tags">
@@ -294,6 +316,7 @@
                 </div>
               </div>
               <div class="project-preview private">
+                <span class="category-chip chip-amber">AI CLASSIFICATION</span>
                 <div class="hud-frame">
                   <div class="hud-corner top-left"></div>
                   <div class="hud-corner top-right"></div>
@@ -309,7 +332,7 @@
                   <div class="fp-reticle"></div>
                   <div class="fp-ridges"></div>
                   <div class="fp-scan-line"></div>
-                  <div class="fp-status">SCANNING</div>
+                  <div class="fp-status">CLASSIFYING</div>
                 </div>
               </div>
               <div class="tech-tags">
@@ -347,6 +370,7 @@
                 </div>
               </div>
               <div class="project-preview private">
+                <span class="category-chip chip-cyan">REALTIME EVENTS</span>
                 <div class="hud-frame">
                   <div class="hud-corner top-left"></div>
                   <div class="hud-corner top-right"></div>
@@ -362,7 +386,7 @@
                   <div class="fp-reticle"></div>
                   <div class="fp-ridges"></div>
                   <div class="fp-scan-line"></div>
-                  <div class="fp-status">SCANNING</div>
+                  <div class="fp-status">STREAMING</div>
                 </div>
               </div>
               <div class="tech-tags">
@@ -400,6 +424,7 @@
                 </div>
               </div>
               <div class="project-preview private">
+                <span class="category-chip chip-red">CLASSIFIED OPS</span>
                 <div class="hud-frame">
                   <div class="hud-corner top-left"></div>
                   <div class="hud-corner top-right"></div>
@@ -415,7 +440,7 @@
                   <div class="fp-reticle"></div>
                   <div class="fp-ridges"></div>
                   <div class="fp-scan-line"></div>
-                  <div class="fp-status">SCANNING</div>
+                  <div class="fp-status">AUTHORIZING</div>
                 </div>
               </div>
               <div class="tech-tags">
@@ -494,6 +519,7 @@
                 </div>
               </div>
               <div class="project-preview private">
+                <span class="category-chip chip-pink">NMS MONITORING</span>
                 <div class="hud-frame">
                   <div class="hud-corner top-left"></div>
                   <div class="hud-corner top-right"></div>
@@ -509,7 +535,7 @@
                   <div class="fp-reticle"></div>
                   <div class="fp-ridges"></div>
                   <div class="fp-scan-line"></div>
-                  <div class="fp-status">SCANNING</div>
+                  <div class="fp-status">POLLING</div>
                 </div>
               </div>
               <div class="tech-tags">
@@ -550,6 +576,7 @@
                 </div>
               </div>
               <div class="project-preview private">
+                <span class="category-chip chip-red">PENETRATION TEST</span>
                 <div class="hud-frame">
                   <div class="hud-corner top-left"></div>
                   <div class="hud-corner top-right"></div>
@@ -565,7 +592,7 @@
                   <div class="fp-reticle"></div>
                   <div class="fp-ridges"></div>
                   <div class="fp-scan-line"></div>
-                  <div class="fp-status">SCANNING</div>
+                  <div class="fp-status">SIMULATING</div>
                 </div>
               </div>
               <div class="tech-tags">
@@ -1132,32 +1159,30 @@
 
             <!-- AeroLink -->
             <article class="project-card" data-card-index="22" tabindex="0">
-              <h3>
-                AeroLink<span class="badge private">PRIVATE</span>
-              </h3>
+              <h3>AeroLink<span class="badge private">PRIVATE</span></h3>
               <p class="project-description">
                 여러 드론의 통신 프로토콜을 하나로 정규화하는 코어 엔진입니다.
-                Zoom과 유사한 방식으로 동작하는 드론 플랫폼 구축을 목표로
-                개발 중이며, 기존 드론 관제 업체에서도 연동해 활용할 수
-                있습니다.
+                Zoom과 유사한 방식으로 동작하는 드론 플랫폼 구축을 목표로 개발
+                중이며, 기존 드론 관제 업체에서도 연동해 활용할 수 있습니다.
               </p>
               <div class="problem-solution">
                 <div class="ps-item">
                   <span class="ps-label">Problem</span>
                   <span class="ps-text"
-                    >드론 제조사·모델마다 통신 프로토콜이 달라 다중 드론
-                    통합 관제가 어려움</span
+                    >드론 제조사·모델마다 통신 프로토콜이 달라 다중 드론 통합
+                    관제가 어려움</span
                   >
                 </div>
                 <div class="ps-item">
                   <span class="ps-label">Solution</span>
                   <span class="ps-text"
-                    >여러 드론의 통신을 하나의 표준 프로토콜로 정규화하는
-                    코어 엔진을 Go로 설계</span
+                    >여러 드론의 통신을 하나의 표준 프로토콜로 정규화하는 코어
+                    엔진을 Go로 설계</span
                   >
                 </div>
               </div>
               <div class="project-preview private">
+                <span class="category-chip chip-green">CORE ENGINE</span>
                 <div class="hud-frame">
                   <div class="hud-corner top-left"></div>
                   <div class="hud-corner top-right"></div>
@@ -1173,7 +1198,7 @@
                   <div class="fp-reticle"></div>
                   <div class="fp-ridges"></div>
                   <div class="fp-scan-line"></div>
-                  <div class="fp-status">SCANNING</div>
+                  <div class="fp-status">NORMALIZING</div>
                 </div>
               </div>
               <div class="tech-tags">
@@ -1256,13 +1281,248 @@
             </div>
           </div>
         </div>
+
+        <!-- 기술 스택 실제 적용 사례 — 나열이 아니라 어떤 프로젝트에서 어떤 판단으로 썼는지 연결 -->
+        <div class="tech-usage-table">
+          <h3 class="tech-usage-title">기술 스택 실제 적용 사례</h3>
+
+          <div class="tech-usage-row">
+            <span class="tech-usage-name">Rust WebAssembly</span>
+            <ul class="tech-usage-list">
+              <li>
+                <span class="tech-usage-project">ServiceDesk</span>
+                <span class="tech-usage-note"
+                  >대규모 이벤트 필터링 오프로드, 데이터가 적을 땐 Web
+                  Worker 단독 처리로 전환</span
+                >
+              </li>
+              <li>
+                <span class="tech-usage-project">SoarPlaybook 2.0</span>
+                <span class="tech-usage-note">핵심 연산 이식</span>
+              </li>
+              <li>
+                <span class="tech-usage-project">비밀번호 암·복호화</span>
+                <span class="tech-usage-note"
+                  >AES-256-GCM 기반 복호화에 활용</span
+                >
+              </li>
+              <li>
+                <span class="tech-usage-project"
+                  >Rwasm / Rust WASM Playground</span
+                >
+                <span class="tech-usage-note"
+                  >(개인 프로젝트) 웹에서 Rust를 직접 실행하는 환경 자체
+                  제작</span
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div class="tech-usage-row">
+            <span class="tech-usage-name">Web Worker</span>
+            <ul class="tech-usage-list">
+              <li>
+                <span class="tech-usage-project">ServiceDesk</span>
+                <span class="tech-usage-note"
+                  >복잡한 트리 구조 탐색을 메인 스레드에서 분리</span
+                >
+              </li>
+              <li>
+                <span class="tech-usage-project">Zenith Grid</span>
+                <span class="tech-usage-note"
+                  >(개인 프로젝트) 대용량 데이터 그리드의 워커 기반
+                  처리</span
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div class="tech-usage-row">
+            <span class="tech-usage-name">Service Worker</span>
+            <ul class="tech-usage-list">
+              <li>
+                <span class="tech-usage-project">ServiceDesk</span>
+                <span class="tech-usage-note"
+                  >정적 리소스 로컬 캐싱으로 재방문 로딩 단축</span
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div class="tech-usage-row">
+            <span class="tech-usage-name">Virtual Scroll</span>
+            <ul class="tech-usage-list">
+              <li>
+                <span class="tech-usage-project">PROM LITE2</span>
+                <span class="tech-usage-note"
+                  >초당 수만~수십만 건 로그 수신 시에도 렌더 비용이
+                  수신량이 아닌 뷰포트 크기에 비례하도록 적용</span
+                >
+              </li>
+              <li>
+                <span class="tech-usage-project">High Tree</span>
+                <span class="tech-usage-note"
+                  >(개인 프로젝트) 대용량 트리 노드 렌더링</span
+                >
+              </li>
+              <li>
+                <span class="tech-usage-project">Zenith Grid</span>
+                <span class="tech-usage-note"
+                  >(개인 프로젝트) 대용량 데이터 그리드</span
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div class="tech-usage-row">
+            <span class="tech-usage-name">Pixi.js</span>
+            <ul class="tech-usage-list">
+              <li>
+                <span class="tech-usage-project">PROM LITE2</span>
+                <span class="tech-usage-note">탐지 룰 맵 시각화</span>
+              </li>
+              <li>
+                <span class="tech-usage-project">Argus</span>
+                <span class="tech-usage-note"
+                  >상시 모니터링용 2D 렌더링(비용이 큰 3D는 조감이 필요한
+                  순간에만 전환)</span
+                >
+              </li>
+              <li>
+                <span class="tech-usage-project">국방부 프로젝트</span>
+                <span class="tech-usage-note"
+                  >팀 내 선례 없이 신규 도입, DOM/SVG 대비 리플로우 없는
+                  시각화 모듈</span
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div class="tech-usage-row">
+            <span class="tech-usage-name">Three.js / WebGL</span>
+            <ul class="tech-usage-list">
+              <li>
+                <span class="tech-usage-project">Argus</span>
+                <span class="tech-usage-note"
+                  >장비 수백~수천 대 규모의 3D 네트워크 토폴로지
+                  시각화</span
+                >
+              </li>
+              <li>
+                <span class="tech-usage-project">TopoSpace</span>
+                <span class="tech-usage-note"
+                  >(개인 프로젝트) 인터랙티브 3D 네트워크 토폴로지 시각화
+                  라이브러리</span
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div class="tech-usage-row">
+            <span class="tech-usage-name">AbortController</span>
+            <ul class="tech-usage-list">
+              <li>
+                <span class="tech-usage-project">PROM LITE2</span>
+                <span class="tech-usage-note"
+                  >주기적 상태 갱신 요청이 중첩돼 UI가 멈추던 문제를 유효하지
+                  않은 이전 요청 취소로 해결</span
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div class="tech-usage-row">
+            <span class="tech-usage-name">litegraph.js</span>
+            <ul class="tech-usage-list">
+              <li>
+                <span class="tech-usage-project">SoarPlaybook 2.0</span>
+                <span class="tech-usage-note"
+                  >노드 수가 늘어도 렌더링 성능이 급격히 저하되던 문제를
+                  GPU 가속 기반 자체 렌더러로 해결</span
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div class="tech-usage-row">
+            <span class="tech-usage-name">Vanilla JS 노드 에디터</span>
+            <ul class="tech-usage-list">
+              <li>
+                <span class="tech-usage-project">PROM-ATS</span>
+                <span class="tech-usage-note"
+                  >프레임워크 없이 드래그 앤 드롭 공격 시나리오 빌더를 직접
+                  구현하고, 위험한 코드가 들어가지 않도록 시큐어 가드레일을
+                  내장</span
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div class="tech-usage-row">
+            <span class="tech-usage-name">Puppeteer</span>
+            <ul class="tech-usage-list">
+              <li>
+                <span class="tech-usage-project">AI 데이터 수집 스크래퍼</span>
+                <span class="tech-usage-note"
+                  >SPA 렌더링 완료 시점을 감지해 수집, 보안장비의 IP
+                  차단에는 프록시 IP 풀로 대응</span
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div class="tech-usage-row">
+            <span class="tech-usage-name">WebGPU / WGSL</span>
+            <ul class="tech-usage-list">
+              <li>
+                <span class="tech-usage-project">oria-webgpu</span>
+                <span class="tech-usage-note"
+                  >(개인 프로젝트) WGSL 리플렉션으로 바인딩을 자동 매칭하는
+                  타입 안전 WebGPU 래퍼</span
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div class="tech-usage-row">
+            <span class="tech-usage-name">TypeScript 마이그레이션</span>
+            <ul class="tech-usage-list">
+              <li>
+                <span class="tech-usage-project">ServiceDesk</span>
+                <span class="tech-usage-note"
+                  >기존 JavaScript 코드베이스의 TypeScript 전환 주도</span
+                >
+              </li>
+              <li>
+                <span class="tech-usage-project">PROM LITE2</span>
+                <span class="tech-usage-note"
+                  >기존 JavaScript 코드베이스의 TypeScript 전환 주도</span
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div class="tech-usage-row">
+            <span class="tech-usage-name">Go</span>
+            <ul class="tech-usage-list">
+              <li>
+                <span class="tech-usage-project">AeroLink</span>
+                <span class="tech-usage-note"
+                  >제조사·모델마다 다른 드론 통신 프로토콜을 하나의 표준
+                  규격으로 정규화하는 코어 엔진 설계</span
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
       </section>
 
       <!-- 푸터 / 연락처 섹션 -->
       <footer id="contact" class="reveal">
         <h2 class="section-title">Contact</h2>
         <p class="contact-description">
-          보안관제 도메인 프론트엔드 포지션을 찾고 계신다면 연락주세요.
+          실시간 데이터 시각화와 대규모 이벤트 처리 성능 최적화가 중요한
+          보안관제 프론트엔드 포지션을 찾고 계신다면 연락주세요.
         </p>
         <div class="contact-links">
           <a href="mailto:funky856@naver.com" class="contact-item">
@@ -1590,6 +1850,8 @@
               ["재방문 로딩", "1.8s", "1.0s"],
               ["Lighthouse", "40점대", "90점 이상"],
             ],
+            metricsNote:
+              "리뉴얼 진행 당시 측정한 수치이며, 이후 재측정은 하지 않음",
             arch: [
               "[Security Events] ──→ WebSocket / SSE",
               "                            │",
@@ -1611,7 +1873,7 @@
             },
             trouble:
               "대용량 데이터가 아닌 경우 WASM 오프로드가 오히려 성능 저하를 유발하는 문제 발생. Web Worker 단독 처리와 WASM 오프로드를 상황에 따라 선택하도록 개선.",
-            role: "Rust WebAssembly 바이너리로 검색/필터링 등 핵심 연산을 이식하여 메인 스레드 연산 오프로드 주도. Web Worker를 이용한 복잡 구조 트리 탐색 및 Service Worker 기반 로컬 리소스 캐싱 도입. JavaScript → TypeScript 마이그레이션 주도.",
+            role: "리뉴얼 전 과정에서 프론트엔드 설계부터 구현까지 전담. Rust WebAssembly 바이너리로 검색/필터링 등 핵심 연산을 이식하여 메인 스레드 연산 오프로드 주도. Web Worker를 이용한 복잡 구조 트리 탐색 및 Service Worker 기반 로컬 리소스 캐싱 도입. JavaScript → TypeScript 마이그레이션 주도.",
             tech: "Vue.js, Rust WebAssembly, Web Worker, Service Worker, WebSocket, TypeScript",
           },
           3: {
@@ -1641,7 +1903,7 @@
             },
             trouble:
               "팀 내 Pixi.js 경험자가 없어 초기 렌더링 성능 최적화에 어려움 발생. Pixi.js 공식 문서와 소스코드 분석을 통해 문제 해결.",
-            role: "20인 규모 태스크포스(TF) 프론트엔드 리드로서 아키텍처·상태 관리 설계 및 ESLint/Prettier 컨벤션 정립 주도. 신규 팀원 온보딩 가이드 작성. 개발 및 품질 관리 공로 표창 수상.",
+            role: "20인 규모 태스크포스(TF) 프론트엔드 리드로서 아키텍처·상태 관리 설계 및 ESLint/Prettier 컨벤션 정립 주도. 신규 팀원 온보딩 가이드 작성. 국방부 고객사의 만족스러운 평가를 바탕으로 PM 우수성과 표창 수상.",
             tech: "Vue.js, TypeScript, Pixi.js, WebGL",
           },
           4: {
@@ -1657,6 +1919,8 @@
               ["UI 프리징", "발생", "없음"],
               ["로그 수신 부하", "25만 건/초 (9억 건/시)"],
             ],
+            metricsNote:
+              "실무 운영 당시(2023.12-2024.07) 측정한 수치이며, 이후 재측정은 하지 않음",
             arch: [
               "[Security Devices] ──→ Log Engine ──→ WebSocket",
               "                                          │",
@@ -1755,9 +2019,11 @@
               position: "Frontend Lead",
             },
             metrics: [
-              ["관리 플레이북 수", "수백 개", "십수 개"],
+              ["관리 플레이북 수 (테스트 → 실 운영)", "수백 개", "십수 개"],
               ["대응 커버리지", "70%", "90%"],
             ],
+            metricsNote:
+              "테스트 운영에서 실 운영으로 전환하는 과정에서 통합·정리된 수치",
             arch: [
               "[Security Event] ──→ SSE",
               "                      │",
@@ -1772,13 +2038,13 @@
             ],
             decision: {
               choice: "레이어 기반 플레이북 트리 아키텍처",
-              why: "레이어 조합으로 최소 플레이북을 구성하여 최대 커버리지를 확보하고, 시나리오별 중복 로직을 제거하여 유지보수성을 향상시키기 위해 레이어 기반 아키텍처를 설계.",
+              why: "레이어 조합으로 최소 플레이북을 구성하여 최대 커버리지를 확보하고, 시나리오별 중복 로직을 제거하여 유지보수성을 향상시키기 위해 팀장과 함께 레이어 기반 아키텍처를 설계.",
               rejected:
                 "시나리오별 독립 플레이북 — 중복 로직이 많아 유지보수 어려움",
             },
             trouble:
               "litegraph.js가 노드가 일정 수가 넘으면 렌더링 성능이 급격히 저하되는 문제 발생. gpu가속 및 기존 노드 라이브러리 구조를 분석하여 커스텀 렌더러를 제작하여 문제 해결.",
-            role: "레이어 설계가 적용된 플레이북 에디터 UI/UX 기획 및 구현. litegraph.js 노드 라이브러리 커스텀 및 직렬화 로그 매핑 엔진 제작.",
+            role: "플레이북 에디터 프론트엔드 전반(UI/UX 기획·구현, litegraph.js 노드 라이브러리 커스텀, 직렬화 로그 매핑 엔진)을 담당. 레이어 기반 아키텍처는 팀장과 공동 설계.",
             tech: "Vue.js, Rust WebAssembly, SOAR Engine, Server-Sent Events",
           },
           18: {
@@ -1870,12 +2136,15 @@
           var idxAttr = card.getAttribute("data-card-index");
           var isPrivate = !!card.querySelector(".badge.private");
 
+          // 프로젝트별 고유 URL(#project-N) — 공유·새로고침·뒤로가기 대응
+          card.id = "project-" + idxAttr;
           card.style.cursor = "pointer";
           card.setAttribute("role", "button");
           card.setAttribute(
             "aria-label",
-            (isPrivate ? "비공개 프로젝트 상세 보기: " : "프로젝트 상세 보기: ") +
-              getCardTitle(card),
+            (isPrivate
+              ? "비공개 프로젝트 상세 보기: "
+              : "프로젝트 상세 보기: ") + getCardTitle(card),
           );
 
           function triggerCard() {
@@ -1898,7 +2167,93 @@
           });
         });
 
-        function openSecureModal(cardIndex, isPrivate, cardEl) {
+        // =====================
+        // 프로젝트 딥링크 (#project-N) — 직접 접근·공유·뒤로가기 대응
+        // =====================
+        var pageLoadHash = location.hash;
+        var currentOpenCardIndex = null;
+
+        function parseProjectHash() {
+          var match = /^#project-(\d+)$/.exec(location.hash);
+          return match ? match[1] : null;
+        }
+
+        function syncModalFromHash() {
+          var idx = parseProjectHash();
+          if (idx === currentOpenCardIndex) return;
+
+          if (idx === null) {
+            if (currentOpenCardIndex !== null) {
+              closeSecureModal({ syncingHash: true });
+            }
+            return;
+          }
+
+          var card = document.querySelector(
+            '.project-card[data-card-index="' + idx + '"]',
+          );
+          if (!card) return;
+          var isPrivate = !!card.querySelector(".badge.private");
+          openSecureModal(idx, isPrivate, card, { syncingHash: true });
+          card.scrollIntoView({ block: "center", behavior: "auto" });
+        }
+
+        window.addEventListener("hashchange", syncModalFromHash);
+
+        // =====================
+        // 터미널 자동 스크롤 — 사용자가 위로 스크롤해 읽는 중이면 하단 강제 이동을 멈춘다
+        // =====================
+        var terminalFollowScroll = true;
+
+        function bindTerminalScrollTracking() {
+          var body = secureModal.querySelector(".terminal-window-body");
+          if (!body || body.dataset.scrollBound) return;
+          body.dataset.scrollBound = "1";
+          body.addEventListener("scroll", function () {
+            var distanceFromBottom =
+              body.scrollHeight - body.scrollTop - body.clientHeight;
+            terminalFollowScroll = distanceFromBottom < 40;
+          });
+        }
+
+        function autoScrollTerminal() {
+          var body = secureModal.querySelector(".terminal-window-body");
+          if (body && terminalFollowScroll) {
+            body.scrollTop = body.scrollHeight;
+          }
+        }
+
+        // 연출 건너뛰기 — 현재 렌더링 중인 내용을 즉시 완성된 상태로 표시
+        var terminalSkipBtn = document.getElementById("terminal-skip-btn");
+        var activeRenderKind = null;
+        var activeRenderCardEl = null;
+        var activeRenderCardIndex = null;
+
+        if (terminalSkipBtn) {
+          terminalSkipBtn.addEventListener("click", function () {
+            activeTypewriterTimers.forEach(clearTimeout);
+            activeTypewriterTimers = [];
+            clearInterval(decryptProgressInterval);
+
+            document.getElementById("decrypt-terminal-output").textContent = "";
+            document.getElementById("terminal-input-cursor").style.visibility =
+              "hidden";
+
+            if (activeRenderKind === "public") {
+              document.getElementById("terminal-typed-command").textContent =
+                "./inspect_project.sh --id=" + activeRenderCardIndex;
+              startPublicOutput(activeRenderCardEl, true);
+            } else if (activeRenderKind === "private") {
+              document.getElementById("terminal-typed-command").textContent =
+                "./decrypt_secret_assets.sh --mission-id=" +
+                activeRenderCardIndex;
+              startDecryptedOutput(activeRenderCardIndex, true);
+            }
+          });
+        }
+
+        function openSecureModal(cardIndex, isPrivate, cardEl, opts) {
+          opts = opts || {};
           if (isDecrypting) return;
           isDecrypting = true;
 
@@ -1928,8 +2283,21 @@
           }, 20);
           activeTypewriterTimers.push(tModalFocus);
 
+          currentOpenCardIndex = String(cardIndex);
+          if (!opts.syncingHash) {
+            location.hash = "project-" + cardIndex;
+          }
+
+          terminalFollowScroll = true;
+          bindTerminalScrollTracking();
+
+          activeRenderCardEl = cardEl;
+          activeRenderCardIndex = cardIndex;
+          if (terminalSkipBtn) terminalSkipBtn.hidden = false;
+
           // 공개 프로젝트: 침입/디크립팅 연출 없이 바로 기록을 출력
           if (!isPrivate) {
+            activeRenderKind = "public";
             typedCommand.textContent = "./inspect_project.sh --id=" + cardIndex;
             inputCursor.style.visibility = "hidden";
             var tPublic = setTimeout(function () {
@@ -1938,6 +2306,8 @@
             activeTypewriterTimers.push(tPublic);
             return;
           }
+
+          activeRenderKind = "private";
 
           // 이번 세션에 이미 해제한 적 있는 비공개 프로젝트: 반복되는 디크립팅 연출 생략
           if (getUnlockedIds().has(String(cardIndex))) {
@@ -1986,8 +2356,7 @@
               line.className = "terminal-line " + (className || "");
               line.textContent = text;
               termOutput.appendChild(line);
-              var body = secureModal.querySelector(".terminal-window-body");
-              body.scrollTop = body.scrollHeight;
+              autoScrollTerminal();
             }, delay);
             activeTypewriterTimers.push(t);
           }
@@ -2103,9 +2472,7 @@
             progress +
             "%";
           lineEl.textContent = barStr;
-
-          var body = secureModal.querySelector(".terminal-window-body");
-          body.scrollTop = body.scrollHeight;
+          autoScrollTerminal();
         }
 
         // 한글(전각) 문자를 2칸으로 계산해 모노스페이스 정렬을 맞춘다
@@ -2123,13 +2490,19 @@
           line.className = "terminal-line " + (className || "");
           line.textContent = text;
           termOutput.appendChild(line);
-          var body = secureModal.querySelector(".terminal-window-body");
-          body.scrollTop = body.scrollHeight;
+          autoScrollTerminal();
           return line;
         }
 
-        function queueTextOutput(label, value, labelClass, valueClass, d) {
-          var t = setTimeout(function () {
+        function queueTextOutput(
+          label,
+          value,
+          labelClass,
+          valueClass,
+          d,
+          instant,
+        ) {
+          function render() {
             var line = appendLineInstant("", "");
 
             var labelSpan = document.createElement("span");
@@ -2140,13 +2513,18 @@
             textSpan.className = valueClass || "";
             line.appendChild(textSpan);
 
+            if (instant) {
+              labelSpan.textContent = label + " : ";
+              textSpan.textContent = value;
+              return;
+            }
+
             // 아직 해독되지 않은 구간 — 난수 문자로 표시
             var noiseSpan = document.createElement("span");
             noiseSpan.className = "term-noise";
             line.appendChild(noiseSpan);
 
             var scrambleChars = "ABCDEF0123456789$#%&@*+=?<>/";
-            var body = secureModal.querySelector(".terminal-window-body");
 
             var charIdx = 0;
             var typedLabel = label + " : ";
@@ -2176,33 +2554,50 @@
                 }
                 noiseSpan.textContent = noise;
 
-                body.scrollTop = body.scrollHeight;
+                autoScrollTerminal();
                 charIdx++;
                 var t = setTimeout(typeValue, 6);
                 activeTypewriterTimers.push(t);
               } else {
                 textSpan.textContent = value;
                 noiseSpan.textContent = "";
-                body.scrollTop = body.scrollHeight;
+                autoScrollTerminal();
               }
             }
 
             typeLabel();
-          }, d);
+          }
+
+          if (instant) {
+            render();
+            return;
+          }
+          var t = setTimeout(render, d);
           activeTypewriterTimers.push(t);
         }
 
         // 섹션 구분 헤더 — [ SECTION ] 형태
-        function queueSection(title, d) {
-          var t = setTimeout(function () {
+        function queueSection(title, d, instant) {
+          function render() {
             appendLineInstant("", "");
             appendLineInstant("[ " + title + " ]", "term-label");
-          }, d);
+          }
+          if (instant) {
+            render();
+            return;
+          }
+          var t = setTimeout(render, d);
           activeTypewriterTimers.push(t);
         }
 
         // 여러 줄을 한 줄씩 스트리밍하듯 출력
-        function queueLines(lines, className, d, step) {
+        function queueLines(lines, className, d, step, instant) {
+          if (instant) {
+            lines.forEach(function (text) {
+              appendLineInstant(text, className);
+            });
+            return lines.length * (step || 30);
+          }
           lines.forEach(function (text, i) {
             var t = setTimeout(
               function () {
@@ -2216,8 +2611,8 @@
         }
 
         // 터미널 하단 종료 프롬프트 — 비공개/공개 출력 공통, cardIndexToUnlock이 있으면 세션에 해제 상태 기록
-        function renderClosingPrompt(delay, cardIndexToUnlock) {
-          var tFooter = setTimeout(function () {
+        function renderClosingPrompt(delay, cardIndexToUnlock, instant) {
+          function render() {
             appendLineInstant(
               "--------------------------------------------------",
               "term-info",
@@ -2258,14 +2653,20 @@
 
             var termOutput = document.getElementById("decrypt-terminal-output");
             termOutput.appendChild(lastPrompt);
-            var body = secureModal.querySelector(".terminal-window-body");
-            body.scrollTop = body.scrollHeight;
+            autoScrollTerminal();
 
             if (cardIndexToUnlock !== undefined && cardIndexToUnlock !== null) {
               markUnlocked(cardIndexToUnlock);
             }
             isDecrypting = false;
-          }, delay);
+            if (terminalSkipBtn) terminalSkipBtn.hidden = true;
+          }
+
+          if (instant) {
+            render();
+            return;
+          }
+          var tFooter = setTimeout(render, delay);
           activeTypewriterTimers.push(tFooter);
         }
 
@@ -2320,11 +2721,11 @@
         }
 
         // 공개 프로젝트: 디크립팅 연출 없이 카드에 이미 공개된 정보를 터미널 형식으로만 출력
-        function startPublicOutput(cardEl) {
+        function startPublicOutput(cardEl, instant) {
           var data = extractPublicProjectData(cardEl);
           var delay = 0;
 
-          var tHeader = setTimeout(function () {
+          function renderHeader() {
             appendLineInstant(
               "--------------------------------------------------",
               "term-info",
@@ -2337,8 +2738,13 @@
               "--------------------------------------------------",
               "term-info",
             );
-          }, delay);
-          activeTypewriterTimers.push(tHeader);
+          }
+          if (instant) {
+            renderHeader();
+          } else {
+            var tHeader = setTimeout(renderHeader, delay);
+            activeTypewriterTimers.push(tHeader);
+          }
 
           delay += 200;
           queueTextOutput(
@@ -2347,31 +2753,40 @@
             "term-label term-success",
             "term-success",
             delay,
+            instant,
           );
 
           if (data.description) {
             delay += 250;
-            queueSection("DESCRIPTION", delay);
+            queueSection("DESCRIPTION", delay, instant);
             delay += 60;
-            delay += queueLines(["  " + data.description], "term-info", delay);
+            delay += queueLines(
+              ["  " + data.description],
+              "term-info",
+              delay,
+              undefined,
+              instant,
+            );
           }
 
           if (data.problemSolution.length) {
             delay += 150;
-            queueSection("PROBLEM / SOLUTION", delay);
+            queueSection("PROBLEM / SOLUTION", delay, instant);
             delay += 60;
             data.problemSolution.forEach(function (pair) {
               delay += queueLines(
                 ["  " + pair[0].toUpperCase() + " : " + pair[1]],
                 "term-warn",
                 delay,
+                undefined,
+                instant,
               );
             });
           }
 
           if (data.role.length) {
             delay += 150;
-            queueSection("ROLE", delay);
+            queueSection("ROLE", delay, instant);
             delay += 60;
             delay += queueLines(
               data.role.map(function (item) {
@@ -2380,6 +2795,7 @@
               "term-info",
               delay,
               30,
+              instant,
             );
           }
 
@@ -2390,11 +2806,12 @@
             "term-label term-success",
             "term-success",
             delay,
+            instant,
           );
 
           if (data.links.length) {
             delay += 350;
-            queueSection("LINKS", delay);
+            queueSection("LINKS", delay, instant);
             delay += 60;
             delay += queueLines(
               data.links.map(function (link) {
@@ -2403,14 +2820,15 @@
               "term-info",
               delay,
               30,
+              instant,
             );
           }
 
           delay += 300;
-          renderClosingPrompt(delay, null);
+          renderClosingPrompt(delay, null, instant);
         }
 
-        function startDecryptedOutput(cardIndex) {
+        function startDecryptedOutput(cardIndex, instant) {
           var data = privateProjectDetails[cardIndex] || {
             title: "기밀 자산",
             meta: {
@@ -2428,7 +2846,7 @@
 
           var delay = 0;
 
-          var tHeader = setTimeout(function () {
+          function renderHeader() {
             // ACCESS GRANTED ASCII 배너
             appendLineInstant(
               "▄▀█ █▀▀ █▀▀ █▀▀ █▀ █▀   █▀▀ █▀█ ▄▀█ █▄░█ ▀█▀ █▀▀ █▀▄",
@@ -2451,8 +2869,13 @@
               "--------------------------------------------------",
               "term-info",
             );
-          }, delay);
-          activeTypewriterTimers.push(tHeader);
+          }
+          if (instant) {
+            renderHeader();
+          } else {
+            var tHeader = setTimeout(renderHeader, delay);
+            activeTypewriterTimers.push(tHeader);
+          }
 
           delay += 250;
           queueTextOutput(
@@ -2461,12 +2884,13 @@
             "term-label term-success",
             "term-success",
             delay,
+            instant,
           );
 
           // ── 프로젝트 메타 ──────────────────────────────
           var meta = data.meta || {};
           delay += 250;
-          queueSection("MISSION BRIEF", delay);
+          queueSection("MISSION BRIEF", delay, instant);
           delay += 60;
           delay += queueLines(
             [
@@ -2476,20 +2900,22 @@
             ],
             "term-info term-table",
             delay,
+            undefined,
+            instant,
           );
 
           // ── 아키텍처 다이어그램 ────────────────────────
           if (data.arch && data.arch.length) {
             delay += 125;
-            queueSection("ARCHITECTURE", delay);
+            queueSection("ARCHITECTURE", delay, instant);
             delay += 60;
-            delay += queueLines(data.arch, "term-diagram", delay, 35);
+            delay += queueLines(data.arch, "term-diagram", delay, 35, instant);
           }
 
           // ── 정량 지표 (Before → After) ─────────────────
           if (data.metrics && data.metrics.length) {
             delay += 150;
-            queueSection("BENCHMARK", delay);
+            queueSection("BENCHMARK", delay, instant);
             delay += 60;
             delay += queueLines(
               [
@@ -2500,6 +2926,8 @@
               ],
               "term-info term-table",
               delay,
+              undefined,
+              instant,
             );
             var metricLines = data.metrics.map(function (m) {
               // [지표, before, after] — 개선 폭을 화살표로 대비
@@ -2516,41 +2944,65 @@
               "term-success term-table",
               delay,
               55,
+              instant,
             );
+
+            if (data.metricsNote) {
+              delay += 80;
+              delay += queueLines(
+                ["  ※ " + data.metricsNote],
+                "term-warn",
+                delay,
+                undefined,
+                instant,
+              );
+            }
           }
 
           // ── 기술 선택의 근거 ───────────────────────────
           if (data.decision) {
             delay += 150;
-            queueSection("DESIGN DECISION", delay);
+            queueSection("DESIGN DECISION", delay, instant);
             delay += 60;
             delay += queueLines(
               ["  CHOSEN   : " + data.decision.choice],
               "term-success",
               delay,
+              undefined,
+              instant,
             );
             delay += queueLines(
               ["  WHY      : " + data.decision.why],
               "term-warn",
               delay,
+              undefined,
+              instant,
             );
             delay += queueLines(
               ["  REJECTED : " + data.decision.rejected],
               "term-error",
               delay,
+              undefined,
+              instant,
             );
           }
 
           // ── 트러블슈팅 ─────────────────────────────────
           if (data.trouble) {
             delay += 150;
-            queueSection("TROUBLESHOOTING LOG", delay);
+            queueSection("TROUBLESHOOTING LOG", delay, instant);
             delay += 60;
-            delay += queueLines(["  " + data.trouble], "term-warn", delay);
+            delay += queueLines(
+              ["  " + data.trouble],
+              "term-warn",
+              delay,
+              undefined,
+              instant,
+            );
           }
 
           delay += 200;
-          queueSection("RECORD", delay);
+          queueSection("RECORD", delay, instant);
           delay += 100;
           queueTextOutput(
             "MY_ROLE     ",
@@ -2558,6 +3010,7 @@
             "term-label term-warn",
             "",
             delay,
+            instant,
           );
 
           delay += 350;
@@ -2567,13 +3020,42 @@
             "term-label term-success",
             "term-success",
             delay,
+            instant,
           );
 
           delay += 450;
-          renderClosingPrompt(delay, cardIndex);
+          renderClosingPrompt(delay, cardIndex, instant);
         }
 
-        function closeSecureModal() {
+        function closeSecureModal(opts) {
+          opts = opts || {};
+
+          // 딥링크 정리: 사용자가 직접 닫은 경우 해시를 되돌린다
+          // (뒤로가기와 동일하게 동작하도록 history.back() 사용, 단 공유 링크로 바로 들어온
+          //  경우에는 back()이 사이트 밖으로 나갈 수 있어 replaceState로 안전하게 처리)
+          if (
+            !opts.syncingHash &&
+            currentOpenCardIndex !== null &&
+            parseProjectHash() === currentOpenCardIndex
+          ) {
+            if (location.hash === pageLoadHash) {
+              history.replaceState(
+                null,
+                "",
+                location.pathname + location.search,
+              );
+            } else {
+              history.back();
+              return; // hashchange -> syncModalFromHash({syncingHash:true})가 아래 정리를 재호출
+            }
+          }
+
+          currentOpenCardIndex = null;
+          activeRenderKind = null;
+          activeRenderCardEl = null;
+          activeRenderCardIndex = null;
+          if (terminalSkipBtn) terminalSkipBtn.hidden = true;
+
           clearInterval(decryptProgressInterval);
           activeTypewriterTimers.forEach(clearTimeout);
           activeTypewriterTimers = [];
@@ -2667,6 +3149,9 @@
             );
           });
         }
+
+        // 최초 로드 시 URL에 #project-N이 있으면 해당 프로젝트를 바로 연다 (공유 링크 대응)
+        syncModalFromHash();
       });
     </script>
     <!-- 기밀 복호화 모달 (Linux Terminal Modal) -->
@@ -2737,6 +3222,19 @@
           </div>
         </div>
         <div class="terminal-window-body">
+          <!-- 연출 건너뛰기 버튼 — 잠시 비활성화(나중에 다시 쓸 수 있어 주석 처리만 함).
+               JS의 terminalSkipBtn 관련 코드는 전부 null 체크가 있어 이 버튼이
+               없어도 안전하게 동작한다.
+          <button
+            type="button"
+            id="terminal-skip-btn"
+            class="terminal-skip-btn"
+            hidden
+          >
+            SKIP ▸▸ 바로 보기
+          </button>
+          -->
+
           <div class="terminal-content">
             <!-- Bash 프롬프트 입력 시뮬레이션 -->
             <div class="bash-input-line">
