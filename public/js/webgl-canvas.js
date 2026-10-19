@@ -38,7 +38,10 @@ const BUS_PITCH = 0.85;
 const PACKET_TRAIL = 5;
 // 매트릭스 컬럼 중 버스 끝에 떨어져 패킷을 보내는 비율, 레인과 무관하게 순환하는 패킷 수
 const FEED_RATIO = 0.4;
-const MAX_FREE_PACKETS = 12;
+const MAX_FREE_PACKETS = 120;
+// 레인과 무관하게 기판이 늘 살아 있도록: 잔배선 위를 흐르는 작은 신호 수, 깜빡이는 비아 수
+const MAX_DENSE_SIGNALS = 300;
+const MAX_VIA_NODES = 140;
 // 첫 화면의 기판 밝기(기존 헥스 그리드 수준)와, 완전히 드러나는 스크롤 진행도
 const BOARD_REVEAL_MIN = 0.4;
 const BOARD_REVEAL_AT = 0.25;
@@ -159,6 +162,8 @@ class MatrixRainBackground {
     this.frameTime = 0;
     this.rippleScratch = [];
     this.packets = [];
+    this.denseSignals = [];
+    this.viaNodes = [];
     this.reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
@@ -171,6 +176,7 @@ class MatrixRainBackground {
     this.createBoard();
     this.createColumns();
     this.createPackets();
+    this.createViaNodes();
     this.createRain();
     this.createSplashes();
     this.createSparks();
@@ -280,6 +286,7 @@ class MatrixRainBackground {
     this.boardColumns = this.columns.filter((col) => col.onBoard);
     this.activePackets = feeds.concat(
       this.packets.filter((packet) => !packet.feed).slice(0, MAX_FREE_PACKETS),
+      this.denseSignals.slice(0, MAX_DENSE_SIGNALS),
     );
   }
 
@@ -362,9 +369,16 @@ class MatrixRainBackground {
         busRuns.push(run);
         const end = run[run.length - 1];
         ring(end.x, end.z, 0.45, base * 1.4);
-        // 패킷은 강조 버스 위주로, 바깥 끝(비아)에서 칩 쪽으로 달린다
-        if (random() < (tier > 0.6 ? 0.45 : 0.06)) {
-          this.packets.push(this.createPath(run.slice().reverse(), random));
+        if (random() < 0.5) this.viaNodes.push(end);
+        // 패킷은 바깥 끝(비아)에서 칩 쪽으로 달린다. 강조 버스일수록 자주, 밝게
+        if (random() < (tier > 0.6 ? 0.45 : 0.3)) {
+          this.packets.push(
+            this.createPath(
+              run.slice().reverse(),
+              random,
+              tier > 0.6 ? 1 : 0.6,
+            ),
+          );
         }
       });
     };
@@ -577,6 +591,12 @@ class MatrixRainBackground {
       polyline(run, base, 1);
       const end = run[run.length - 1];
       if (random() < 0.25) ring(end.x, end.z, 0.3, base * 1.5, 1);
+      // 일부 잔배선에는 희미하고 느린 신호가 흐른다
+      if (random() < 0.12) {
+        const signal = this.createPath(run, random, 0.45);
+        signal.speed = 8 + random() * 10;
+        this.denseSignals.push(signal);
+      }
       return true;
     };
     // 무작위 시작점으로 먼저 깔고, 남은 빈 칸을 전부 시작점으로 다시 훑어 빈틈을 채운다
@@ -728,7 +748,9 @@ class MatrixRainBackground {
   }
 
   // 패킷이 달릴 경로: 바깥 끝(points[0])에서 칩 쪽 끝까지
-  createPath(points, random) {
+  // level: 밝기와 크기(잔배선 신호 0.45 ~ 강조 버스 1). 레인과 무관한 패킷은
+  // 한 번 달린 뒤 gap(경로 길이 대비)만큼 쉬었다가 다시 출발한다.
+  createPath(points, random, level = 1) {
     const lengths = [0];
     for (let i = 1; i < points.length; i++) {
       lengths.push(lengths[i - 1] + points[i].distanceTo(points[i - 1]));
@@ -740,6 +762,8 @@ class MatrixRainBackground {
       outer: points[0],
       speed: 18 + random() * 20,
       phase: random(),
+      gap: 0.4 + random() * 2.5,
+      level,
       feed: null,
     };
   }
@@ -759,9 +783,15 @@ class MatrixRainBackground {
   createPackets() {
     const count = this.activePackets.length * PACKET_TRAIL;
     const fades = [];
-    for (let i = 0; i < this.activePackets.length; i++) {
-      for (let k = 0; k < PACKET_TRAIL; k++) fades.push(Math.pow(0.55, k));
-    }
+    const levels = [];
+    const frees = [];
+    this.activePackets.forEach((packet) => {
+      for (let k = 0; k < PACKET_TRAIL; k++) {
+        fades.push(Math.pow(0.55, k));
+        levels.push(packet.level);
+        frees.push(packet.feed ? 0 : 1);
+      }
+    });
     const geometry = new THREE.BufferGeometry();
     const position = new THREE.Float32BufferAttribute(
       new Float32Array(count * 3),
@@ -770,24 +800,31 @@ class MatrixRainBackground {
     position.setUsage(THREE.DynamicDrawUsage);
     geometry.setAttribute("position", position);
     geometry.setAttribute("aFade", new THREE.Float32BufferAttribute(fades, 1));
+    geometry.setAttribute(
+      "aLevel",
+      new THREE.Float32BufferAttribute(levels, 1),
+    );
+    geometry.setAttribute("aFree", new THREE.Float32BufferAttribute(frees, 1));
 
     this.packetMaterial = additive(
       new THREE.ShaderMaterial({
         uniforms: {
           uColor: { value: new THREE.Color() },
           uPixelRatio: { value: 1 },
+          uReveal: this.boardReveal,
         },
         vertexShader: `
-          attribute float aFade;
+          attribute float aFade, aLevel, aFree;
           uniform vec3 uColor;
-          uniform float uPixelRatio;
+          uniform float uPixelRatio, uReveal;
           varying vec3 vColor;
           ${FOG_GLSL}
           void main() {
             vec4 mv = modelViewMatrix * vec4(position, 1.0);
             gl_Position = projectionMatrix * mv;
-            gl_PointSize = clamp(160.0 / -mv.z, 2.0, 9.0) * uPixelRatio;
-            vColor = uColor * aFade * fogFactor(mv.xyz);
+            gl_PointSize = clamp(160.0 / -mv.z, 2.0, 9.0) * mix(0.55, 1.0, aLevel) * uPixelRatio;
+            // 레인이 보낸 패킷은 늘 같은 밝기, 나머지는 기판처럼 스크롤에 따라 드러난다
+            vColor = uColor * aFade * aLevel * mix(1.0, uReveal, aFree) * fogFactor(mv.xyz);
           }`,
         fragmentShader: `
           varying vec3 vColor;
@@ -808,26 +845,83 @@ class MatrixRainBackground {
     this.activePackets.forEach((packet, i) => {
       const { feed } = packet;
       // 연결된 레인 컬럼이 기판에 닿는 순간 출발 (레인 셰이더와 같은 낙하 공식)
+      // 나머지는 한 번 달리고 gap만큼 쉬는 주기를 반복한다
+      const cycle = 1 + packet.gap;
       const head = feed
         ? (((positiveMod(time * feed.speed + feed.phase, feed.cycle) - LAND) /
             feed.speed) *
             packet.speed) /
           packet.length
-        : (time * packet.speed) / packet.length + packet.phase;
+        : positiveMod(
+            (time * packet.speed) / packet.length + packet.phase * cycle,
+            cycle,
+          );
       for (let k = 0; k < PACKET_TRAIL; k++) {
-        let t = head - (k * 0.9) / packet.length;
+        const t = head - (k * 0.9) / packet.length;
         const index = i * PACKET_TRAIL + k;
-        if (feed && (t < 0 || t > 1)) {
-          // 다음 착지 전까지는 화면 밖에 둔다
+        if (t < 0 || t > 1) {
+          // 달리지 않는 동안은 화면 밖에 둔다
           positions.setXYZ(index, 0, -1000, 0);
           continue;
         }
-        if (!feed) t = positiveMod(t, 1);
         const p = this.pathPoint(packet, t, this.packetPosition);
         positions.setXYZ(index, p.x, FLOOR + 0.1, p.z);
       }
     });
     positions.needsUpdate = true;
+  }
+
+  // 버스 끝 비아 일부가 각자의 주기로 짧게 반짝인다
+  createViaNodes() {
+    const nodes = this.viaNodes.slice(0, MAX_VIA_NODES);
+    const positions = [];
+    const rhythms = [];
+    nodes.forEach((node) => {
+      positions.push(node.x, FLOOR + 0.06, node.z);
+      rhythms.push(Math.random() * Math.PI * 2, 0.4 + Math.random() * 1.2);
+    });
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute(
+      "position",
+      new THREE.Float32BufferAttribute(positions, 3),
+    );
+    geometry.setAttribute(
+      "aRhythm",
+      new THREE.Float32BufferAttribute(rhythms, 2),
+    );
+    this.viaMaterial = additive(
+      new THREE.ShaderMaterial({
+        uniforms: {
+          uTime: { value: 0 },
+          uColor: { value: new THREE.Color() },
+          uPixelRatio: { value: 1 },
+          uReveal: this.boardReveal,
+        },
+        vertexShader: `
+          attribute vec2 aRhythm; // phase, rate
+          uniform float uTime, uPixelRatio, uReveal;
+          uniform vec3 uColor;
+          varying vec3 vColor;
+          ${FOG_GLSL}
+          void main() {
+            vec4 mv = modelViewMatrix * vec4(position, 1.0);
+            gl_Position = projectionMatrix * mv;
+            // 대부분은 희미하게 켜져 있다가 가끔 짧게 반짝인다
+            float blink = pow(0.5 + 0.5 * sin(uTime * aRhythm.y + aRhythm.x), 12.0);
+            gl_PointSize = clamp(200.0 / -mv.z, 2.0, 10.0) * (1.0 + blink * 0.6) * uPixelRatio;
+            vColor = uColor * (0.12 + 0.88 * blink) * 0.7 * uReveal * fogFactor(mv.xyz);
+          }`,
+        fragmentShader: `
+          varying vec3 vColor;
+          void main() {
+            float d = length(gl_PointCoord - 0.5) * 2.0;
+            gl_FragColor = vec4(vColor * exp(-d * d * 4.0) * (1.0 - step(1.0, d)), 1.0);
+          }`,
+      }),
+    );
+    const points = new THREE.Points(geometry, this.viaMaterial);
+    points.frustumCulled = false;
+    this.scene.add(points);
   }
 
   // R = 글자, G = 글자 + 번짐(글로우). 한 장의 텍스처로 헤드 글로우까지 처리한다.
@@ -1291,6 +1385,7 @@ class MatrixRainBackground {
     this.boardColor.setHex(palette.board);
     this.boardMaterial.uniforms.uRippleColor.value.setHex(palette.ripple);
     this.packetMaterial.uniforms.uColor.value.setHex(palette.near);
+    this.viaMaterial.uniforms.uColor.value.setHex(palette.near);
 
     const ambient = this.ambientParticles.geometry.attributes.color;
     this.ambientPicks.forEach((pick, k) => {
@@ -1335,6 +1430,7 @@ class MatrixRainBackground {
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.sparkMaterial.uniforms.uPixelRatio.value = ratio;
     this.packetMaterial.uniforms.uPixelRatio.value = ratio;
+    this.viaMaterial.uniforms.uPixelRatio.value = ratio;
     if (this.reducedMotion) this.renderFrame(0);
   }
 
@@ -1360,20 +1456,24 @@ class MatrixRainBackground {
       THREE.MathUtils.smoothstep(scrollProgress, 0, BOARD_REVEAL_AT),
     );
 
+    // 첫 구도에서 출발해, 끝에서는 기판 위에서 중앙 코어 칩을 비스듬히 내려다본다.
+    // 스크롤할수록 카메라가 기판 쪽으로 고개를 숙인다.
     const startPos = { x: 0, y: 15, z: 60 };
-    const endPos = { x: -40, y: -10, z: -30 };
+    const endPos = { x: -30, y: -8, z: -5 };
+    const startLook = { x: 0, y: 0, z: 0 };
+    const endLook = { x: 5, y: FLOOR + 2, z: -60 };
+    const lerp = (a, b) => a + (b - a) * scrollProgress;
 
-    this.camera.position.x =
-      startPos.x + (endPos.x - startPos.x) * scrollProgress;
-    this.camera.position.y =
-      startPos.y + (endPos.y - startPos.y) * scrollProgress;
-    this.camera.position.z =
-      startPos.z + (endPos.z - startPos.z) * scrollProgress;
+    this.camera.position.set(
+      lerp(startPos.x, endPos.x),
+      lerp(startPos.y, endPos.y),
+      lerp(startPos.z, endPos.z),
+    );
 
     const lookTarget = this.lookTarget.set(
-      -20 * scrollProgress,
-      -5 * scrollProgress,
-      -10 * scrollProgress,
+      lerp(startLook.x, endLook.x),
+      lerp(startLook.y, endLook.y),
+      lerp(startLook.z, endLook.z),
     );
 
     // 마우스 위치를 부드럽게 보간 (lerp)
@@ -1428,6 +1528,7 @@ class MatrixRainBackground {
     this.rainMaterial.uniforms.uTime.value = time;
     this.splashMaterial.uniforms.uTime.value = time;
     this.sparkMaterial.uniforms.uTime.value = time;
+    this.viaMaterial.uniforms.uTime.value = time;
 
     this.starField.rotation.y += 0.0036 * delta;
     this.ambientParticles.rotation.y += 0.009 * delta;
