@@ -51,6 +51,25 @@ const DENSE_CELL = 1.1;
 const DENSE_BASE = 0.07;
 const DENSE_NEAR = 70;
 const DENSE_FAR = 170;
+// 스크롤 카메라 경로. 첫 구도에서 출발해 코어 칩 주위를 약 70도 돌며 내려간다
+// (처음엔 오른쪽으로 살짝, 이후 왼쪽으로 크게). 시선도 원점에서 코어 칩으로 옮겨 간다.
+const CAMERA_PATH = [
+  [0, 15, 60],
+  [26, 10, 42],
+  [-22, 2, 27],
+  [-45, -3, -1],
+  [-49, -8, -21],
+];
+const LOOK_PATH = [
+  [0, 0, 0],
+  [0, -10, -20],
+  [0, -22, -40],
+  [0, -30, -52],
+  [2, -33, -58],
+];
+// 빠르게 스크롤할 때만 살짝 기울고(라디안) 시야각이 넓어진다(도)
+const SCROLL_ROLL = 0.035;
+const SCROLL_FOV_KICK = 4;
 const FOG_DENSITY = 0.004;
 // 60Hz는 매 프레임, 120/144Hz는 한 프레임씩 건너뛴다(60~72fps).
 const MIN_FRAME_MS = 1000 / 72;
@@ -213,6 +232,15 @@ class MatrixRainBackground {
     });
     this.renderer.setClearColor(0x0a0e1a);
     this.lookTarget = new THREE.Vector3();
+    const curve = (points) =>
+      new THREE.CatmullRomCurve3(
+        points.map(([x, y, z]) => new THREE.Vector3(x, y, z)),
+        false,
+        "centripetal",
+      );
+    this.cameraPath = curve(CAMERA_PATH);
+    this.lookPath = curve(LOOK_PATH);
+    this.scrollKick = 0;
   }
 
   pixelRatio() {
@@ -1065,8 +1093,10 @@ class MatrixRainBackground {
               a = max(0.05, 0.7 * b);
             }
             // 기판 아래로 내려간 칸은 사라진다 (그 순간 파편으로 바뀐다)
+            // 카메라 경로가 레인 사이를 지나가므로, 렌즈에 닿을 만큼 가까운 글자는 지운다
             float vis = aLook.x * fogFactor(mv.xyz) * step(0.0, slot)
-              * (1.0 - smoothstep(${(TOP - 20).toFixed(1)}, ${TOP.toFixed(1)}, y));
+              * (1.0 - smoothstep(${(TOP - 20).toFixed(1)}, ${TOP.toFixed(1)}, y))
+              * smoothstep(5.0, 14.0, length(mv.xyz));
             vColor = min(color, vec3(1.0)) * a * vis;
             vGlow = glow * a * vis * 0.6;
           }`,
@@ -1456,25 +1486,10 @@ class MatrixRainBackground {
       THREE.MathUtils.smoothstep(scrollProgress, 0, BOARD_REVEAL_AT),
     );
 
-    // 첫 구도에서 출발해, 끝에서는 기판 위에서 중앙 코어 칩을 비스듬히 내려다본다.
-    // 스크롤할수록 카메라가 기판 쪽으로 고개를 숙인다.
-    const startPos = { x: 0, y: 15, z: 60 };
-    const endPos = { x: -30, y: -8, z: -5 };
-    const startLook = { x: 0, y: 0, z: 0 };
-    const endLook = { x: 5, y: FLOOR + 2, z: -60 };
-    const lerp = (a, b) => a + (b - a) * scrollProgress;
-
-    this.camera.position.set(
-      lerp(startPos.x, endPos.x),
-      lerp(startPos.y, endPos.y),
-      lerp(startPos.z, endPos.z),
-    );
-
-    const lookTarget = this.lookTarget.set(
-      lerp(startLook.x, endLook.x),
-      lerp(startLook.y, endLook.y),
-      lerp(startLook.z, endLook.z),
-    );
+    // 경로 위를 일정한 속도로 이동한다 (곡선 길이 기준)
+    const t = THREE.MathUtils.clamp(scrollProgress, 0, 1);
+    this.cameraPath.getPointAt(t, this.camera.position);
+    const lookTarget = this.lookPath.getPointAt(t, this.lookTarget);
 
     // 마우스 위치를 부드럽게 보간 (lerp)
     this.smoothMouseX += (this.mouseX - this.smoothMouseX) * mouseEase;
@@ -1485,6 +1500,20 @@ class MatrixRainBackground {
     lookTarget.y -= this.smoothMouseY * 5;
 
     this.camera.lookAt(lookTarget);
+
+    // 스크롤이 목표를 따라잡는 중인 거리(화면 높이 기준)를 속도 대신 쓴다
+    const lag = THREE.MathUtils.clamp(
+      (this.targetScrollY - this.scrollY) / window.innerHeight,
+      -1,
+      1,
+    );
+    this.scrollKick += (lag - this.scrollKick) * (1 - Math.exp(-delta * 4));
+    this.camera.rotateZ(-this.scrollKick * SCROLL_ROLL);
+    const fov = 60 + Math.abs(this.scrollKick) * SCROLL_FOV_KICK;
+    if (Math.abs(this.camera.fov - fov) > 0.01) {
+      this.camera.fov = fov;
+      this.camera.updateProjectionMatrix();
+    }
   }
 
   // 최근 착지한 컬럼을 골라 트레이스 발광으로 넘긴다 (셰이더와 같은 낙하 공식)
