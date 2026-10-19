@@ -1242,6 +1242,66 @@
                 <span class="decrypt-hint">CLICK TO DECRYPT</span>
               </div>
             </article>
+
+            <!-- hex-hound -->
+            <article class="project-card" data-card-index="25" tabindex="0">
+              <h3>hex-hound<span class="badge private">PRIVATE</span></h3>
+              <p class="project-description">
+                폐쇄망용 로컬 AI 보조 악성코드·로그 점검 도구입니다. Linux /
+                Windows / Unix(Solaris, AIX, HP-UX, BSD)에서 동작하며, 인터넷
+                연결 없이 로컬 LLM이 의심 항목을 근거와 함께 분석합니다.
+              </p>
+              <div class="problem-solution">
+                <div class="ps-item">
+                  <span class="ps-label">Problem</span>
+                  <span class="ps-text"
+                    >폐쇄망에서는 외부 분석 서비스나 클라우드 AI를 쓸 수 없어
+                    대량의 파일·로그를 사람이 직접 점검해야 함</span
+                  >
+                </div>
+                <div class="ps-item">
+                  <span class="ps-label">Solution</span>
+                  <span class="ps-text"
+                    >해시 IOC·YARA·정규식 룰·PE/ELF 휴리스틱·로그 상관 룰로 의심
+                    항목을 먼저 추리고, 그 항목만 REA(Reverse Engineer
+                    Anything)·Ghidra 리버싱과 Ollama 로컬 LLM으로 2차 분석. hex
+                    뷰어로 의심 코드 구간을 근거와 함께 확인</span
+                  >
+                </div>
+              </div>
+              <div class="project-preview private">
+                <span class="category-chip chip-red">MALWARE ANALYSIS</span>
+                <div class="hud-frame">
+                  <div class="hud-corner top-left"></div>
+                  <div class="hud-corner top-right"></div>
+                  <div class="hud-corner bottom-left"></div>
+                  <div class="hud-corner bottom-right"></div>
+                </div>
+                <div class="access-restricted-label">
+                  <span class="hud-prefix">AIR-GAPPED //</span>
+                  <span class="hud-main">LOCAL AI FORENSICS</span>
+                  <span class="hud-id">SEC-ID: #HEX-201</span>
+                </div>
+                <div class="fingerprint-scanner">
+                  <div class="fp-reticle"></div>
+                  <div class="fp-ridges"></div>
+                  <div class="fp-scan-line"></div>
+                  <div class="fp-status">SCANNING</div>
+                </div>
+              </div>
+              <div class="tech-tags">
+                <span class="tech-tag-sm">Python</span>
+                <span class="tech-tag-sm">YARA</span>
+                <span class="tech-tag-sm">REA</span>
+                <span class="tech-tag-sm">Ghidra</span>
+                <span class="tech-tag-sm">Ollama</span>
+              </div>
+              <div class="decrypt-cta">
+                <span class="decrypt-prompt">$</span>
+                <span class="decrypt-cmd">./decrypt --mission-id=25</span>
+                <span class="decrypt-hint">CLICK TO DECRYPT</span>
+              </div>
+            </article>
           </div>
         </div>
       </section>
@@ -2127,6 +2187,39 @@
             trouble: "",
             role: "제조사·모델마다 상이한 드론 통신 프로토콜을 하나의 표준 규격으로 정규화하는 Go 코어 엔진 설계 및 구현. Zoom과 유사한 방식으로 동작하는 드론 플랫폼과 기존 드론 관제 업체 연동을 목표로 개발 중.",
             tech: "Go",
+          },
+          25: {
+            title: "hex-hound",
+            meta: {
+              duration: "개인 프로젝트 (비공개)",
+              team: "1명 (단독)",
+              position: "Security Tooling / Local AI",
+            },
+            metrics: [],
+            arch: [
+              "[파일 · 시스템 로그]  (Linux / Windows / Unix)",
+              "          │",
+              "          ↓",
+              "[결정적 탐지]  해시 IOC · YARA · 정규식 룰 · PE/ELF 휴리스틱 · 로그 상관 룰",
+              "          │  의심 항목만 추림",
+              "          ↓",
+              "[리버싱]  REA (Reverse Engineer Anything) · Ghidra",
+              "          │",
+              "          ↓",
+              "[로컬 LLM 2차 분석]  Ollama ──→ 판단 근거",
+              "          │",
+              "          ↓",
+              "[hex 뷰어]  의심 코드 구간 + 근거 표시",
+            ],
+            decision: {
+              choice: "결정적 탐지로 먼저 거르고, 의심 항목만 로컬 LLM에 전달",
+              why: "폐쇄망 장비에서 도는 로컬 LLM은 느리고 자원이 한정적이라 모든 파일·로그를 넘길 수 없음. 룰 기반 탐지로 대상을 줄이면 분석 시간이 줄고, LLM 판단마다 어떤 룰에 걸렸는지 근거가 함께 남음.",
+              rejected:
+                "모든 항목을 LLM으로 분석 — 처리량이 감당되지 않고, 근거 없는 판단(환각)을 검증하기 어려움",
+            },
+            trouble: "",
+            role: "폐쇄망 환경에서 인터넷 연결 없이 동작하는 악성코드·로그 점검 도구 단독 설계 및 구현. 결정적 탐지 파이프라인, 오픈소스 리버싱 도구 REA(Reverse Engineer Anything)·Ghidra 연동, Ollama 기반 로컬 LLM 2차 분석, 의심 구간을 근거와 함께 보여주는 hex 뷰어 개발.",
+            tech: "Python, YARA, REA (Reverse Engineer Anything), Ghidra, Ollama",
           },
         };
 
