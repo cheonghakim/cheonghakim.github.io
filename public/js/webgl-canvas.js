@@ -22,10 +22,13 @@ const LAND = TOP - FLOOR;
 // 글리프 쿼드 크기 / 글자 간격. 아틀라스 셀에서 글자가 차지하는 비율 보정
 const QUAD = 1.45;
 const CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ<>{}[]|/\\:;.=-+*";
-const MATRIX_COLUMNS = 70;
-const BINARY_COLUMNS = 40;
+// 작은 화면은 CSS 투명도만 낮춰서는 부하가 줄지 않으므로 개수 자체를 줄인다
+const SMALL_SCREEN = window.matchMedia("(max-width: 768px)").matches;
+const MATRIX_COLUMNS = SMALL_SCREEN ? 44 : 70;
+// 먼 배경용 0/1 비. 회로가 주인공이 되도록 적게 둔다
+const BINARY_COLUMNS = SMALL_SCREEN ? 8 : 18;
 // 착지 시 컬럼당 흩어지는 파편 수 (트레일 행에 고르게 매핑)
-const SPARKS_PER_COLUMN = 8;
+const SPARKS_PER_COLUMN = SMALL_SCREEN ? 5 : 8;
 const SPARK_LIFE = 0.6;
 const SPLASH_LIFE = 0.5;
 // 트레이스 발광: 동시에 표시하는 최대 개수와 수명
@@ -38,10 +41,10 @@ const BUS_PITCH = 0.85;
 const PACKET_TRAIL = 5;
 // 매트릭스 컬럼 중 버스 끝에 떨어져 패킷을 보내는 비율, 레인과 무관하게 순환하는 패킷 수
 const FEED_RATIO = 0.4;
-const MAX_FREE_PACKETS = 120;
+const MAX_FREE_PACKETS = SMALL_SCREEN ? 60 : 120;
 // 레인과 무관하게 기판이 늘 살아 있도록: 잔배선 위를 흐르는 작은 신호 수, 깜빡이는 비아 수
-const MAX_DENSE_SIGNALS = 300;
-const MAX_VIA_NODES = 140;
+const MAX_DENSE_SIGNALS = SMALL_SCREEN ? 140 : 300;
+const MAX_VIA_NODES = SMALL_SCREEN ? 40 : 80;
 // 첫 화면의 기판 밝기(기존 헥스 그리드 수준)와, 완전히 드러나는 스크롤 진행도
 const BOARD_REVEAL_MIN = 0.4;
 const BOARD_REVEAL_AT = 0.25;
@@ -51,15 +54,19 @@ const DENSE_CELL = 1.1;
 const DENSE_BASE = 0.07;
 const DENSE_NEAR = 70;
 const DENSE_FAR = 170;
-// 스크롤 카메라 경로. 첫 구도에서 출발해 코어 칩 주위를 약 70도 돌며 내려간다
-// (처음엔 오른쪽으로 살짝, 이후 왼쪽으로 크게). 시선도 원점에서 코어 칩으로 옮겨 간다.
+// 스크롤 카메라 경로. 첫 구도에서 출발해 코어 칩(0, FLOOR, -55) 주위를 한 방향(왼쪽)으로만
+// 약 55도 돌며 다가간다. 구간별 회전각(15° → 17° → 14° → 9°)이 끝으로 갈수록 줄어 움직임이
+// 잦아든다. 방향을 바꾸면 보여줄 대상 없이 좌우로 흔들리는 인상이 나므로 왕복하지 않는다.
+// 시선도 원점에서 코어 칩으로 옮겨 간다.
 const CAMERA_PATH = [
   [0, 15, 60],
-  [26, 10, 42],
-  [-22, 2, 27],
-  [-45, -3, -1],
+  [-26, 9, 42],
+  [-45, 2, 16],
+  [-50, -4, -6],
   [-49, -8, -21],
 ];
+// 스크롤 진행에 거는 완만한 감속 (끝에 가까울수록 카메라가 덜 움직인다)
+const CAMERA_EASE_OUT = 1.6;
 const LOOK_PATH = [
   [0, 0, 0],
   [0, -10, -20],
@@ -68,6 +75,8 @@ const LOOK_PATH = [
   [2, -33, -58],
 ];
 // 빠르게 스크롤할 때만 살짝 기울고(라디안) 시야각이 넓어진다(도)
+// 본문 뒤 배경 밝기 (가장자리는 1)
+const CONTENT_CALM = 0.5;
 const SCROLL_ROLL = 0.035;
 const SCROLL_FOV_KICK = 4;
 const FOG_DENSITY = 0.004;
@@ -241,12 +250,13 @@ class MatrixRainBackground {
     this.cameraPath = curve(CAMERA_PATH);
     this.lookPath = curve(LOOK_PATH);
     this.scrollKick = 0;
+    this.calm = 1;
   }
 
   pixelRatio() {
     return (
       QUALITY_PIXEL_RATIOS[this.qualityStep] ||
-      Math.min(window.devicePixelRatio, 2)
+      Math.min(window.devicePixelRatio, SMALL_SCREEN ? 1.5 : 2)
     );
   }
 
@@ -937,7 +947,7 @@ class MatrixRainBackground {
             // 대부분은 희미하게 켜져 있다가 가끔 짧게 반짝인다
             float blink = pow(0.5 + 0.5 * sin(uTime * aRhythm.y + aRhythm.x), 12.0);
             gl_PointSize = clamp(200.0 / -mv.z, 2.0, 10.0) * (1.0 + blink * 0.6) * uPixelRatio;
-            vColor = uColor * (0.12 + 0.88 * blink) * 0.7 * uReveal * fogFactor(mv.xyz);
+            vColor = uColor * (0.06 + 0.5 * blink) * 0.7 * uReveal * fogFactor(mv.xyz);
           }`,
         fragmentShader: `
           varying vec3 vColor;
@@ -1178,7 +1188,7 @@ class MatrixRainBackground {
             gl_Position = projectionMatrix * mv;
             vUv = uv;
             vSince = since;
-            vColor = mix(aTint, uNear, 0.6) * aShape.z * exp(-since * 7.0) * fogFactor(mv.xyz);
+            vColor = mix(aTint, uNear, 0.6) * aShape.z * 1.4 * exp(-since * 7.0) * fogFactor(mv.xyz);
           }`,
         fragmentShader: `
           varying vec2 vUv;
@@ -1277,7 +1287,7 @@ class MatrixRainBackground {
             vec3 color = mix(mix(aTint, uNear, 0.6), vec3(1.0), flash * 0.7);
             // 신호가 끊기듯 깜빡인다
             float flicker = step(0.35, fract(sin(floor(since * 24.0) + aSpark.w * 91.0) * 43758.5453));
-            vColor = color * aShape.y * life * life * mix(0.25, 1.0, flicker) * fogFactor(mv.xyz);
+            vColor = color * aShape.y * 1.3 * life * life * mix(0.25, 1.0, flicker) * fogFactor(mv.xyz);
           }`,
         fragmentShader: `
           varying vec3 vColor;
@@ -1299,7 +1309,7 @@ class MatrixRainBackground {
     const vertices = [];
     const colors = [];
 
-    for (let i = 0; i < 6000; i++) {
+    for (let i = 0; i < (SMALL_SCREEN ? 800 : 2000); i++) {
       vertices.push(
         (Math.random() - 0.5) * 1000,
         (Math.random() - 0.5) * 1000,
@@ -1324,7 +1334,7 @@ class MatrixRainBackground {
       size: 0.2,
       vertexColors: true,
       transparent: true,
-      opacity: 0.7,
+      opacity: 0.4,
       sizeAttenuation: true,
     });
 
@@ -1333,7 +1343,7 @@ class MatrixRainBackground {
   }
 
   createAmbientParticles() {
-    const count = 600;
+    const count = SMALL_SCREEN ? 0 : 200;
     const geometry = new THREE.BufferGeometry();
     const vertices = [];
     this.ambientPicks = [];
@@ -1360,7 +1370,7 @@ class MatrixRainBackground {
       size: 0.06,
       vertexColors: true,
       transparent: true,
-      opacity: 0.3,
+      opacity: 0.2,
       sizeAttenuation: true,
       blending: THREE.AdditiveBlending,
     });
@@ -1472,22 +1482,42 @@ class MatrixRainBackground {
   }
 
   updateCameraFromScroll(delta) {
-    // 프레임레이트와 무관하게 기존(60fps 기준 0.05 / 0.03)과 같은 감속
-    const scrollEase = this.reducedMotion ? 1 : 1 - Math.exp(-delta * 3.1);
+    // 스크롤을 멈추면 약 0.5초 안에 남은 이동의 95%를 따라잡는다 (ln 20 / 6)
+    const scrollEase = this.reducedMotion ? 1 : 1 - Math.exp(-delta * 6);
     const mouseEase = 1 - Math.exp(-delta * 1.8);
     this.scrollY += (this.targetScrollY - this.scrollY) * scrollEase;
 
     const maxScroll =
       document.documentElement.scrollHeight - window.innerHeight;
     const scrollProgress = this.scrollY / Math.max(maxScroll, 1);
+    // 첫 화면을 지나 본문이 시작되면 가운데(본문 영역)만 어둡게, 가장자리는 그대로 둔다.
+    // CSS 마스크가 --bg-calm 값을 쓴다 (styles.css #webgl-canvas)
+    const calm = THREE.MathUtils.lerp(
+      1,
+      CONTENT_CALM,
+      THREE.MathUtils.smoothstep(
+        this.scrollY,
+        window.innerHeight * 0.3,
+        window.innerHeight,
+      ),
+    );
+    if (Math.abs(calm - this.calm) > 0.005) {
+      this.calm = calm;
+      this.canvas.style.setProperty("--bg-calm", calm.toFixed(3));
+    }
     this.boardReveal.value = THREE.MathUtils.lerp(
       BOARD_REVEAL_MIN,
       1,
       THREE.MathUtils.smoothstep(scrollProgress, 0, BOARD_REVEAL_AT),
     );
 
-    // 경로 위를 일정한 속도로 이동한다 (곡선 길이 기준)
-    const t = THREE.MathUtils.clamp(scrollProgress, 0, 1);
+    // 곡선 길이 기준으로 이동하되, 끝으로 갈수록 감속한다
+    const t =
+      1 -
+      Math.pow(
+        1 - THREE.MathUtils.clamp(scrollProgress, 0, 1),
+        CAMERA_EASE_OUT,
+      );
     this.cameraPath.getPointAt(t, this.camera.position);
     const lookTarget = this.lookPath.getPointAt(t, this.lookTarget);
 
@@ -1496,8 +1526,8 @@ class MatrixRainBackground {
     this.smoothMouseY += (this.mouseY - this.smoothMouseY) * mouseEase;
 
     // 자연스러운 기울기 효과를 위해 lookTarget에 마우스 오프셋 추가
-    lookTarget.x += this.smoothMouseX * 5;
-    lookTarget.y -= this.smoothMouseY * 5;
+    lookTarget.x += this.smoothMouseX * 2.5;
+    lookTarget.y -= this.smoothMouseY * 2.5;
 
     this.camera.lookAt(lookTarget);
 

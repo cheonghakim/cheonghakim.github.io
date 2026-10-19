@@ -81,6 +81,22 @@ body {
   height: 100%;
   z-index: 0;
   pointer-events: none;
+  /* 본문 뒤는 차분하게: 스크립트가 --bg-calm을 1 → 0.5로 낮추면 가운데만 어두워진다 */
+  --bg-calm: 1;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    #000 0%,
+    rgba(0, 0, 0, var(--bg-calm)) 22%,
+    rgba(0, 0, 0, var(--bg-calm)) 78%,
+    #000 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    #000 0%,
+    rgba(0, 0, 0, var(--bg-calm)) 22%,
+    rgba(0, 0, 0, var(--bg-calm)) 78%,
+    #000 100%
+  );
 }
 
 /* =====================
