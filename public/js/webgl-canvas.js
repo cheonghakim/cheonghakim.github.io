@@ -23,7 +23,9 @@ const LAND = TOP - FLOOR;
 const QUAD = 1.45;
 const CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ<>{}[]|/\\:;.=-+*";
 // 작은 화면은 CSS 투명도만 낮춰서는 부하가 줄지 않으므로 개수 자체를 줄인다
-const SMALL_SCREEN = window.matchMedia("(max-width: 768px)").matches;
+// (개수는 생성 시점에 고정되지만, 픽셀 비율은 회전 등으로 바뀌면 다시 계산한다)
+const SMALL_SCREEN_QUERY = window.matchMedia("(max-width: 768px)");
+const SMALL_SCREEN = SMALL_SCREEN_QUERY.matches;
 const MATRIX_COLUMNS = SMALL_SCREEN ? 44 : 70;
 // 먼 배경용 0/1 비. 회로가 주인공이 되도록 적게 둔다
 const BINARY_COLUMNS = SMALL_SCREEN ? 8 : 18;
@@ -256,7 +258,7 @@ class MatrixRainBackground {
   pixelRatio() {
     return (
       QUALITY_PIXEL_RATIOS[this.qualityStep] ||
-      Math.min(window.devicePixelRatio, SMALL_SCREEN ? 1.5 : 2)
+      Math.min(window.devicePixelRatio, SMALL_SCREEN_QUERY.matches ? 1.5 : 2)
     );
   }
 
@@ -1463,11 +1465,26 @@ class MatrixRainBackground {
   }
 
   resize() {
-    this.camera.aspect = window.innerWidth / window.innerHeight;
-    this.camera.updateProjectionMatrix();
+    // 캔버스 높이는 CSS에서 100lvh로 고정된다. 모바일 주소창이 접히고 펴질 때 오는
+    // resize 이벤트는 이 크기를 바꾸지 않으므로, 크기·비율이 그대로면 버퍼를 다시 잡지 않는다
+    const width = this.canvas.clientWidth;
+    const height = this.canvas.clientHeight;
     const ratio = this.pixelRatio();
+    if (
+      width === this.viewWidth &&
+      height === this.viewHeight &&
+      ratio === this.viewRatio
+    ) {
+      return;
+    }
+    this.viewWidth = width;
+    this.viewHeight = height;
+    this.viewRatio = ratio;
+
+    this.camera.aspect = width / height;
+    this.camera.updateProjectionMatrix();
     this.renderer.setPixelRatio(ratio);
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.setSize(width, height, false);
     this.sparkMaterial.uniforms.uPixelRatio.value = ratio;
     this.packetMaterial.uniforms.uPixelRatio.value = ratio;
     this.viaMaterial.uniforms.uPixelRatio.value = ratio;
