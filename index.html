@@ -1871,6 +1871,8 @@
         );
         var decryptProgressInterval = null;
         var isDecrypting = false;
+        // 닫힘 애니메이션 뒤 모달을 숨기는 타이머. 그 사이 다른 카드를 열면 취소한다
+        var modalHideTimer = null;
         var activeTypewriterTimers = [];
         var lastModalTrigger = null;
 
@@ -2262,8 +2264,9 @@
           }
 
           card.addEventListener("click", function (e) {
-            // 이미지(라이트박스)나 버튼(외부 링크)은 카드 자체의 모달 오픈과 별개로 동작
-            if (e.target.closest(".btn, .project-preview")) return;
+            // 이미지(라이트박스)나 버튼(외부 링크)은 카드 자체의 모달 오픈과 별개로 동작.
+            // 비공개 카드의 HUD 미리보기(div.project-preview)는 라이트박스가 없으므로 모달을 연다
+            if (e.target.closest(".btn, img.project-preview")) return;
             triggerCard();
           });
 
@@ -2381,6 +2384,7 @@
           activeTypewriterTimers = [];
           clearInterval(decryptProgressInterval);
 
+          clearTimeout(modalHideTimer);
           secureModal.style.display = "flex";
           secureModal.setAttribute("aria-hidden", "false");
           setTimeout(function () {
@@ -3180,11 +3184,13 @@
                 "terminal-maximized",
               );
             }
-            setTimeout(function () {
+            clearTimeout(modalHideTimer);
+            modalHideTimer = setTimeout(function () {
               secureModal.style.display = "none";
-              isDecrypting = false;
             }, 300);
           }
+          // 닫는 즉시 다음 카드를 열 수 있게 한다 (진행 중이던 연출 타이머는 위에서 정리됨)
+          isDecrypting = false;
           document.body.style.overflow = "";
           if (lastModalTrigger && lastModalTrigger.focus) {
             lastModalTrigger.focus();
