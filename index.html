@@ -124,7 +124,7 @@
       <section id="projects">
         <h2 class="section-title">Projects</h2>
 
-        <!-- 먼저 볼 프로젝트: 대표 사례 3건 바로가기 -->
+        <!-- 먼저 볼 프로젝트: 대표 사례 4건 바로가기 -->
         <div class="flagship-jump" id="projects-flagship">
           <span class="flagship-jump-label">먼저 볼 프로젝트</span>
           <a href="#project-4" class="flagship-jump-link">
@@ -135,6 +135,9 @@
           </a>
           <a href="#project-7" class="flagship-jump-link">
             <span class="flagship-jump-tag">LEADERSHIP</span>기술 리딩 보기
+          </a>
+          <a href="#project-26" class="flagship-jump-link">
+            <span class="flagship-jump-tag">LOCAL AI</span>로컬 AI 분석 보기
           </a>
         </div>
 
@@ -759,6 +762,36 @@
               </div>
             </article>
 
+            <!-- log-trace -->
+            <article class="project-card" data-card-index="26" tabindex="0">
+              <h3>log-trace</h3>
+              <p class="project-description">
+                보안 로그와 시스템 로그를 외부로 내보내지 않고 브라우저 안에서
+                다양한 상관분석을 수행하고, 로컬 AI 에이전트와 페어로 결과를
+                검토할 수 있는 서비스입니다. AI는 Chrome 내장 AI(Gemini Nano)와
+                Qwen3 1.7B / 4B 중에서 선택할 수 있습니다.
+              </p>
+              <img
+                src="public/imgs/log-trace.png"
+                alt="log-trace Preview"
+                class="project-preview"
+              />
+              <div class="tech-tags">
+                <span class="tech-tag-sm">Vue 3</span>
+                <span class="tech-tag-sm">Web Worker</span>
+                <span class="tech-tag-sm">WebLLM</span>
+                <span class="tech-tag-sm">Chrome Built-in AI</span>
+              </div>
+              <div class="button-group">
+                <a
+                  href="https://log-trace.net/"
+                  class="btn btn-primary"
+                  target="_blank"
+                  >Website</a
+                >
+              </div>
+            </article>
+
             <!-- EventLens -->
             <article class="project-card" data-card-index="10" tabindex="0">
               <h3>EventLens</h3>
@@ -907,34 +940,6 @@
                   class="btn"
                   target="_blank"
                   >GITHUB</a
-                >
-              </div>
-            </article>
-
-            <!-- 프로젝트 12: LogTrace -->
-            <article class="project-card" data-card-index="15" tabindex="0">
-              <h3>LogTrace</h3>
-              <p class="project-description">
-                Apache / Nginx 액세스 로그를 업로드하면 SQL Injection, XSS, 경로
-                탐색 등 보안 위협 패턴을 자동으로 분석·분류해주는 웹
-                서비스입니다.
-              </p>
-              <img
-                src="public/imgs/logtrace.png"
-                alt="LogTrace Preview"
-                class="project-preview"
-              />
-              <div class="tech-tags">
-                <span class="tech-tag-sm">Vue.js</span>
-                <span class="tech-tag-sm">Log Analysis</span>
-                <span class="tech-tag-sm">Regex Engine</span>
-              </div>
-              <div class="button-group">
-                <a
-                  href="https://log-trace.net/"
-                  class="btn btn-primary"
-                  target="_blank"
-                  >Website</a
                 >
               </div>
             </article>
@@ -1129,7 +1134,7 @@
                 그래픽과 컴퓨트를 위한 최소한의, 타입이 명확한 WebGPU
                 래퍼입니다. WGSL 리플렉션으로 바인딩을 자동 매칭하고
                 파이프라인을 캐싱해 반복적인 보일러플레이트를 제거합니다.
-                "WebGPU용 TWGL"
+                "WebGPU용 TWGL"을 목표로 합니다.
               </p>
               <img
                 src="public/imgs/oria.png"
@@ -1161,7 +1166,10 @@
             <article class="project-card" data-card-index="24" tabindex="0">
               <h3>spatium-engine</h3>
               <p class="project-description">
-                도면으로 실내 맵을 만들고 수정해서 뽑아낼 수 있는 도구입니다.
+                건물·층·공간·벽·출입구·POI와 내비게이션 그래프까지, 실내 지도를
+                제작·조회·임베드하기 위한 TypeScript 툴킷입니다. 도면 이미지를
+                벽/공간 초안으로 자동 벡터화해 에디터에서 다듬고, 2D 캔버스 / 3D
+                렌더러로 재생하며 A* 경로 탐색을 지원합니다.
               </p>
               <img
                 src="public/imgs/spatium-engine.png"
@@ -1170,8 +1178,11 @@
               />
               <div class="tech-tags">
                 <span class="tech-tag-sm">TypeScript</span>
-                <span class="tech-tag-sm">Vue.js</span>
+                <span class="tech-tag-sm">Vue 3</span>
                 <span class="tech-tag-sm">Three.js</span>
+                <span class="tech-tag-sm">Canvas 2D</span>
+                <span class="tech-tag-sm">A* Pathfinding</span>
+                <span class="tech-tag-sm">pnpm Monorepo</span>
               </div>
               <div class="button-group">
                 <a
@@ -1369,8 +1380,8 @@
               <li>
                 <span class="tech-usage-project">ServiceDesk</span>
                 <span class="tech-usage-note"
-                  >대규모 이벤트 필터링 오프로드, 데이터가 적을 땐 Web
-                  Worker 단독 처리로 전환</span
+                  >대규모 이벤트 필터링 오프로드, 데이터가 적을 땐 Web Worker
+                  단독 처리로 전환</span
                 >
               </li>
               <li>
@@ -1407,8 +1418,7 @@
               <li>
                 <span class="tech-usage-project">Zenith Grid</span>
                 <span class="tech-usage-note"
-                  >(개인 프로젝트) 대용량 데이터 그리드의 워커 기반
-                  처리</span
+                  >(개인 프로젝트) 대용량 데이터 그리드의 워커 기반 처리</span
                 >
               </li>
             </ul>
@@ -1432,8 +1442,8 @@
               <li>
                 <span class="tech-usage-project">PROM LITE2</span>
                 <span class="tech-usage-note"
-                  >초당 수만~수십만 건 로그 수신 시에도 렌더 비용이
-                  수신량이 아닌 뷰포트 크기에 비례하도록 적용</span
+                  >초당 수만~수십만 건 로그 수신 시에도 렌더 비용이 수신량이
+                  아닌 뷰포트 크기에 비례하도록 적용</span
                 >
               </li>
               <li>
@@ -1468,8 +1478,8 @@
               <li>
                 <span class="tech-usage-project">국방부 프로젝트</span>
                 <span class="tech-usage-note"
-                  >팀 내 선례 없이 신규 도입, DOM/SVG 대비 리플로우 없는
-                  시각화 모듈</span
+                  >팀 내 선례 없이 신규 도입, DOM/SVG 대비 리플로우 없는 시각화
+                  모듈</span
                 >
               </li>
             </ul>
@@ -1481,8 +1491,7 @@
               <li>
                 <span class="tech-usage-project">Argus</span>
                 <span class="tech-usage-note"
-                  >장비 수백~수천 대 규모의 3D 네트워크 토폴로지
-                  시각화</span
+                  >장비 수백~수천 대 규모의 3D 네트워크 토폴로지 시각화</span
                 >
               </li>
               <li>
@@ -1514,8 +1523,8 @@
               <li>
                 <span class="tech-usage-project">SoarPlaybook 2.0</span>
                 <span class="tech-usage-note"
-                  >노드 수가 늘어도 렌더링 성능이 급격히 저하되던 문제를
-                  GPU 가속 기반 자체 렌더러로 해결</span
+                  >노드 수가 늘어도 렌더링 성능이 급격히 저하되던 문제를 GPU
+                  가속 기반 자체 렌더러로 해결</span
                 >
               </li>
             </ul>
@@ -1541,8 +1550,8 @@
               <li>
                 <span class="tech-usage-project">AI 데이터 수집 스크래퍼</span>
                 <span class="tech-usage-note"
-                  >SPA 렌더링 완료 시점을 감지해 수집, 보안장비의 IP
-                  차단에는 프록시 IP 풀로 대응</span
+                  >SPA 렌더링 완료 시점을 감지해 수집, 보안장비의 IP 차단에는
+                  프록시 IP 풀로 대응</span
                 >
               </li>
             </ul>
@@ -1554,8 +1563,8 @@
               <li>
                 <span class="tech-usage-project">oria-webgpu</span>
                 <span class="tech-usage-note"
-                  >(개인 프로젝트) WGSL 리플렉션으로 바인딩을 자동 매칭하는
-                  타입 안전 WebGPU 래퍼</span
+                  >(개인 프로젝트) WGSL 리플렉션으로 바인딩을 자동 매칭하는 타입
+                  안전 WebGPU 래퍼</span
                 >
               </li>
             </ul>
